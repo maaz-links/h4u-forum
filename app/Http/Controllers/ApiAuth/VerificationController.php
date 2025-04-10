@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\ApiAuth;
 use App\Http\Controllers\Controller;
+
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -59,16 +59,23 @@ class VerificationController extends Controller
             throw new AuthorizationException;
         }
 
-        if ($user->hasVerifiedEmail()) {
-            return response()->json(['message' => 'Email already verified']);
-        }
+        // if ($user->hasVerifiedEmail()) {
+        //     return response()->json(['message' => 'Email already verified']);
+        // }
 
         
-        if ($user->markEmailAsVerified()) {
-            event(new Verified($user));
-        }
+        // if ($user->markEmailAsVerified()) {
+        //     event(new Verified($user));
+        // }
 
-        return response()->json(['message' => 'Email successfully verified']);
+        //return response()->json(['message' => 'Email successfully verified']);
+        $token = $user->createToken('auth-token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Email verified successfully',
+            'access_token' => $token,
+            'user' => $user
+    ]);
     }
 
     /**

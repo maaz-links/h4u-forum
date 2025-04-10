@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ApiAuth;
+use App\Http\Controllers\Controller;
 
 use App\Models\User;
 use Auth;
@@ -9,7 +10,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Validator;
 
-class ApiAuthentication extends Controller
+class ApiAuthenticationController extends Controller
 {
     public function register(Request $request)
     {
@@ -31,11 +32,11 @@ class ApiAuthentication extends Controller
 
         event(new Registered($user));
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        //$token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'message' => 'User registered successfully. Please check your email for verification.',
-            'access_token' => $token,
+          //  'access_token' => $token,
             'token_type' => 'Bearer',
         ], 201);
     }
@@ -49,7 +50,8 @@ class ApiAuthentication extends Controller
 
         if (!Auth::attempt($credentials)) {
             return response()->json([
-                'message' => 'Invalid login credentials'
+                'message' => 'Invalid login credentials',
+                'noreload' => true
             ], 401);
         }
 

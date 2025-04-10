@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\ApiAuth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -48,7 +48,7 @@ class PasswordResetController extends Controller
             function (User $user, string $password) {
                 $user->forceFill([
                     'password' => Hash::make($password)
-                ])->setRememberToken(Str::random(60));
+                ]);//->setRememberToken(Str::random(60));
 
                 $user->save();
 

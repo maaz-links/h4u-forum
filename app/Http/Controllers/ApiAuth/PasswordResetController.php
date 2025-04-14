@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ApiAuth;
 
 use App\Http\Controllers\Controller;
+use App\Services\UserValidation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Hash;
@@ -18,14 +19,20 @@ class PasswordResetController extends Controller
      */
     public function sendResetLinkEmail(Request $request)
     {
-        $request->validate(['email' => 'required|email']);
-        
+        $validator = Validator::make($request->all(),[
+            'email' => 'required|email'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['formError' => $validator->errors()], 422);
+        }
+
         $status = Password::sendResetLink(
             $request->only('email')
         );
         return $status === Password::RESET_LINK_SENT
             ? response()->json(['message' => __($status)])
-            : response()->json(['email' => __($status)], 422);
+            : response()->json(['formError' => ['email' => [__($status)]]], 422);
     }
 
     /**
@@ -36,11 +43,12 @@ class PasswordResetController extends Controller
         $validator = Validator::make($request->all(), [
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:8|confirmed',
-        ]);
+            //'password' => 'required|min:8|confirmed',
+            
+        ]+ UserValidation::rules(['password']));
         
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json(['formError' => $validator->errors()], 422);
         }
 
         $status = Password::reset(
@@ -58,6 +66,6 @@ class PasswordResetController extends Controller
 
         return $status === Password::PASSWORD_RESET
             ? response()->json(['message' => __($status)])
-            : response()->json(['email' => [__($status)]], 422);
+            : response()->json(['formError' => ['password' => [__($status)]]], 422);
     }
 }

@@ -23,6 +23,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'phone',
+        'newsletter',
+        'role',
+        'dob',
     ];
 
     // In app/Models/User.php

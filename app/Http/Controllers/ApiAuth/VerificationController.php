@@ -59,16 +59,15 @@ class VerificationController extends Controller
             throw new AuthorizationException;
         }
 
-        // if ($user->hasVerifiedEmail()) {
-        //     return response()->json(['message' => 'Email already verified']);
-        // }
+        if ($user->hasVerifiedEmail()) {
+            return response()->json(['message' => 'Email already verified'], 422);
+        }
 
         
-        // if ($user->markEmailAsVerified()) {
-        //     event(new Verified($user));
-        // }
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
+        }
 
-        //return response()->json(['message' => 'Email successfully verified']);
         $token = $user->createToken('auth-token')->plainTextToken;
 
         return response()->json([

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\ApiAuth;
 use App\Http\Controllers\Controller;
 
+use App\Models\EuropeCountry;
+use App\Models\EuropeProvince;
 use App\Models\User;
+use App\Models\UserProfile;
 use App\Services\UserValidation;
 use Auth;
 use Hash;
@@ -80,6 +83,21 @@ class ApiAuthenticationController extends Controller
         }
         //return response()->json($user);
         $user->save();
+
+        $firstCountryId = EuropeCountry::orderBy('display_order')->value('id') ?? null;
+        $firstProvinceId = EuropeProvince::where('country_id', $firstCountryId)
+        ->orderBy('display_order')
+        ->value('id') ?? null;
+
+        $profile = new UserProfile([
+            'user_id' => $user->id,
+            'nationality' => 'Italian',
+            'Description' => 'New User here',
+            'country_id' => $firstCountryId,
+            'province_id' => $firstProvinceId,
+        ]);
+
+        $profile->save();
 
         event(new Registered($user));
 

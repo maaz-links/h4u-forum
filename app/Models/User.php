@@ -27,7 +27,26 @@ class User extends Authenticatable implements MustVerifyEmail
         'newsletter',
         'role',
         'dob',
+        'profile_picture_id'
+        //user_profile'
     ];
+    // protected $appends = ['pfp_url'];
+    // public function getPfpUrlAttribute(){
+    //     return $this->profilePictureId()->value('path');
+    // }
+    public function profilePictureId()
+    {
+        return $this->belongsTo(Attachment::class, 'profile_picture_id');
+    }
+    public function profile()
+    {
+        return $this->hasOne(UserProfile::class);
+    }
+
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class);
+    }
 
     // In app/Models/User.php
     public function sendEmailVerificationNotification()

@@ -61,7 +61,7 @@ class CustomVerifyEmail extends Notification
 
         //dd($queryParams);
         // Create a frontend URL with the same parameters
-        $frontendUrl = 'http://localhost:5173/verify-email?' . http_build_query([
+        $frontendUrl = env('FRONTEND_URL').'/verify-email?' . http_build_query([
             'expires' => $queryParams['expires'],
             'hash' => $queryParams['hash'],
             'id' => $id,//$queryParams['id'],

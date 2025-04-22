@@ -38,9 +38,9 @@ class UserProfile extends Model
         'credits',
         'nationality',
         'country_id',
-        'province_id'
+        'province_id',
     ];
-    protected $appends = ['available_services','personal_interests','my_languages'];
+    protected $appends = ['available_services','personal_interests','my_languages','country_name', 'province_name'];
 
     public function getAvailableServicesAttribute()
     {
@@ -55,6 +55,16 @@ class UserProfile extends Model
     public function getMyLanguagesAttribute()
     {
         return $this->spoken_languages()->pluck('spoken_languages.id')->toArray();
+    }
+
+    public function getCountryNameAttribute()
+    {
+        return $this->country() ? $this->country()->value('name') : null;
+    }
+
+    public function getProvinceNameAttribute()
+    {
+        return $this->province() ? $this->province()->value('name') : null;
     }
 
     public function country()

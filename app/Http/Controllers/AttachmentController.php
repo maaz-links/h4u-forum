@@ -21,7 +21,7 @@ class AttachmentController extends Controller
     {
         $request->validate([
             'images' => 'required|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5000',
             'profile_pic_id' => 'nullable|string'
         ]);
 

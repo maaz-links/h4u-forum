@@ -34,7 +34,8 @@ class UserValidation
                 'after:1900-01-01',
                 'before_or_equal:' . now()->subYears(18)->format('Y-m-d'),
             ],
-            'newsletter' => 'boolean'
+            'newsletter' => 'boolean',
+            'isModel' => 'boolean'
         ];
 
         // If no specific fields requested, return all rules

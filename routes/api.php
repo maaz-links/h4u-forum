@@ -5,6 +5,7 @@ use App\Http\Controllers\ApiAuth\PasswordResetController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\HostessServiceController;
 use App\Http\Controllers\MiscController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ApiAuth\VerificationController;
 use App\Models\EuropeCountry;
@@ -76,9 +77,22 @@ Route::get('/attachments/{id}', [AttachmentController::class, 'show'])->name('at
 Route::get('/countries', function() {
     return EuropeCountry::ordered()->get(['id', 'name']);
 });
+Route::get('/provinces', function() {
+    return EuropeProvince::ordered()->get(['id', 'name']);
+});
 // Get provinces for a specific country ordered
 Route::get('/countries/{countryId}/provinces', function($countryId) {
     return EuropeProvince::where('country_id', $countryId)
         ->ordered()
         ->get(['id', 'name']);
 });
+
+Route::post('/search-guest', [SearchController::class, 'searchByGuest']);
+Route::post('/search', [SearchController::class, 'searchByUser'])->middleware('auth:sanctum');
+
+Route::get('/user-profile-guest/{username}',[UserProfileController::class, 'profileByGuest']);
+Route::get('/user-profile/{username}',[UserProfileController::class, 'profileByUser'])->middleware('auth:sanctum');
+
+Route::get('/last-views',[UserProfileController::class, 'getLastViews'])->middleware('auth:sanctum');
+
+Route::get('/randomize-profiles', [UserProfileController::class, 'randomize']);

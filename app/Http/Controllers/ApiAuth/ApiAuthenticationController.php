@@ -58,7 +58,7 @@ class ApiAuthenticationController extends Controller
         // ]);
         $validator = Validator::make(
             $request->all(),
-            UserValidation::rules(['name', 'email', 'password', 'dob','role','phone','newsletter']),
+            UserValidation::rules(['name', 'email', 'password', 'dob','role','phone','newsletter','isModel']),
             UserValidation::messages()
         );
 
@@ -92,20 +92,21 @@ class ApiAuthenticationController extends Controller
         $profile = new UserProfile([
             'user_id' => $user->id,
             'nationality' => 'Italian',
-            'Description' => 'New User here',
+            'description' => 'New User here',
             'country_id' => $firstCountryId,
             'province_id' => $firstProvinceId,
+            'is_user_model' => $request->isModel ?? 0,
         ]);
 
         $profile->save();
 
         event(new Registered($user));
 
-        //$token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'message' => 'User registered successfully. Please check your email for verification.',
-          //  'access_token' => $token,
+           'access_token' => $token,
             'token_type' => 'Bearer',
         ], 201);
     }

@@ -101,14 +101,18 @@ class ApiAuthenticationController extends Controller
         $profile->save();
 
         event(new Registered($user));
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
+        $otp = $this->generateOTP($user);
         return response()->json([
-            'message' => 'User registered successfully. Please check your email for verification.',
-           'access_token' => $token,
-            'token_type' => 'Bearer',
-        ], 201);
+            'message' => $otp,
+            'phone' => $user->phone,
+        ]);
+        // $token = $user->createToken('auth_token')->plainTextToken;
+
+        // return response()->json([
+        //     'message' => 'User registered successfully. Please check your email for verification.',
+        //    'access_token' => $token,
+        //     'token_type' => 'Bearer',
+        // ], 201);
     }
 
     public function login(Request $request)
@@ -142,15 +146,20 @@ class ApiAuthenticationController extends Controller
         // Revoke all previous tokens (optional)
         $user->tokens()->delete();
         
-        // Create new token
-        $token = $user->createToken('auth_token')->plainTextToken;
-
+        $otp = $this->generateOTP($user);
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => $user,
-            'email_verified' => $user->hasVerifiedEmail(),
-        ]);
+                'message' => $otp,
+                'phone' => $user->phone,
+            ]);
+        // Create new token
+        // $token = $user->createToken('auth_token')->plainTextToken;
+
+        // return response()->json([
+        //     'access_token' => $token,
+        //     'token_type' => 'Bearer',
+        //     'user' => $user,
+        //     'email_verified' => $user->hasVerifiedEmail(),
+        // ]);
     }
 
     /**
@@ -163,6 +172,75 @@ class ApiAuthenticationController extends Controller
 
         return response()->json([
             'message' => 'Successfully logged out'
+        ]);
+    }
+
+    protected function generateOTP(User $user){
+        $otp = rand(100000, 999999);
+        $expiresAt = now()->addMinutes(5); // OTP valid for 5 minutes
+        
+        $user->update([
+            'otp' => $otp,
+            'otp_expires_at' => $expiresAt
+        ]);
+
+        return $otp;
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        // dd('ok');
+        // $request->validate([
+        //     'email' => 'required|email',
+        //     'otp' => 'required|digits:6'
+        // ]);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'email' => 'required|email',
+                //'otp' => 'required|integer|digits:6',
+                //'otp' => 'integer|digits:6',
+            ]
+        );
+        // dd('ok');
+        if ($validator->fails()) {
+            return response()->json(['formError' => $validator->errors()], 422);
+        }
+
+        // dd('ok');
+        if(!$request->otp){
+            $user = User::where('email', $request->email)
+            ->where('otp_expires_at', '>', now())
+            ->first();
+        }else{
+            $user = User::where('email', $request->email)
+            ->where('otp', $request->otp)
+            ->where('otp_expires_at', '>', now())
+            ->first();
+        }
+        
+        
+        if (!$user) {
+            return response()->json([
+                //'message' => 'Invalid login credentials',
+                'formError' => ['otp' => ['OTP Invalid or Expired']],
+                'noreload' => true
+            ], 401);
+        }
+        // Clear OTP after successful verification
+        // $user->update([
+        //     'otp' => null,
+        //     'otp_expires_at' => null
+        // ]);
+        
+        // Generate and return authentication token
+        $token = $user->createToken('auth_token')->plainTextToken;
+        
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'user' => $user,
+            'email_verified' => $user->hasVerifiedEmail(),
         ]);
     }
 }

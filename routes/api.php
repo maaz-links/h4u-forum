@@ -42,6 +42,7 @@ Route::post('/email/resend', [VerificationController::class, 'resend'])
 
 
 Route::post('/login', [ApiAuthenticationController::class, 'login'])->name('login');
+Route::post('/verify-otp', [ApiAuthenticationController::class, 'verifyOtp']);
 Route::post('/logout', [ApiAuthenticationController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail'])

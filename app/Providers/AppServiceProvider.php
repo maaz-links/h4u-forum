@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\UserConfig;
+use Config;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $allConfigs = UserConfig::get();
+        foreach ($allConfigs as $c) {
+            Config::set($c->key, $c->value);
+        }
         //
     }
 }

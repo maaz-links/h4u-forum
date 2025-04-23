@@ -27,7 +27,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'newsletter',
         'role',
         'dob',
-        'profile_picture_id'
+        'profile_picture_id',
+        'otp',
+        'otp_expires_at'
         //user_profile'
     ];
     // protected $appends = ['pfp_url'];
@@ -67,6 +69,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
+        'otp',
+        'otp_expires_at'
     ];
 
     /**

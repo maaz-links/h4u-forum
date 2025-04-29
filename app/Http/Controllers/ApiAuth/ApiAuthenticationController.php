@@ -79,7 +79,7 @@ class ApiAuthenticationController extends Controller
         if ($request->role) {
             $user->role = $request->role;
         } else {
-            $user->role = 'CUSTOMER'; // Default value
+            $user->role = User::ROLE_KING; // Default value
         }
         //return response()->json($user);
         $user->save();
@@ -228,10 +228,10 @@ class ApiAuthenticationController extends Controller
             ], 401);
         }
         // Clear OTP after successful verification
-        // $user->update([
-        //     'otp' => null,
-        //     'otp_expires_at' => null
-        // ]);
+        $user->update([
+            'otp' => null,
+            'otp_expires_at' => null
+        ]);
         
         // Generate and return authentication token
         $token = $user->createToken('auth_token')->plainTextToken;

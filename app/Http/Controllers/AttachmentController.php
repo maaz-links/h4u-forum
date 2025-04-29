@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attachment;
+use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -44,8 +45,20 @@ class AttachmentController extends Controller
             // Process the image
             //$image->resize(800, 800);
             $encoded = $image->toWebp();
+            // $path = 'attachments/' . $user->id . '/' . Str::uuid()->toString() . '.webp';
+            // $encoded->save(storage_path('app/private/'. $path));
+
             $path = 'attachments/' . $user->id . '/' . Str::uuid()->toString() . '.webp';
-            $encoded->save(storage_path('app/private/'. $path));
+            $fullPath = storage_path('app/private/' . $path);
+
+            // Ensure the directory exists
+            $directory = dirname($fullPath);
+            if (!File::exists($directory)) {
+                File::makeDirectory($directory, 0755, true);
+            }
+
+            // Now save the image
+            $encoded->save($fullPath);
             //dd($encoded);
         // ->resize(800, 800, function ($constraint) {
         //     $constraint->aspectRatio();

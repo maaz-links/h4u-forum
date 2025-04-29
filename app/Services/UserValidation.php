@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
@@ -26,7 +27,7 @@ class UserValidation
                     ->numbers()
                     ->symbols(),
             ],
-            'role' => ['string','nullable','max:255',Rule::in(['ADMIN', 'HOSTESS', 'CUSTOMER'])],
+            'role' => ['string','nullable','max:255',Rule::in([User::ROLE_HOSTESS, User::ROLE_KING])],
             'phone' => 'required|string|phone:AUTO',
             'dob' => [
                 'required',

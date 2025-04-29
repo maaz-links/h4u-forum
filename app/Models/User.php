@@ -3,9 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Builders\UserQueryBuilder;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -14,6 +17,10 @@ class User extends Authenticatable implements MustVerifyEmail
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
+    public const ROLE_HOSTESS = 'HOSTESS';
+    public const ROLE_ADMIN = 'ADMIN';
+    public const ROLE_KING = 'CUSTOMER';
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -36,6 +43,12 @@ class User extends Authenticatable implements MustVerifyEmail
     // public function getPfpUrlAttribute(){
     //     return $this->profilePictureId()->value('path');
     // }
+    protected $appends = ['rating'];
+
+    public function getRatingAttribute(){
+        return $this->reviewsReceived()->avg('rating') ?? 0.0;
+    }
+
     public function profilePictureId()
     {
         return $this->belongsTo(Attachment::class, 'profile_picture_id');
@@ -49,6 +62,46 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Attachment::class);
     }
+    // public function chats()
+    // {
+    //     // $case1 = $this->hasMany(Chat::class, 'user1_id');
+    //     // return !$case1 ? $this->hasMany(Chat::class, 'user1_id') : $case1;
+    //     return $this->hasMany(Chat::class, 'user1_id');
+    // }
+
+    // public function chatsAsUser1()
+    // {
+    //     return $this->hasMany(Chat::class, 'user1_id');
+    // }
+    
+    // public function chatsAsUser2()
+    // {
+    //     return $this->hasMany(Chat::class, 'user2_id');
+    // }
+    
+    // // Combined accessor
+    // public function getChatsAttribute()
+    // {
+    //     if (!$this->relationLoaded('chatsAsUser1') || !$this->relationLoaded('chatsAsUser2')) {
+    //         $this->load('chatsAsUser1', 'chatsAsUser2');
+    //     }
+        
+    //     return $this->chatsAsUser1->merge($this->chatsAsUser2);
+    // }
+
+    public function reviewsGiven()
+    {
+        return $this->hasMany(Review::class, 'reviewer_id');
+    }
+
+    /**
+     * Get all reviews this user has received (as reviewed user)
+     */
+    public function reviewsReceived()
+    {
+        return $this->hasMany(Review::class, 'reviewed_user_id');
+    }
+
 
     // In app/Models/User.php
     public function sendEmailVerificationNotification()
@@ -84,5 +137,11 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function newEloquentBuilder($query): UserQueryBuilder
+    {
+        //dd('ok');
+        return new UserQueryBuilder($query);
     }
 }

@@ -136,12 +136,19 @@ class UserProfileController extends Controller
 
     public function setCustomerCredits(Request $request, $amount = '100')
     {
-        $data1 = DB::table('user_profiles')
-        ->join('users', 'user_profiles.user_id', '=', 'users.id')
-        ->where('users.role', User::ROLE_KING)
-        ->update(['user_profiles.credits' => 100]);
-        //$data1->update(['user_profiles.credit' => 100]);
-        return response()->json($data1);
+        // $data1 = DB::table('user_profiles')
+        // ->join('users', 'user_profiles.user_id', '=', 'users.id')
+        // ->where('users.role', User::ROLE_KING)
+        // ->update(['user_profiles.credits' => 100]);
+        if($request->user()->role == User::ROLE_KING){
+            $data1 = UserProfile::where('user_id',$request->user()->id)->first();
+            $data1->update(['credits' => 100]);
+            return response()->json($data1);
+        }
+        else{
+            return response()->json('not good');
+        }
+        
     }
 
 }

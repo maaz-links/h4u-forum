@@ -88,6 +88,12 @@ class User extends Authenticatable implements MustVerifyEmail
         
     //     return $this->chatsAsUser1->merge($this->chatsAsUser2);
     // }
+    public function chats()
+    {
+        return $this->belongsToMany(Chat::class, 'chat_user')
+            ->withPivot('is_archived', 'archived_at')
+            ->withTimestamps();
+    }
 
     public function reviewsGiven()
     {

@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\UserConfig;
 use Config;
 use Illuminate\Support\ServiceProvider;
+use Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,9 +22,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $allConfigs = UserConfig::get();
-        foreach ($allConfigs as $c) {
-            Config::set($c->key, $c->value);
+        // Check if the table exists before trying to query it
+        if (Schema::hasTable('user_configs')) {
+            $allConfigs = UserConfig::get();
+            foreach ($allConfigs as $c) {
+                Config::set($c->key, $c->value);
+            }
         }
         //
     }

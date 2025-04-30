@@ -47,14 +47,30 @@ class BuyChat
                 $newChat = $existingChat->update(['unlocked' => 1]);
             }
             else{
-                $newChat = Chat::create([
-                    'user1_id' => $user->id,
-                    'user2_id' => $other_user_id,
-                    'unlocked' => 1,
-                ]);
+                // $newChat = Chat::create([
+                //     'user1_id' => $user->id,
+                //     'user2_id' => $other_user_id,
+                //     'unlocked' => 1,
+                // ]);
+                $newChat = $this->fullChatInstance($user->id,$other_user_id,1);
             }           
             return response()->json(['message' => 'Chat Created','chat' => $newChat]);
         });
+    }
+
+    public function fullChatInstance($user1_id,$user2_id,$unlocked = 0){
+        $newChat = Chat::create([
+            'user1_id' => $user1_id,
+            'user2_id' => $user2_id,
+            'unlocked' => $unlocked,
+        ]);
+
+        $newChat->participants()->attach([
+            $user1_id => ['is_archived' => false],
+            $user2_id => ['is_archived' => false]
+        ]);
+
+        return $newChat;
     }
 
 }

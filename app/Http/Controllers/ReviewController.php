@@ -19,8 +19,8 @@ class ReviewController extends Controller
 
     public function __construct()
     {
-        $this->dayInterval = 3;
-        $this->dayIntervalOutput = Carbon::now()->subDays(3);
+        $this->dayInterval = config('h4u.review_delay');
+        $this->dayIntervalOutput = Carbon::now()->subDays(config('h4u.review_delay'));
     }
 
     public function store(Request $request)

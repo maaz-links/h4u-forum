@@ -66,6 +66,19 @@ class Chat extends Model
         })->first();
     }
 
+    public function participants()
+    {
+        return $this->belongsToMany(User::class, 'chat_user')
+            ->withPivot('is_archived', 'archived_at')
+            ->withTimestamps();
+    }
+
+    // Helper method to check if user is participant
+    public function hasParticipant($userId): bool
+    {
+        return $this->user1_id == $userId || $this->user2_id == $userId;
+    }
+
     public function newEloquentBuilder($query): ChatQueryBuilder
     {
         return new ChatQueryBuilder($query);

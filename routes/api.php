@@ -107,9 +107,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
             Route::post('/reviews', [ReviewController::class, 'store']);
             Route::get('/reviews', [ReviewController::class, 'index']);
+
+            Route::post('/set-customer-credits', [UserProfileController::class, 'setCustomerCredits']);
+            Route::post('/set-customer-credits/{amount}', [UserProfileController::class, 'setCustomerCredits']);
     });
 });
 
 Route::get('/randomize-profiles', [UserProfileController::class, 'randomize']);
-Route::post('/set-customer-credits', [UserProfileController::class, 'setCustomerCredits']);
-Route::post('/set-customer-credits/{amount}', [UserProfileController::class, 'setCustomerCredits']);
+

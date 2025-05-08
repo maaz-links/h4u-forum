@@ -11,7 +11,7 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class ChatController extends Controller
+class ChatController30apr extends Controller
 {
     protected $buyChat;
 
@@ -114,60 +114,42 @@ class ChatController extends Controller
         $user = Auth::user();
         $type = $request->query('type', 'all');
         
-        //dd($user->name);
-        // $chats=Chat::with('user2')->get();
-        // return $chats;
         $chats = Chat::
         // where(function($query) use ($user) {
         //         $query->where('user1_id', $user->id)
         //               ->orWhere('user2_id', $user->id);
         //     })
-            // myChats($user->id)
+            myChats($user->id)
             //->addSelect(['my_user' => Chat::select('name')])
             // ->when($type === 'archived', function($query) {
             //     $query->where('is_archived', true);
             // }, function($query) {
             //     $query->where('is_archived', false);
             // })
-            // ->
-            whereHas('participants', function($query) use ($user, $type) {
+            ->whereHas('participants', function($query) use ($user, $type) {
                 $query->where('user_id', $user->id)
                       ->where('is_archived', $type === 'archived');
             })
-            ->
-            with([
-                // 'user1', 'user2',
+            ->with([
+                'user1', 'user2',
                 // 'user1' => function($q) 
                 // { $q->with('profile')->select('user.profiles.province_name'); },
-                // 'participants',
+                //'participants',
                 'participants' => function($query) use($user) {
-                // $query->select('user_id')->where('user_id',$user->id);
-                // $query->with('profile');
-                $query->with(['profile' => function($query) use($user) {
-                    $query->select('id', 'user_id','province_id');
-                }
-                    
-                ]);
+                $query->select('id')->where('id',$user->id);
                 },
-                // 'participants.profile' => function($query) use($user) {
-                //     //$query->select('description');
-                // },
                 'messages' => function($query) {
                 $query->latest()->limit(1);
-            }
-            ])
+            }])
             // ->addSelect(chat)
             // ->leftJoin('chat_user','chat_user.chat_id','=','chat.id')
             ->get()
             // ;
             ->map(function($chat) use ($user) {
-                //$chat->other_user = $chat->user2_id === $user->id ? $chat->user1 : $chat->user2;
-                $other_user_index = $chat->participants[0]->id === $user->id ? 1 : 0;
-                //$chat->other_user = $chat->participants[0]->id === $user->id ? $chat->participants[0] : $chat->participants[1];
-                $chat->other_user = $chat->participants[$other_user_index];
-                $chat->is_archived = $chat->participants[!$other_user_index]->pivot->is_archived;
-                $chat->archived_at = $chat->participants[!$other_user_index]->pivot->archived_at;
-                $chat->other_user->province_id = $chat->other_user->profile->province_id;
+                $chat->other_user = $chat->user2_id === $user->id ? $chat->user1 : $chat->user2;
+                $chat->is_archived = $chat->participants[0]->pivot->is_archived;
+                $chat->archived_at = $chat->participants[0]->pivot->archived_at;
+                $chat->other_user->province_name = $chat->other_user->profile->province_name;
                 // $chat->other_user = $chat->otherUser();
                 $chat->last_message = $chat->messages->first();
 
@@ -178,28 +160,22 @@ class ChatController extends Controller
         return response()->json($chats);
     }
 
-    // public function show(Request $request,Chat $chat)
-    // {
-    //     //$this->authorize('view', $chat);
-    //     $user= $request->user();
-
-    //     //Check if user is allowed to view chat.
-    //     if(($chat->user1_id != $user->id) && ($chat->user2_id != $user->id)){
-    //         return response()->json('bad code');
-    //     }
-
-    //     $chat->load(['user1', 'user2',
-    //     'participants' => function($query) use($user) {
-    //             $query->select('id')->where('id',$user->id);
-    //             },
-    //     ]);
-    //     $chat->other_user = $chat->user1_id === auth()->id() ? $chat->user2 : $chat->user1;
-    //     $chat->other_user->province_name = $chat->other_user->profile->province_name;
-    //     $chat->is_archived = $chat->participants[0]->pivot->is_archived;
-    //     $chat->archived_at = $chat->participants[0]->pivot->archived_at;
-    //     unset($chat->user1, $chat->user2, $chat->other_user->profile, $chat->messages,$chat->participants); //Remove form list after query
-    //     return response()->json($chat);
-    // }
+    public function show(Request $request,Chat $chat)
+    {
+        //$this->authorize('view', $chat);
+        $user= $request->user();
+        $chat->load(['user1', 'user2',
+        'participants' => function($query) use($user) {
+                $query->select('id')->where('id',$user->id);
+                },
+        ]);
+        $chat->other_user = $chat->user1_id === auth()->id() ? $chat->user2 : $chat->user1;
+        $chat->other_user->province_name = $chat->other_user->profile->province_name;
+        $chat->is_archived = $chat->participants[0]->pivot->is_archived;
+        $chat->archived_at = $chat->participants[0]->pivot->archived_at;
+        unset($chat->user1, $chat->user2, $chat->other_user->profile, $chat->messages,$chat->participants); //Remove form list after query
+        return response()->json($chat);
+    }
 
     public function archive(Request $request,Chat $chat)
     {

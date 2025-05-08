@@ -40,7 +40,7 @@ class UserProfile extends Model
         'country_id',
         'province_id',
     ];
-    protected $appends = ['available_services','personal_interests','my_languages','country_name', 'province_name'];
+    // protected $appends = ['available_services','personal_interests','my_languages','country_name', 'province_name'];
 
     public function getAvailableServicesAttribute()
     {

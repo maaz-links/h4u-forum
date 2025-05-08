@@ -1,0 +1,163 @@
+@extends('adminlte::page')
+
+@section('title', 'User Details')
+
+@section('content_header')
+    <h1>User Details</h1>
+@stop
+
+@section('content')
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary">
+                        <h3 class="card-title">Basic Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Name:</strong> {{ $user->name }}</p>
+                                <p><strong>Email:</strong> {{ $user->email }}</p>
+                                <p><strong>Phone:</strong> {{ $user->phone }}</p>
+                                <p><strong>Role:</strong> {{ ucfirst($user->role) }}</p>
+                                <p><strong>Date of Birth:</strong> {{ \Carbon\Carbon::parse($user->dob)->format('M d, Y') }}</p>
+                                <p><strong>Joined:</strong> {{ $user->created_at->format('M d, Y') }}</p>
+                                <p><strong>Rating:</strong> {{ number_format($user->rating, 2) }} ⭐</p>
+                                <p><a href="{{route('user-profile.chat',[$user->name])}}">Check chat list</a></p>
+                            </div>
+                            <div class="col-md-6">
+                                
+                                {{-- <p><strong>Last Updated:</strong> {{ $user->updated_at->format('M d, Y') }}</p> --}}
+                                @if($user->profile_picture_id)
+                                    <img src="{{ '../api/attachments/' . $user->profile_picture_id }}" 
+                                         alt="Profile Picture" 
+                                         class="img-thumbnail" 
+                                         style="max-width: 150px;">
+                                @else
+                                    <p class="text-muted">No profile picture</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @if($user->profile)
+                <div class="card mt-4">
+                    <div class="card-header bg-success">
+                        <h3 class="card-title">Profile Details</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <p><strong>Description:</strong><div>{{ $user->profile->description }}</div> </p>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{-- <p><strong>Gender:</strong> {{ $user->profile->gender }}</p> --}}
+                                {{-- <p><strong>Description:</strong> {{ $user->profile->description }}</p> --}}
+
+                                <p><strong>Nationality:</strong> {{ $user->profile->nationality }}</p>
+                                <p><strong>Height:</strong> {{ $user->profile->height }} cm</p>
+                                <p><strong>Top Profile:</strong> {{ $user->profile->top_profile ? 'Yes' : 'No' }}</p>
+                                <p><strong>Verified Profile:</strong> {{ $user->profile->verified_profile ? 'Yes' : 'No' }}</p>
+                                <p><strong>Eye Color:</strong> {{ ucwords($user->profile->eye_color) }}</p>
+                                <p><strong>Shoe Size:</strong> {{ $user->profile->shoe_size }}</p>
+                                <p><strong>Credits:</strong> {{ $user->profile->credits }}</p>
+                            </div>
+                            @if ($user->role == \App\Models\User::ROLE_HOSTESS)
+                            <div class="col-md-6">
+                                <p><strong>Weight:</strong> {{ $user->profile->weight }} kg</p>
+                                <p><strong>Dress Size:</strong> {{ $user->profile->dress_size }}</p>
+                                <p><strong>Is Model:</strong> {{ $user->profile->is_user_model ? 'Yes' : 'No' }}</p>
+                                
+                                {{-- <p><strong>Verified Female:</strong> {{ $user->profile->verified_female ? 'Yes' : 'No' }}</p> --}}
+                                
+                                <p><strong>Travel Available:</strong> {{ $user->profile->travel_available ? 'Yes' : 'No' }}</p>
+                                
+                            </div>
+                            @endif
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header bg-info">
+                        <h3 class="card-title">Social Media</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Facebook:</strong> {{ $user->profile->facebook ?: 'N/A' }}</p>
+                                <p><strong>Instagram:</strong> {{ $user->profile->instagram ?: 'N/A' }}</p>
+                                <p><strong>Telegram:</strong> {{ $user->profile->telegram ?: 'N/A' }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>TikTok:</strong> {{ $user->profile->tiktok ?: 'N/A' }}</p>
+                                <p><strong>OnlyFans:</strong> {{ $user->profile->onlyfans ?: 'N/A' }}</p>
+                                <p><strong>Personal Website:</strong> {{ $user->profile->personal_website ?: 'N/A' }}</p>
+                            </div>
+                        </div>
+                        {{-- <hr> --}}
+                        {{-- <div class="row mt-3">
+                            <div class="col-md-6">
+                                <p><strong>Available Services:</strong></p>
+                                <ul>
+                                    @foreach($user->profile->available_services as $service)
+                                        <li>{{ $service }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Personal Interests:</strong></p>
+                                <ul>
+                                    @foreach($user->profile->personal_interests as $interest)
+                                        <li>{{ $interest }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <p><strong>Languages:</strong></p>
+                                <ul>
+                                    @foreach($user->profile->my_languages as $language)
+                                        <li>{{ $language }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div> --}}
+                    </div>
+                </div>
+                @else
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <p class="text-muted">No profile details available for this user.</p>
+                    </div>
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+@stop
+
+@section('css')
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .card-header {
+            color: white;
+        }
+        .card {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+    </style>
+@stop
+
+@section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js"
+        integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+@stop

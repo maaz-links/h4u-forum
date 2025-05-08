@@ -15,13 +15,6 @@ class BuyChat
         $userA = $user->id;
         $userB = $other_user_id;
 
-        // $existingChat = Chat::where(function ($query) use ($userA, $userB) {
-        //     $query->where('user1_id', $userA)
-        //           ->where('user2_id', $userB);
-        // })->orWhere(function ($query) use ($userA, $userB) {
-        //     $query->where('user1_id', $userB)
-        //           ->where('user2_id', $userA);
-        // })->first();
         $existingChat = Chat::findBetweenUsers($user->id,$other_user_id);
         
         if($existingChat){

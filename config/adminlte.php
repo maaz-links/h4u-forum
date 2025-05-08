@@ -393,8 +393,23 @@ return [
         //     'url' => '#',
         // ],
         [
+            'text' => 'Home',
+            'url' => '/home',
+            'icon' => 'far fa-fw fa-file',
+        ],
+        [
             'text' => 'Configuration',
             'url' => '/configs',
+            'icon' => 'far fa-fw fa-file',
+        ],
+        [
+            'text' => 'Credits Configuration',
+            'url' => '/credits-config',
+            'icon' => 'far fa-fw fa-file',
+        ],
+        [
+            'text' => 'Reviews Configuration',
+            'url' => '/reviews-config',
             'icon' => 'far fa-fw fa-file',
         ],
     ],
@@ -480,12 +495,12 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
+                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11',
                 ],
             ],
         ],

@@ -19,15 +19,16 @@ class ReviewController extends Controller
 
     public function __construct()
     {
-        $this->dayInterval = config('h4u.review_delay');
-        $this->dayIntervalOutput = Carbon::now()->subDays(config('h4u.review_delay'));
+        $this->dayInterval = config('h4u.reviews.review_delay');
+        $this->dayIntervalOutput = Carbon::now()->subDays(config('h4u.reviews.review_delay'));
     }
 
     public function store(Request $request)
     {
         $user = $request->user();
         $userID = $user->id;
-        $leastrating = 1;
+        $leastrating = config('h4u.reviews.minimum_rating');
+        //return response()->json($leastrating,500);
         $validator = Validator::make(
             $request->all(),
             [
@@ -49,7 +50,7 @@ class ReviewController extends Controller
             Review::where('reviewer_id',$request->reviewed_user_id)
             ->where('reviewed_user_id',$userID)->first();
             if(!$hasReviewed){
-                return response()->json(['formError' => 'target hasnt reviewed yet'], 422);
+                return response()->json(['formError' => ['target hasnt reviewed yet']], 422);
             }
         }
         elseif($user->role == User::ROLE_KING){
@@ -59,7 +60,7 @@ class ReviewController extends Controller
             Chat::findBetweenUsers($userID, $request->reviewed_user_id,true,$this->dayIntervalOutput);
             //return $existingChat;
             if(!$existingChat){
-                return response()->json(['formError' => 'Chat not exist'], 422);
+                return response()->json(['formError' => ['Chat not exist']], 422);
             }
             // if(!$existingChat->unlocked){
             //     return response()->json(['formError' => 'locked chat'], 422);
@@ -69,7 +70,7 @@ class ReviewController extends Controller
             // }
         }
         else{
-            return response()->json(['formError' => 'Bad Role'], 422);
+            return response()->json(['formError' => ['Bad Role']], 422);
         }
 
         //for KING, at least 3 days of chat.

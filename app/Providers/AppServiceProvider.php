@@ -4,7 +4,10 @@ namespace App\Providers;
 
 use App\Models\UserConfig;
 use Config;
+use DB;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
+use Log;
 use Schema;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,6 +25,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        JsonResource::withoutWrapping();
+        Log::info("__________________________________________");
+        DB::listen(function ($query) {
+            // Log the query and its execution time
+            Log::info("Query: {$query->sql}, Time: {$query->time}ms");
+        });
         // Check if the table exists before trying to query it
         if (Schema::hasTable('user_configs')) {
             $allConfigs = UserConfig::get();
@@ -29,6 +38,8 @@ class AppServiceProvider extends ServiceProvider
                 Config::set($c->key, $c->value);
             }
         }
+
+        
         //
     }
 }

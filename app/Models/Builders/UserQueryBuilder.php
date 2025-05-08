@@ -78,6 +78,11 @@ class UserQueryBuilder extends Builder
         return $this->where('role', $role);
     }
 
+    public function forRoleAny(): self
+    {
+        return $this->whereIn('role', [User::ROLE_HOSTESS,User::ROLE_KING]);
+    }
+
     /**
      * Filter by opposite user role. ( Requires $role )
      */

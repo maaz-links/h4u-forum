@@ -11,6 +11,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ApiAuth\VerificationController;
+use App\Http\Resources\UserResource;
 use App\Models\EuropeCountry;
 use App\Models\EuropeProvince;
 use App\Models\User;
@@ -47,11 +48,19 @@ Route::get('/miscdata', [MiscController::class, 'miscdata']);
 
 Route::get('/attachments/{id}', [AttachmentController::class, 'show'])->name('attachments.show');
 
+// Route::get('/countries', function() {
+//     return EuropeCountry::ordered()->get(['id', 'name']);
+// });
 Route::get('/countries', function() {
-    return EuropeCountry::ordered()->get(['id', 'name']);
+    return EuropeCountry::with(
+        ['provinces' => function($query) {
+            $query->select('id','country_id','name')->ordered();
+        }
+    
+    ])->ordered()->get(['id', 'name']);
 });
 Route::get('/provinces', function() {
-    return EuropeProvince::ordered()->get(['id', 'name']);
+    return EuropeProvince::orderBy('name')->get(['id', 'name']);
 });
 // Get provinces for a specific country ordered
 Route::get('/countries/{countryId}/provinces', function($countryId) {
@@ -69,11 +78,20 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('reset.msglimit')->group(function () {
 
+        // Route::get('/user', function (Request $request) {
+        //     $user = User::with('profile')->where('id', '=', $request->user()->id)->first();
+        //     $user->rating = $user->getRatingAttribute();
+        
+        //     // dd($user->profile());
+        //     return response()->json($user);
+        
+        // });     
         Route::get('/user', function (Request $request) {
             $user = User::with('profile')->where('id', '=', $request->user()->id)->first();
-        
+            $user->rating = $user->getRatingAttribute();
+            return new UserResource($user);
             // dd($user->profile());
-            return response()->json($user);
+            // return response()->json($user);
         
         });        
 

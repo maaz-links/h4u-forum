@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ProfileViewed;
+use App\Http\Resources\UserResource;
 use App\Models\Chat;
 use App\Models\ProfileView;
 use App\Models\User;
@@ -19,8 +21,11 @@ class UserProfileController extends Controller
     public function profileByGuest(Request $request,$username){
         //return $this->getFullProfile($username,[0]);
         $result = $this->getFullProfile($username,[0]);
+        if (!$result) {
+            return response()->json(['user'=>$result,'unlockChat'=>false]);
+        }
         return response()->json([
-            'user'=>$result,
+            'user'=>new UserResource($result),
             'unlockChat'=>false,
         ]);
     }
@@ -50,8 +55,9 @@ class UserProfileController extends Controller
         $unlockChat = $existingChat ? false : true;
         
         $this->recordProfileView($user->id, $result->id);
+        // ProfileViewed::dispatch($user->id, $result->id);
 
-        return response()->json(['user'=>$result,'unlockChat'=>$unlockChat]);
+        return response()->json(['user'=>new UserResource($result),'unlockChat'=>$unlockChat]);
     }
 
     public function getFullProfile($username,$check_visibility,$role = User::ROLE_KING){
@@ -78,6 +84,9 @@ class UserProfileController extends Controller
         // if(!$user){
         //     return false;
         // }
+        // if($user){
+        //     $user = new UserResource($user);
+        // }
         return $user;
     }
 
@@ -90,6 +99,10 @@ class UserProfileController extends Controller
             ->exists();
 
         if (!$recentViewExists) {
+            ProfileView::where('viewer_id', $viewerId)
+            ->where('viewed_id', $viewedId)
+            ->delete();
+
             ProfileView::create([
                 'viewer_id' => $viewerId,
                 'viewed_id' => $viewedId
@@ -99,19 +112,20 @@ class UserProfileController extends Controller
 
     public function getLastViews(Request $request){
         $lastViewers = ProfileView::withWhereHas(
-            'viewer' ,function ($query)  {
+            'viewer' ,function ($query) use ($request) {
                 $query->select(
                     'id',
                     'name',
                     'role',
                     'created_at',
                     'profile_picture_id',
-                )->hasProfilePicture();
+                )->hasProfilePicture()
+                ->forOppositeRole($request->user()->role);
             }
         )
         ->where('viewed_id', $request->user()->id)        // Only views of this profile
         ->latest()                             // Newest first
-        ->take(5)                             // Limit to 5
+        // ->take(5)                             // Limit to 5
         ->get();                               // Execute query
         return response()->json($lastViewers);
     }

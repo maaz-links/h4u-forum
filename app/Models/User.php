@@ -43,7 +43,7 @@ class User extends Authenticatable implements MustVerifyEmail
     // public function getPfpUrlAttribute(){
     //     return $this->profilePictureId()->value('path');
     // }
-    protected $appends = ['rating'];
+    // protected $appends = ['rating'];
 
     public function getRatingAttribute(){
         return $this->reviewsReceived()->avg('rating') ?? 0.0;

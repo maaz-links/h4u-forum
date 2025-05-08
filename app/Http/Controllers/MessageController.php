@@ -15,7 +15,7 @@ class MessageController extends Controller
         //$this->authorize('view', $chat);
         
         $messages = $chat->messages()
-            ->with('sender')
+            // ->with('sender')
             ->orderBy('created_at', 'asc')
             ->get()
             ->map(function($message) {
@@ -24,7 +24,7 @@ class MessageController extends Controller
                     'text' => $message->message,
                     'time' => $message->created_at->format('H:i'),
                     'sent' => $message->sender_id === auth()->id(),
-                    'sender_name' => $message->sender->name,
+                    // 'sender_name' => $message->sender->name,
                 ];
             })
             ;
@@ -50,7 +50,7 @@ class MessageController extends Controller
             'text' => $message->message,
             'time' => $message->created_at->format('H:i'),
             'sent' => true,
-            'sender_name' => $message->sender->name,
+            // 'sender_name' => $message->sender->name,
         ]);
     }
 
@@ -63,7 +63,7 @@ class MessageController extends Controller
         $messages = $chat->messages()
             ->where('id', '>', $lastMessageId)
             ->where('sender_id', '!=', auth()->id())
-            ->with('sender')
+            // ->with('sender')
             ->orderBy('created_at', 'asc')
             ->get()
             ->map(function($message) {
@@ -72,7 +72,7 @@ class MessageController extends Controller
                     'text' => $message->message,
                     'time' => $message->created_at->format('H:i'),
                     'sent' => false,
-                    'sender_name' => $message->sender->name,
+                    // 'sender_name' => $message->sender->name,
                 ];
             });
             

@@ -20,13 +20,15 @@ class Chat extends Model
     public function user1()
     {
         return $this->belongsTo(User::class, 'user1_id')
-                    ->whereIn('role', [User::ROLE_KING, User::ROLE_HOSTESS]);
+                    // ->whereIn('role', [User::ROLE_KING, User::ROLE_HOSTESS])
+                    ;
     }
 
     public function user2()
     {
         return $this->belongsTo(User::class, 'user2_id')
-                    ->whereIn('role', [User::ROLE_KING, User::ROLE_HOSTESS]);
+                    // ->whereIn('role', [User::ROLE_KING, User::ROLE_HOSTESS])
+                    ;
     }
 
     protected static function booted()

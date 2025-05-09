@@ -25,6 +25,7 @@
                                 <p><strong>Joined:</strong> {{ $user->created_at->format('M d, Y') }}</p>
                                 <p><strong>Rating:</strong> {{ number_format($user->rating, 2) }} ⭐</p>
                                 <p><a href="{{route('user-profile.chat',[$user->name])}}">Check chat list</a></p>
+                                <p><a href="{{route('user-profile.reviews',[$user->name])}}">Check reviews</a></p>
                             </div>
                             <div class="col-md-6">
                                 

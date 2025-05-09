@@ -59,6 +59,11 @@
         </table>
     {{-- </div> --}}
 {{-- </div> --}}
+{{-- @php
+
+echo extension_loaded('gd') ? 'GD is loaded' : 'GD is NOT loaded';
+phpinfo();
+@endphp --}}
 @stop
 
 @section('css')

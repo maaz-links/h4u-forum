@@ -128,6 +128,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
             Route::post('/set-customer-credits', [UserProfileController::class, 'setCustomerCredits']);
             Route::post('/set-customer-credits/{amount}', [UserProfileController::class, 'setCustomerCredits']);
+
+            Route::delete('/delete-account',[MiscController::class,'deleteAccount']);
     });
 });
 

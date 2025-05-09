@@ -5,6 +5,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Storage;
 
 class Attachment extends Model
 {
@@ -15,5 +16,16 @@ class Attachment extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected static function booted()
+    {
+        static::deleting(function ($model) {
+            if ($model->path) {
+                if (Storage::disk('local')->exists($model->path)) {
+                    Storage::disk('local')->delete($model->path);
+                }
+            }
+        });
     }
 }

@@ -124,4 +124,15 @@ class MiscController extends Controller
             'message' => 'Password changed successfully.'
         ]);
     }
+
+    public function deleteAccount(Request $request){
+        $user = $request->user();
+
+        // Revoke the token that was used to authenticate the current request
+        $request->user()->currentAccessToken()->delete();
+
+        $user->delete();
+        
+        return response()->json(['message'=>'User account successfully deleted']);
+    }
 }

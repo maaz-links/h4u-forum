@@ -5,11 +5,11 @@
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
         <h1>Chat Log #{{ $chat->id }}</h1>
-        <div>
+        {{-- <div>
             <a href="" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Back to Chats
             </a>
-        </div>
+        </div> --}}
     </div>
 @stop
 
@@ -39,7 +39,7 @@
                                 @endif
                             </div>
                             <div>
-                                <strong>{{ $chat->user1->name }}</strong><br>
+                                <a href="{{route('user-profile', $chat->user1->name) }}"><strong>{{ $chat->user1->name }}</strong></a><br>
                                 {{-- <span class="badge {{ $chat->user1->role == 'HOSTESS' ? 'bg-purple' : 'bg-primary' }}">
                                     {{ ucfirst(strtolower($chat->user1->role)) }}
                                 </span> --}}
@@ -62,7 +62,7 @@
                                 @endif
                             </div>
                             <div>
-                                <strong>{{ $chat->user2->name }}</strong><br>
+                                <a href="{{route('user-profile', $chat->user2->name) }}"><strong>{{ $chat->user2->name }}</strong></a><br>
                                 {{-- <span class="badge {{ $chat->user2->role == 'HOSTESS' ? 'bg-purple' : 'bg-primary' }}">
                                     {{ ucfirst(strtolower($chat->user2->role)) }}
                                 </span> --}}
@@ -245,6 +245,7 @@
 @stop
 
 @section('css')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
     .direct-chat-messages {
@@ -280,7 +281,9 @@
 @stop
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
 <script>
+    
     $(document).ready(function() {
         // Scroll to bottom of chat
         // $('.direct-chat-messages').scrollTop($('.direct-chat-messages')[0].scrollHeight);

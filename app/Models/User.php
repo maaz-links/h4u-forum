@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Storage;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -108,6 +109,15 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Review::class, 'reviewed_user_id');
     }
 
+    protected static function booted()
+    {
+        static::deleting(function ($parent) {
+            //dd($parent,$parent->securefile);
+            $parent->attachments->each(function ($child) {
+                $child->delete();
+            });
+        });
+    }
 
     // In app/Models/User.php
     public function sendEmailVerificationNotification()

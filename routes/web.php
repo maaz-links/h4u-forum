@@ -9,16 +9,16 @@ use App\Http\Controllers\Admin\UserReviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    //return view('welcome');
+    return redirect('/login');
 });
 
 Auth::routes();
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::group(['middleware' => ['auth']], function () {
 
-Route::group([
-    'middleware' => ['admin']
-], function () {
+Route::group(['middleware' => ['admin']], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/user-profile/{name}', [HomeController::class, 'profile'])->name('user-profile');
     Route::get('/user-profile/{name}/chat', [UserChatController::class, 'allchats'])->name('user-profile.chat');
@@ -43,4 +43,6 @@ Route::group([
     Route::get('/configs/{mail_config}/edit', [ConfigController::class, 'edit'])->name('configs.edit');
     Route::put('/configs/{mail_config}', [ConfigController::class, 'update'])->name('configs.update');
     Route::delete('/configs/{mail_config}', [ConfigController::class, 'destroy'])->name('configs.destroy');
+});
+
 });

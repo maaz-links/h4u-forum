@@ -9,16 +9,6 @@ use Illuminate\Http\Request;
 
 class ReviewConfigController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-        // $this->middleware('admin');
-    }
     public function index()
     {
         $configs = UserConfig::orderBy('key')->get();

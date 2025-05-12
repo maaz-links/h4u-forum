@@ -55,20 +55,3 @@ class ConfigController extends Controller
         return redirect()->route('configs.index')->with('success', 'Configuration deleted successfully.');
     }
 }
-
-// MAIL_MAILER=log
-// MAIL_HOST=127.0.0.1
-// MAIL_PORT=2525
-// MAIL_USERNAME=null
-// MAIL_PASSWORD=null
-// MAIL_ENCRYPTION=null
-// MAIL_FROM_ADDRESS="hello@example.com"
-// MAIL_FROM_NAME="${APP_NAME}"
-// # MAIL_MAILER=smtp
-// # MAIL_HOST=smtp.gmail.com
-// # MAIL_PORT=587
-// # MAIL_USERNAME=mzit3116@gmail.com
-// # MAIL_PASSWORD="akvu gdcu tnhw lzok"
-// # MAIL_ENCRYPTION=tls
-// # MAIL_FROM_ADDRESS="noreplyfilepad@gmail.com"
-// # MAIL_FROM_NAME="FilePad"

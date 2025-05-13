@@ -16,6 +16,7 @@ class UserProfileResource extends JsonResource
     {
         /** @var \App\Models\User $this */
         return [
+            'id' => $this->id,
             'user_id' => $this->user_id,
             'gender' => $this->gender,
             'description' => $this->description,

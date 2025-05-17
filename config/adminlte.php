@@ -408,6 +408,11 @@ return [
             'url' => '/reviews-config',
             'icon' => 'far fa-fw fa-file',
         ],
+        [
+            'text' => 'Admin Logs',
+            'url' => '/admin-logs',
+            'icon' => 'far fa-fw fa-file',
+        ],
     ],
 
     /*

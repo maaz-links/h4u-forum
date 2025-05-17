@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminLogController;
 use App\Http\Controllers\Admin\ConfigController;
 use App\Http\Controllers\Admin\CreditController;
 use App\Http\Controllers\Admin\HomeController;
@@ -43,6 +44,8 @@ Route::group(['middleware' => ['admin']], function () {
     Route::get('/configs/{mail_config}/edit', [ConfigController::class, 'edit'])->name('configs.edit');
     Route::put('/configs/{mail_config}', [ConfigController::class, 'update'])->name('configs.update');
     Route::delete('/configs/{mail_config}', [ConfigController::class, 'destroy'])->name('configs.destroy');
+
+    Route::get('/admin-logs', [AdminLogController::class, 'index'])->name('admin-logs.index');
 });
 
 });

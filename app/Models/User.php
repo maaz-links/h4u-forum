@@ -20,7 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public const ROLE_HOSTESS = 'HOSTESS';
     public const ROLE_ADMIN = 'ADMIN';
-    public const ROLE_KING = 'CUSTOMER';
+    public const ROLE_KING = 'KING';
     
     /**
      * The attributes that are mass assignable.

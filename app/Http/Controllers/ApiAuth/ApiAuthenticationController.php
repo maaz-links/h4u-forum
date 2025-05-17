@@ -138,7 +138,7 @@ class ApiAuthenticationController extends Controller
                 //'message' => 'Invalid login credentials',
                 'formError' => ['email' => ['Invalid login credentials']],
                 'noreload' => true
-            ], 401);
+            ], 422);
         }
 
         $user = User::where('email', $request->email)->first();
@@ -225,7 +225,7 @@ class ApiAuthenticationController extends Controller
                 //'message' => 'Invalid login credentials',
                 'formError' => ['otp' => ['OTP Invalid or Expired']],
                 'noreload' => true
-            ], 401);
+            ], 422);
         }
         // Clear OTP after successful verification
         $user->update([

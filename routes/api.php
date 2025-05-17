@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\API\PaymentController;
+use App\Http\Controllers\API\ShopController;
 use App\Http\Controllers\ApiAuth\ApiAuthenticationController;
 use App\Http\Controllers\ApiAuth\PasswordResetController;
 use App\Http\Controllers\AttachmentController;
@@ -131,7 +133,17 @@ Route::middleware('auth:sanctum')->group(function () {
 
             Route::delete('/delete-account',[MiscController::class,'deleteAccount']);
     });
+
+    Route::get('shops',[ShopController::class,'index']);
+    Route::get('shop/{id}',[ShopController::class,'shop']);
+    Route::post('/add/user-credits',[ShopController::class,'addCredits']);
+    Route::get('/user-purchased',[ShopController::class,'userPurchased']);
+
+    Route::post('/create-payment-intent',[PaymentController::class,'createPaymentIntent']);
+    Route::post('/paypal/create-order', [PaymentController::class, 'createOrder']);
+    Route::get('/paypal/success', [PaymentController::class, 'success']);
+    Route::get('/paypal/cancel', [PaymentController::class, 'cancel']);
+
 });
 
 Route::get('/randomize-profiles', [UserProfileController::class, 'randomize']);
-

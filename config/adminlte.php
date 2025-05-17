@@ -413,6 +413,17 @@ return [
             'url' => '/admin-logs',
             'icon' => 'far fa-fw fa-file',
         ],
+
+         [
+            'text' => 'Shops',
+            'url' => '/shops/all',
+            'icon' => 'far fa-fw fa-file',
+        ],
+          [
+            'text' => 'Shops Transaction',
+            'url' => '/shop/transactions',
+            'icon' => 'far fa-fw fa-file',
+        ],
     ],
 
     /*

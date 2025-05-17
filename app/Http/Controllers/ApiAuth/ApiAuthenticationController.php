@@ -198,7 +198,7 @@ class ApiAuthenticationController extends Controller
             $request->all(),
             [
                 'email' => 'required|email',
-                //'otp' => 'required|integer|digits:6',
+                'otp' => 'required|integer|digits:6',
                 //'otp' => 'integer|digits:6',
             ]
         );
@@ -208,16 +208,16 @@ class ApiAuthenticationController extends Controller
         }
 
         // dd('ok');
-        if(!$request->otp){
-            $user = User::where('email', $request->email)
-            ->where('otp_expires_at', '>', now())
-            ->first();
-        }else{
+        // if(!$request->otp){
+        //     $user = User::where('email', $request->email)
+        //     ->where('otp_expires_at', '>', now())
+        //     ->first();
+        // }else{
             $user = User::where('email', $request->email)
             ->where('otp', $request->otp)
             ->where('otp_expires_at', '>', now())
             ->first();
-        }
+        // }
         
         
         if (!$user) {

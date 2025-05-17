@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\ConfigController;
 use App\Http\Controllers\Admin\CreditController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\ReviewConfigController;
+use App\Http\Controllers\Admin\ShopController;
+use App\Http\Controllers\Admin\ShopTransactionController;
 use App\Http\Controllers\Admin\UserChatController;
 use App\Http\Controllers\Admin\UserReviewController;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +48,19 @@ Route::group(['middleware' => ['admin']], function () {
     Route::delete('/configs/{mail_config}', [ConfigController::class, 'destroy'])->name('configs.destroy');
 
     Route::get('/admin-logs', [AdminLogController::class, 'index'])->name('admin-logs.index');
+    // Shops Routes
+    Route::get('/shops/all', [ShopController::class, 'index'])->name('shops.index');
+    Route::get('/shop/create', [ShopController::class, 'create'])->name('shop.create');
+    Route::post('/shop/store', [ShopController::class, 'store'])->name('shop.store');
+    Route::get('/shop/edit/{id}', [ShopController::class, 'edit'])->name('shop.edit');
+    Route::post('/shop/update', [ShopController::class, 'update'])->name('shop.update');
+    Route::post('/shop/destroy', [ShopController::class, 'destroy'])->name('shop.destroy');
+
+     // Shops Routes
+    Route::get('/shop/transactions', [ShopTransactionController::class, 'index'])->name('shops.transactions');
+    Route::post('/shop/transaction/destroy', [ShopTransactionController::class, 'destroy'])->name('shop.transaction.destroy');
+
+
 });
 
 });

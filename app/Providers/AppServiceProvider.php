@@ -6,6 +6,7 @@ use App\Models\UserConfig;
 use Config;
 use DB;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Log;
 use Schema;
@@ -25,6 +26,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        
+     Paginator::useBootstrap();
         JsonResource::withoutWrapping();
         Log::info("__________________________________________");
         DB::listen(function ($query) {

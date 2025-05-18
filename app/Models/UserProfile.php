@@ -39,6 +39,7 @@ class UserProfile extends Model
         'nationality',
         'country_id',
         'province_id',
+        'warnings',
     ];
     // protected $appends = ['available_services','personal_interests','my_languages','country_name', 'province_name'];
 

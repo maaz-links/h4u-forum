@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             HostessServiceSeeder::class,
             InterestsTableSeeder::class,
             LanguageSeeder::class,
+            AdminSeeder::class,
         ]);
     }
 }

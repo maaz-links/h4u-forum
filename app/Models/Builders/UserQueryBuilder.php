@@ -132,4 +132,12 @@ class UserQueryBuilder extends Builder
             ->hasProfileWithVisibility($visibilityStatuses)
             ->first();
     }
+
+    public function NotBanned()
+    {
+        return $this->whereDoesntHave('bans', function($q) {
+            $q->whereNull('expired_at') // Permanent bans
+            ->orWhere('expired_at', '>', now()); // Active temporary bans
+        });
+    }
 }

@@ -3,7 +3,18 @@
 @section('title', 'User Details')
 
 @section('content_header')
-    <h1>User Details</h1>
+    <h1>User Details of {{$user->name}}
+
+        @if($user->isBanned())
+        <span class="badge bg-danger">
+            <i class="fas fa-ban"></i> Banned
+        </span>
+    @else
+        {{-- <span class="badge bg-success">
+            <i class="fas fa-check-circle"></i> Active
+        </span> --}}
+    @endif
+    </h1>
 @stop
 
 @section('content')
@@ -26,6 +37,9 @@
                                 <p><strong>Rating:</strong> {{ number_format($user->rating, 2) }} ⭐</p>
                                 <p><a href="{{route('user-profile.chat',[$user->name])}}">Check chat list</a></p>
                                 <p><a href="{{route('user-profile.reviews',[$user->name])}}">Check reviews</a></p>
+                                <p><a href="{{route('admin.users.ban.show',[$user->name])}}">Manage bans</a>
+                                   
+                                </p>
                             </div>
                             <div class="col-md-6">
                                 

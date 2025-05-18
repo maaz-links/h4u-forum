@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Events\ProfileViewed;
 use App\Http\Resources\UserResource;
+use App\Models\Ban;
 use App\Models\Chat;
 use App\Models\ProfileView;
+use App\Models\Report;
 use App\Models\User;
 use App\Models\UserProfile;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
+use Validator;
 
 class UserProfileController extends Controller
 {
@@ -39,7 +43,7 @@ class UserProfileController extends Controller
             $user = User::with('profile')->where('id', '=', $request->user()->id)->first();
             return response()->json(
                 [
-                    'user'=>$user,
+                    'user'=>new UserResource($user),
                     'unlockChat'=>false,
                 ]
             );
@@ -70,6 +74,7 @@ class UserProfileController extends Controller
         ->hasProfilePicture()
         ->forUsername($username)
         ->forOppositeRole($role)
+        ->NotBanned()
         // ->whereHas('profile', function($q) use ($check_visibility) {
         //     $q->whereIn('visibility_status', $check_visibility);
         // })
@@ -164,5 +169,55 @@ class UserProfileController extends Controller
         }
         
     }
+    
+    public function reportUser(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),[
+                'reported_user_id' => 'required|exists:users,id',
+                'reason' => 'required|string|max:1000',
+                //'additional_info' => 'nullable|string|max:1000',
+            ]
+        );
 
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Invalid Data'], 422);
+        }
+
+        if(auth()->id() == $request->reported_user_id){
+            return response()->json(['message' => 'Cannot Report self'], 422);
+        }
+
+        if(Report::where('reporter_id',auth()->id())->where('reported_user_id',$request->reported_user_id)->first()){
+            return response()->json(['message' => 'Already Reported'], 422);
+        } 
+        $report = Report::create([
+            'reporter_id' => auth()->id(),
+            'reported_user_id' => $request->reported_user_id,
+            'reason' => $request->reason,
+            //'additional_info' => $request->additional_info ?? null,
+            
+        ]);
+    
+        return response()->json([
+            'message' => 'Report submitted successfully',
+            'data' => $report
+        ], 201);
+    }
+
+    public function banReport($username){
+        $ban = Ban::whereHas('user', function ($query) use ($username) {
+            $query->where('name', $username);
+        })->first();
+        if(!$ban){
+            return response()->json(['message'=> 'no'], 404);
+        }
+        if($ban->isPermanent()){
+            return response()->json(['message'=> 'You have been permanently banned'],200);
+        }
+        if($ban->isTemporary()){
+            $date = Carbon::parse($ban->expired_at);
+            return response()->json(['message'=> 'You have been temporarily banned until '.$date->format('F j, Y \a\t g:i A')],200);
+        }
+    }
 }

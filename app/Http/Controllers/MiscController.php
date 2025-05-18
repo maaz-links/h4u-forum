@@ -27,6 +27,12 @@ class MiscController extends Controller
             'available_for' => $services,
             'spoken_languages' => $languages,
             'countries' => $countries,
+            'profile_costs' => [
+             'standard' => config('h4u.chatcost.standard'),
+             'top' => config('h4u.chatcost.topprofile'),
+             'verified' => config('h4u.chatcost.verified'),
+             'verified_top' => config('h4u.chatcost.verified_topprofile'),
+            ]
           ]);
     }
 

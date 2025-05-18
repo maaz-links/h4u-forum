@@ -144,7 +144,7 @@ class ChatController extends Controller
                 // $query->select('user_id')->where('user_id',$user->id);
                 // $query->with('profile');
                 $query->with(['profile' => function($query) use($user) {
-                    $query->select('id', 'user_id','province_id');
+                    $query->select('id', 'user_id','province_id','top_profile','verified_profile');
                 }
                     
                 ]);
@@ -168,6 +168,8 @@ class ChatController extends Controller
                 $chat->is_archived = $chat->participants[!$other_user_index]->pivot->is_archived;
                 $chat->archived_at = $chat->participants[!$other_user_index]->pivot->archived_at;
                 $chat->other_user->province_id = $chat->other_user->profile->province_id;
+                $chat->other_user->verified_profile = $chat->other_user->profile->verified_profile;
+                $chat->other_user->top_profile = $chat->other_user->profile->top_profile;
                 // $chat->other_user = $chat->otherUser();
                 $chat->last_message = $chat->messages->first();
 

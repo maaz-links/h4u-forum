@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminLogController;
+use App\Http\Controllers\Admin\BanController;
 use App\Http\Controllers\Admin\ConfigController;
 use App\Http\Controllers\Admin\CreditController;
 use App\Http\Controllers\Admin\HomeController;
@@ -9,6 +10,8 @@ use App\Http\Controllers\Admin\ShopController;
 use App\Http\Controllers\Admin\ShopTransactionController;
 use App\Http\Controllers\Admin\UserChatController;
 use App\Http\Controllers\Admin\UserReviewController;
+use App\Http\Controllers\Auth\ConfirmPasswordController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,9 +19,32 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Auth::routes();
+//Auth::routes();
 
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Login Routes
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('login', [LoginController::class, 'login']);
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+
+// Registration Routes
+// Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+// Route::post('register', [RegisterController::class, 'register']);
+
+// Password Reset Routes
+// Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+// Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+// Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+// Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+
+// Password Confirmation Route (for security-sensitive actions)
+// Route::get('password/confirm', [ConfirmPasswordController::class, 'showConfirmForm'])->name('password.confirm');
+// Route::post('password/confirm', [ConfirmPasswordController::class, 'confirm']);
+
+// Email Verification Routes
+// Route::get('email/verify', [VerificationController::class, 'show'])->name('verification.notice');
+// Route::get('email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
+// Route::post('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+
 Route::group(['middleware' => ['auth']], function () {
 
 Route::group(['middleware' => ['admin']], function () {
@@ -60,7 +86,23 @@ Route::group(['middleware' => ['admin']], function () {
     Route::get('/shop/transactions', [ShopTransactionController::class, 'index'])->name('shops.transactions');
     Route::post('/shop/transaction/destroy', [ShopTransactionController::class, 'destroy'])->name('shop.transaction.destroy');
 
+    Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])
+            ->name('reports.index');
+        
+        // Show single report (GET /admin/reports/{report})
+        Route::get('/reports/{report}', [\App\Http\Controllers\Admin\ReportController::class, 'show'])
+            ->name('reports.show');
+        
+        // Delete report (DELETE /admin/reports/{report})
+        Route::delete('/reports/{report}', [\App\Http\Controllers\Admin\ReportController::class, 'destroy'])
+            ->name('reports.destroy');
 
+    Route::get('/user-profile/{username}/ban', [BanController::class, 'showBanManagement'])->name('admin.users.ban.show');
+    Route::post('/user-profile/{user}/ban', [BanController::class, 'ban'])->name('admin.users.ban');
+    Route::post('/user-profile/{user}/temp-ban', [BanController::class, 'tempBan'])->name('admin.users.temp-ban');
+    Route::post('/user-profile/{user}/unban', [BanController::class, 'unban'])->name('admin.users.unban');
+    Route::post('/user-profile/{user}/warn', [BanController::class, 'warn'])->name('admin.users.warn');
+    
 });
 
 });

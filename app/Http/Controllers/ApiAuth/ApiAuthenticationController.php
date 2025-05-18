@@ -145,7 +145,13 @@ class ApiAuthenticationController extends Controller
         
         // Revoke all previous tokens (optional)
         $user->tokens()->delete();
-        
+        $ban = $user->activeBan();
+        if ($ban) {
+            return response()->json([
+                'banned' => true,
+                'username' => $user->name,
+            ]);
+        }
         $otp = $this->generateOTP($user);
         return response()->json([
                 'message' => $otp,

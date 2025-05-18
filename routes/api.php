@@ -22,7 +22,6 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::apiResource('hostess-services', HostessServiceController::class);
-Route::get('profile-info', [UserProfileController::class, 'index']);
 
 Route::post('register', [ApiAuthenticationController::class, 'register']);
 Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])
@@ -74,10 +73,10 @@ Route::get('/countries/{countryId}/provinces', function($countryId) {
 Route::post('/search-guest', [SearchController::class, 'searchByGuest']);
 Route::get('/user-profile-guest/{username}',[UserProfileController::class, 'profileByGuest']);
 
-
+Route::get('/ban-report/{username}',[UserProfileController::class, 'banReport']);
 
 Route::middleware('auth:sanctum')->group(function () {
-
+    Route::middleware('check.banned')->group(function () {
     Route::middleware('reset.msglimit')->group(function () {
 
         // Route::get('/user', function (Request $request) {
@@ -125,19 +124,21 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/chats/{chat}/messages', [MessageController::class, 'store']);
         Route::get('/chats/{chat}/messages/poll', [MessageController::class, 'poll']);
 
-            Route::post('/reviews', [ReviewController::class, 'store']);
-            Route::get('/reviews', [ReviewController::class, 'index']);
+        Route::post('/reviews', [ReviewController::class, 'store']);
+        Route::get('/reviews', [ReviewController::class, 'index']);
 
-            Route::post('/set-customer-credits', [UserProfileController::class, 'setCustomerCredits']);
-            Route::post('/set-customer-credits/{amount}', [UserProfileController::class, 'setCustomerCredits']);
+            // Route::post('/set-customer-credits', [UserProfileController::class, 'setCustomerCredits']);
+            // Route::post('/set-customer-credits/{amount}', [UserProfileController::class, 'setCustomerCredits']);
 
-            Route::delete('/delete-account',[MiscController::class,'deleteAccount']);
+        Route::delete('/delete-account',[MiscController::class,'deleteAccount']);
     });
-
+    });
     Route::get('shops',[ShopController::class,'index']);
     Route::get('shop/{id}',[ShopController::class,'shop']);
     Route::post('/add/user-credits',[ShopController::class,'addCredits']);
     Route::get('/user-purchased',[ShopController::class,'userPurchased']);
+
+    Route::post('/report-user', [UserProfileController::class, 'reportUser']);
 
     Route::post('/create-payment-intent',[PaymentController::class,'createPaymentIntent']);
     Route::post('/paypal/create-order', [PaymentController::class, 'createOrder']);

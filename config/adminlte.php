@@ -408,20 +408,30 @@ return [
             'url' => '/reviews-config',
             'icon' => 'far fa-fw fa-file',
         ],
-        [
-            'text' => 'Admin Logs',
-            'url' => '/admin-logs',
-            'icon' => 'far fa-fw fa-file',
-        ],
+        // [
+        //     'text' => 'Admin Logs',
+        //     'url' => '/admin-logs',
+        //     'icon' => 'far fa-fw fa-file',
+        // ],
 
          [
             'text' => 'Shops',
             'url' => '/shops/all',
             'icon' => 'far fa-fw fa-file',
         ],
-          [
+        [
             'text' => 'Shops Transaction',
             'url' => '/shop/transactions',
+            'icon' => 'far fa-fw fa-file',
+        ],
+        [
+            'text' => 'Reported Users',
+            'url' => '/reports',
+            'icon' => 'far fa-fw fa-file',
+        ],
+        [
+            'text' => 'Developer Configs',
+            'url' => '/configs',
             'icon' => 'far fa-fw fa-file',
         ],
     ],

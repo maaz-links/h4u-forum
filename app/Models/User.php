@@ -160,4 +160,51 @@ class User extends Authenticatable implements MustVerifyEmail
         //dd('ok');
         return new UserQueryBuilder($query);
     }
+
+    //BANNING
+    public function bans()
+    {
+        return $this->hasOne(Ban::class);
+    }
+    
+    public function activeBan()
+    {
+        return $this->bans()
+            ->where(function($query) {
+                $query->whereNull('expired_at')
+                    ->orWhere('expired_at', '>', now());
+            })
+            ->latest()
+            ->first();
+    }
+    
+    public function isBanned(): bool
+    {
+        return !is_null($this->activeBan());
+    }
+    
+    public function isPermanentlyBanned(): bool
+    {
+        $ban = $this->activeBan();
+        return $ban && $ban->isPermanent();
+    }
+    
+    public function isTemporarilyBanned(): bool
+    {
+        $ban = $this->activeBan();
+        return $ban && $ban->isTemporary();
+    }
+    
+    public function ban(array $options = []): Ban
+    {
+        return $this->bans()->create([
+            'expired_at' => $options['expired_at'] ?? null,
+            'reason' => $options['reason'] ?? null,
+        ]);
+    }
+    
+    public function unban(): void
+    {
+        $this->bans()->delete();
+    }
 }

@@ -8,7 +8,7 @@ use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class MessageController extends Controller
+class MessageControllerSimple extends Controller
 {
     public function index(Chat $chat)
     {

@@ -4,6 +4,9 @@ namespace App\Listeners;
 
 use App\Events\WarnUser;
 use App\Mail\pastelinkmail;
+use App\Services\CheckNotifPreference;
+use App\Services\ModConfigValues;
+use App\Services\TwilioService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
@@ -23,10 +26,20 @@ class WarnUserListener implements ShouldQueue
      */
     public function handle(WarnUser $event): void
     {
-        $subject = config('h4u.emailsubject.warning');
-        $message = config('h4u.emailmessage.warning');
+        //Load Modded configs values, for queued listeners
+        $modifiedConfig = ModConfigValues::LoadConfigValues();
+        $subject = ModConfigValues::getModifiedConfig($modifiedConfig,'h4u.emailsubject.warning');
+        $message = ModConfigValues::getModifiedConfig($modifiedConfig,'h4u.emailmessage.warning');
+
         $message = str_replace("{username}", $event->user->name, $message);
         //dd(config('mail.mailers.smtp.password'));
         Mail::to($event->user->email)->send(new pastelinkmail($message, $subject));
+
+        //Send SMS
+        $shouldSMS = CheckNotifPreference::isSMSEnabled($event->user->id);
+        if ($shouldSMS) {
+            $twilio = new TwilioService();
+            $twilio->sendSms($event->user->phone, $message);
+        }
     }
 }

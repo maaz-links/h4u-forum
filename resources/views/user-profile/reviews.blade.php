@@ -75,11 +75,15 @@
                                             class="btn btn-sm btn-primary">
                                                 <i class="fas fa-edit"></i> Edit
                                             </a>
-                                            <button type="button"
+                                            {{-- <button type="button"
                                                 onclick="confirmWithReason('{{ 'deletereviewForm-' . $review['id'] }}')"
                                                 class="btn btn-sm btn-danger">
                                                 <i class="fas fa-trash"></i> Delete
-                                            </button>
+                                            </button> --}}
+                                            <button 
+                                            class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
                                         </form>
                                         {{-- <button class="btn btn-sm btn-danger delete-review" data-review-id="{{ $review->id }}">
                                             <i class="fas fa-trash"></i> Delete
@@ -113,8 +117,8 @@
         </div>
     </div>
 </div>
-<x-confirm-dialog title="Delete this review?" message="Enter reason to perform this action" inputPlaceholder=""
-        buttonText="Confirm" cancelText="Cancel" />
+{{-- <x-confirm-dialog title="Delete this review?" message="Enter reason to perform this action" inputPlaceholder=""
+        buttonText="Confirm" cancelText="Cancel" /> --}}
 @stop
 
 @section('css')
@@ -136,7 +140,7 @@
 
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
 <script>
     $(document).ready(function() {
         // Delete review confirmation

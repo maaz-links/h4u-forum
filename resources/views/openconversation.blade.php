@@ -27,7 +27,7 @@
                         <div class="d-flex align-items-center mb-3">
                             <div class="mr-3">
                                 @if($chat->user1->profile_picture_id)
-                                <img src="{{ 'api/attachments/' . $chat->user1->profile_picture_id }}" 
+                                <img src="{{ '../api/attachments/' . $chat->user1->profile_picture_id }}" 
                                      class="img-circle elevation-2" 
                                      width="50" 
                                      alt="User Image">
@@ -50,7 +50,7 @@
                         <div class="d-flex align-items-center">
                             <div class="mr-3">
                                 @if($chat->user2->profile_picture_id)
-                                <img src="{{ 'api/attachments/' . $chat->user2->profile_picture_id }}" 
+                                <img src="{{ '../api/attachments/' . $chat->user2->profile_picture_id }}" 
                                      class="img-circle elevation-2" 
                                      width="50" 
                                      alt="User Image">

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\UserConfig;
-use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
 
 class CreditController extends Controller
@@ -24,9 +23,9 @@ class CreditController extends Controller
             'verified_topprofile' => 'required|numeric|min:0|max:10000',
         ],);
 
-        $validated2 = $request->validate([
-            'admin_reason' => 'required|string',
-        ],);
+        // $validated2 = $request->validate([
+        //     'admin_reason' => 'required|string',
+        // ],);
 
         \DB::transaction(function () use ($validated_data,$request) {
             $results = [];
@@ -39,7 +38,7 @@ class CreditController extends Controller
             }
             
             
-            AuditAdmin::audit("Modified Credits Cost",$request->admin_reason);
+            // AuditAdmin::audit("Modified Credits Cost",$request->admin_reason);
 
             return $results;
         });

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminLogController;
 use App\Http\Controllers\Admin\BanController;
 use App\Http\Controllers\Admin\ConfigController;
 use App\Http\Controllers\Admin\CreditController;
+use App\Http\Controllers\Admin\EmailTemplatesController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ReviewConfigController;
@@ -53,7 +54,8 @@ Route::group(['middleware' => ['admin']], function () {
     Route::get('/user-profile/{name}', [HomeController::class, 'profile'])->name('user-profile');
     Route::get('/user-profile/{name}/chat', [UserChatController::class, 'allchats'])->name('user-profile.chat');
 
-    Route::post('/opened-conversation', [UserChatController::class, 'conversation'])->name('open.conversation');
+    // Route::post('/opened-conversation', [UserChatController::class, 'conversation'])->name('open.conversation');
+    Route::get('/opened-conversation/{chat}', [UserChatController::class, 'conversation'])->name('open.conversation');
 
     Route::get('/user-profile/{name}/reviews', [UserReviewController::class, 'allreviews'])->name('user-profile.reviews');
     Route::get('/user-profile/{review}/reviews/edit', [UserReviewController::class, 'editReview'])->name('edit.review');
@@ -112,6 +114,15 @@ Route::group(['middleware' => ['admin']], function () {
 
     Route::resource('/contact-requests', \App\Http\Controllers\Admin\ContactRequestController::class)
     ->only(['index', 'show', 'destroy']);
+
+    Route::prefix('admin')->group(function () {
+        Route::get('/email-templates', [EmailTemplatesController::class, 'index'])
+            ->name('admin.email-templates.index');
+        Route::get('/email-templates/{type}/edit', [EmailTemplatesController::class, 'edit'])
+            ->name('admin.email-templates.edit');
+        Route::put('/email-templates/{type}', [EmailTemplatesController::class, 'update'])
+            ->name('admin.email-templates.update');
+    });
 });
 
 });

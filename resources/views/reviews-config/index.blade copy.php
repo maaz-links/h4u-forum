@@ -40,14 +40,14 @@
                                 {{-- <button type="button" class="btn btn-success" onclick="confirmWithReason('delayForm')">
                                     Save
                                 </button> --}}
-                                {{-- <button class="btn btn-success">
+                                <button class="btn btn-success">
                                     Save
-                                </button> --}}
+                                </button>
                             </div>
                         </div>
-                    {{-- </form>
+                    </form>
                     <form id="minreviewsForm" action="{{ route('reviews-config.store') }}" method="POST">
-                        @csrf --}}
+                        @csrf
                         <div class="form-group row align-items-center mb-3">
                             <label title="The minimum number of reviews required before a user's rating is visible publicly"
                                 class="col-sm-5 col-form-label text-end">
@@ -65,14 +65,14 @@
                                 {{-- <button type="button" class="btn btn-success" onclick="confirmWithReason('minreviewsForm')">
                                     Save
                                 </button> --}}
-                                {{-- <button class="btn btn-success">
+                                <button class="btn btn-success">
                                     Save
-                                </button> --}}
+                                </button>
                             </div>
                         </div>
-                    {{-- </form>
+                    </form>
                     <form id="minratingForm" action="{{ route('reviews-config.store') }}" method="POST">
-                        @csrf --}}
+                        @csrf
                         <div class="form-group row align-items-center mb-3">
                             <label title="The minimum number of stars a user can give to other user"
                                 class="col-sm-5 col-form-label text-end">
@@ -90,13 +90,9 @@
                                 {{-- <button type="button" class="btn btn-success" onclick="confirmWithReason('minratingForm')">
                                     Save
                                 </button> --}}
-                                {{-- <button class="btn btn-success">
+                                <button class="btn btn-success">
                                     Save
-                                </button> --}}
-                            </div>
-                            <div class="text-center mt-4">
-                                {{-- <button type="button" onclick="confirmWithReason('creditsForm')" class="btn px-3 btn-success">Save</button> --}}
-                                <button class="btn px-3 btn-success">Save</button>
+                                </button>
                             </div>
                         </div>
                     </form>

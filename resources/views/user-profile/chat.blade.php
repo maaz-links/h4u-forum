@@ -52,7 +52,8 @@
                                             @endif --}}
                                         </td>
                                         <td>
-                                            <form id="{{ "openchatForm-{$chat['other_user']['name']}" }}"
+                                            <a class="btn btn-sm btn-primary" href={{route('open.conversation',$chat['id'])}}><i class="fas fa-comments"></i> Open</a>
+                                            {{-- <form id="{{ "openchatForm-{$chat['other_user']['name']}" }}"
                                                 action="{{ route('open.conversation') }}" method="POST">
                                                 @csrf
                                                 <input type="hidden" name="chat_id" value="{{ $chat['id'] }}" required>
@@ -61,7 +62,7 @@
                                                     class="btn btn-sm btn-primary">
                                                     <i class="fas fa-comments"></i> Open
                                                 </button>
-                                            </form>
+                                            </form> --}}
                                             {{-- @if ($chat['is_archived'])
                                                 <button class="btn btn-sm btn-success unarchive-btn" data-chat-id="{{ $chat['id'] }}">
                                                     <i class="fas fa-inbox"></i> Unarchive
@@ -94,8 +95,8 @@
             </div>
         </div>
     </div>
-    <x-confirm-dialog title="Open conversation?" message="Enter reason to perform this action" inputPlaceholder=""
-        buttonText="Confirm" cancelText="Cancel" />
+    {{-- <x-confirm-dialog title="Open conversation?" message="Enter reason to perform this action" inputPlaceholder=""
+        buttonText="Confirm" cancelText="Cancel" /> --}}
 @stop
 
 @section('css')
@@ -113,6 +114,6 @@
 @stop
 
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
 @stop

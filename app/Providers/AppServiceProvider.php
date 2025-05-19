@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
         
      Paginator::useBootstrap();
         JsonResource::withoutWrapping();
-        Log::info("__________________________________________");
+        // Log::info("__________________________________________");
         // DB::listen(function ($query) {
         //     // Log the query and its execution time
         //     Log::info("Query: {$query->sql}, Time: {$query->time}ms");

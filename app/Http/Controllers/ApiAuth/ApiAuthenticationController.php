@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\ApiAuth;
+use App\Events\SendOTP;
+use App\Events\SendSMS;
 use App\Http\Controllers\Controller;
 
 use App\Models\EuropeCountry;
@@ -194,6 +196,7 @@ class ApiAuthenticationController extends Controller
         $otp = rand(100000, 999999);
         $expiresAt = now()->addMinutes(5); // OTP valid for 5 minutes
         
+        event(new SendOTP($user, $otp));
         $user->update([
             'otp' => $otp,
             'otp_expires_at' => $expiresAt

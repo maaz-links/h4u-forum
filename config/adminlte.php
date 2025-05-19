@@ -491,6 +491,11 @@ return [
                 ],
             ],
             [
+                'text' => 'Email Templates',
+                'url' => '/admin/email-templates',
+                'icon' => 'far fa-fw fa-file',
+            ],
+            [
                 'text' => 'Developer Configs',
                 'url' => '/configs',
                 'icon' => 'far fa-fw fa-file',

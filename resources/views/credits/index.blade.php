@@ -64,7 +64,8 @@
                     @endforeach
                     
                     <div class="text-center">
-                        <button type="button" onclick="confirmWithReason('creditsForm')" class="btn px-3 btn-success">Save</button>
+                        {{-- <button type="button" onclick="confirmWithReason('creditsForm')" class="btn px-3 btn-success">Save</button> --}}
+                        <button class="btn px-3 btn-success">Save</button>
                     </div>
                 </form>
             </div>
@@ -76,14 +77,14 @@
     </div>
 </div>
 
-<x-confirm-dialog 
+{{-- <x-confirm-dialog 
     formId="creditsForm"
     title="Update Credit Costs" 
     message="Enter reason to perform this action"
     inputPlaceholder=""
     buttonText="Confirm"
     cancelText="Cancel"
-/>
+/> --}}
 @stop
 
 @section('css')
@@ -91,7 +92,7 @@
 @stop
 
 @section('js')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
 <script
   src="https://code.jquery.com/jquery-3.7.1.slim.js"

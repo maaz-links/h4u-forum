@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\ChatUnlocked;
 use App\Models\Chat;
 use App\Models\User;
 use DB;
@@ -47,6 +48,9 @@ class BuyChat
                 // ]);
                 $newChat = $this->fullChatInstance($user->id,$other_user_id,1);
             }           
+
+
+            event(new ChatUnlocked($user->id,$other_user_id));
             return response()->json(['message' => 'Chat Created','chat' => $newChat]);
         });
     }

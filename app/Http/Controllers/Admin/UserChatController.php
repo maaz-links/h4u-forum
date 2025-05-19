@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Chat;
 use App\Models\User;
-use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
 
 class UserChatController extends Controller
@@ -41,17 +40,18 @@ class UserChatController extends Controller
             return view('user-profile.chat',compact('chats','name'));
     }
 
-    public function conversation(Request $request){
-        $validated_data = $request->validate([
-            'chat_id' => 'required|numeric|exists:chats,id',
-            'admin_reason' => 'required|string',
-        ]);
+    public function conversation(Request $request ,Chat $chat){
+        // $validated_data = $request->validate([
+        //     'chat_id' => 'required|numeric|exists:chats,id',
+        //     // 'admin_reason' => 'required|string',
+        // ]);
 
         
 
         //return view('user-profile.chat',compact('chats'));
-        $chat = Chat::where('id', $validated_data['chat_id'])
-        ->with([
+        // $chat = Chat::where('id', $validated_data['chat_id'])
+        // ->with([
+         $chat->load([
             'user1' => function($query) {
                 $query->select('id','name','role','profile_picture_id');
             },
@@ -68,9 +68,9 @@ class UserChatController extends Controller
         ])
         ->first();
 
-        AuditAdmin::audit(
-            "Opened conversation between {$chat->user1->name} (ID: {$chat->user1->id}) and {$chat->user2->name} (ID: {$chat->user2->id})",
-            $request->admin_reason);
+        // AuditAdmin::audit(
+        //     "Opened conversation between {$chat->user1->name} (ID: {$chat->user1->id}) and {$chat->user2->name} (ID: {$chat->user2->id})",
+        //     $request->admin_reason);
 
         return view('openconversation',compact('chat'));
     }

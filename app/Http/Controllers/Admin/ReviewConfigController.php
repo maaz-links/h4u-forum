@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\UserConfig;
-use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
 
 class ReviewConfigController extends Controller
@@ -18,21 +17,26 @@ class ReviewConfigController extends Controller
     public function store(Request $request){
 
         //dd($request);
+        // $validated_data = $request->validate([
+        //     'review_delay' => 'nullable|numeric|min:0|max:10000|required_without_all:minimum_reviews_for_visibility,minimum_rating',
+        //     'minimum_reviews_for_visibility' => 'nullable|numeric|min:0|max:10000|required_without_all:review_delay,minimum_rating',
+        //     'minimum_rating' => 'nullable|numeric|min:1|max:5|required_without_all:review_delay,minimum_reviews_for_visibility',
+        // ],[
+        //     'review_delay.required_without_all'=> 'Input field is required',
+        //     'minimum_reviews_for_visibility.required_without_all'=> 'Input field is required',
+        //     'minimum_rating.required_without_all'=> 'Input field is required',
+        // ]);
+
         $validated_data = $request->validate([
-            'review_delay' => 'nullable|numeric|min:0|max:10000|required_without_all:minimum_reviews_for_visibility,minimum_rating',
-            'minimum_reviews_for_visibility' => 'nullable|numeric|min:0|max:10000|required_without_all:review_delay,minimum_rating',
-            'minimum_rating' => 'nullable|numeric|min:1|max:5|required_without_all:review_delay,minimum_reviews_for_visibility',
-        ],[
-            'review_delay.required_without_all'=> 'Input field is required',
-            'minimum_reviews_for_visibility.required_without_all'=> 'Input field is required',
-            'minimum_rating.required_without_all'=> 'Input field is required',
-        ]);
-
-        
-
-        $validated2 = $request->validate([
-            'admin_reason' => 'required|string',
+            'review_delay' => 'required|numeric|min:0|max:10000',
+            'minimum_reviews_for_visibility' => 'required|numeric|min:0|max:10000',
+            'minimum_rating' => 'required|numeric|min:0|max:10000',
         ],);
+
+
+        // $validated2 = $request->validate([
+        //     'admin_reason' => 'required|string',
+        // ],);
 
         //dd($validated_data);
 
@@ -45,12 +49,12 @@ class ReviewConfigController extends Controller
                     ['value' => $value]
                 );
 
-                $label = ucwords(str_replace('_', ' ', $key));
-                $messages[] = "Modified \"$label\" to \"$value\"";
+                // $label = ucwords(str_replace('_', ' ', $key));
+                // $messages[] = "Modified \"$label\" to \"$value\"";
             }
             
             
-            AuditAdmin::audit($messages[0],$request->admin_reason);
+            // AuditAdmin::audit($messages[0],$request->admin_reason);
 
             return $results;
         });

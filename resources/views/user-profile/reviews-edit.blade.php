@@ -84,8 +84,12 @@
                     </div>
                     
                     <div class="card-footer">
-                        <button id="saveButton" type="button" class="btn btn-primary"
+                        {{-- <button id="saveButton" type="button" class="btn btn-primary"
                         onclick="confirmWithReason('changeReview')">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button> --}}
+                        <button id="saveButton" class="btn btn-primary"
+                        >
                             <i class="fas fa-save"></i> Save Changes
                         </button>
                         <a href="{{route('user-profile.reviews',[$review->reviewedUser->name])}}" class="btn btn-default">
@@ -97,8 +101,8 @@
         </div>
     </div>
 </div>
-<x-confirm-dialog title="Modify Review?" message="Enter reason to perform this action" inputPlaceholder=""
-        buttonText="Confirm" cancelText="Cancel" />
+{{-- <x-confirm-dialog title="Modify Review?" message="Enter reason to perform this action" inputPlaceholder=""
+        buttonText="Confirm" cancelText="Cancel" /> --}}
 @stop
 
 @section('css')
@@ -120,7 +124,7 @@
 
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
 <script>
     $(document).ready(function() {
         const originalRating = parseInt($('#original_rating').val());

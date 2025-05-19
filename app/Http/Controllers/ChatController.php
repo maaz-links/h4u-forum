@@ -3,6 +3,7 @@
 // app/Http/Controllers/ChatController.php
 namespace App\Http\Controllers;
 
+use App\Events\FreeMessageSent;
 use App\Models\Chat;
 use App\Models\User;
 use App\Models\UserProfile;
@@ -88,6 +89,8 @@ class ChatController extends Controller
                     'sender_id' => $user->id,
                     'message' => "Hi! Nice to meet you, wanna chat?",
                 ]);
+
+                event(new FreeMessageSent($user->id, $king_id));
         
                 return response()->json(['message' => 'Message Given','chat' => $newChat]);
         });

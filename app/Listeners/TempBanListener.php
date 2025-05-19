@@ -4,6 +4,9 @@ namespace App\Listeners;
 
 use App\Events\TempBan;
 use App\Mail\pastelinkmail;
+use App\Services\CheckNotifPreference;
+use App\Services\ModConfigValues;
+use App\Services\TwilioService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Mail;
@@ -23,10 +26,20 @@ class TempBanListener implements ShouldQueue
      */
     public function handle(TempBan $event): void
     {
-        $subject = config('h4u.emailsubject.tempban');
-        $message = config('h4u.emailmessage.tempban');
+        //Load Modded configs values, for queued listeners
+        $modifiedConfig = ModConfigValues::LoadConfigValues();
+        $subject = ModConfigValues::getModifiedConfig($modifiedConfig,'h4u.emailsubject.tempban');
+        $message = ModConfigValues::getModifiedConfig($modifiedConfig,'h4u.emailmessage.tempban');
+
         $message = str_replace("{username}", $event->user->name, $message);
         $message = str_replace("{suspension_time}", $event->banduration, $message);
         Mail::to($event->user->email)->send(new pastelinkmail($message, $subject));
+
+        //Send SMS
+        $shouldSMS = CheckNotifPreference::isSMSEnabled($event->user->id);
+        if ($shouldSMS) {
+            $twilio = new TwilioService();
+            $twilio->sendSms($event->user->phone, $message);
+        }
     }
 }

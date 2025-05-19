@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             InterestsTableSeeder::class,
             LanguageSeeder::class,
             AdminSeeder::class,
+            PagesTableSeeder::class,
         ]);
     }
 }

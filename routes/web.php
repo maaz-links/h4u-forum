@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\BanController;
 use App\Http\Controllers\Admin\ConfigController;
 use App\Http\Controllers\Admin\CreditController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ReviewConfigController;
 use App\Http\Controllers\Admin\ShopController;
 use App\Http\Controllers\Admin\ShopTransactionController;
@@ -103,6 +104,14 @@ Route::group(['middleware' => ['admin']], function () {
     Route::post('/user-profile/{user}/unban', [BanController::class, 'unban'])->name('admin.users.unban');
     Route::post('/user-profile/{user}/warn', [BanController::class, 'warn'])->name('admin.users.warn');
     
+    Route::get('/change-password', [AdminLogController::class, 'showChangePasswordForm'])->name('password.change');
+    Route::post('/change-password', [AdminLogController::class, 'changePassword'])->name('password.update');
+
+    Route::get('/pages/{slug}', [PageController::class, 'edit'])->name('pages.edit');
+    Route::put('/pages/{slug}/update', [PageController::class, 'update'])->name('pages.update');
+
+    Route::resource('/contact-requests', \App\Http\Controllers\Admin\ContactRequestController::class)
+    ->only(['index', 'show', 'destroy']);
 });
 
 });

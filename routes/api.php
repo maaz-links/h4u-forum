@@ -147,4 +147,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 });
 
-Route::get('/randomize-profiles', [UserProfileController::class, 'randomize']);
+// Route::get('/randomize-profiles', [UserProfileController::class, 'randomize']);
+Route::get('/my-terms', [MiscController::class, 'ApiGetTerms']);
+Route::get('/my-privacy', [MiscController::class, 'ApiGetPrivacy']);
+Route::get('/my-cookies', [MiscController::class, 'ApiGetCookiesInfo']);
+Route::get('/my-credits', [MiscController::class, 'apiGetPaymentsCredits']);
+Route::post('/contact-form', [MiscController::class, 'apiContactForm']);

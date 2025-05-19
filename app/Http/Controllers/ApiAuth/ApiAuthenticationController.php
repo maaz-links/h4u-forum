@@ -101,18 +101,18 @@ class ApiAuthenticationController extends Controller
         $profile->save();
 
         event(new Registered($user));
-        $otp = $this->generateOTP($user);
-        return response()->json([
-            'message' => $otp,
-            'phone' => $user->phone,
-        ]);
+        // $otp = $this->generateOTP($user);
+        // return response()->json([
+        //     'message' => $otp,
+        //     'phone' => $user->phone,
+        // ]);
         // $token = $user->createToken('auth_token')->plainTextToken;
 
-        // return response()->json([
-        //     'message' => 'User registered successfully. Please check your email for verification.',
+        return response()->json([
+            'message' => 'User registered successfully. Please check your email for verification.',
         //    'access_token' => $token,
         //     'token_type' => 'Bearer',
-        // ], 201);
+        ], 201);
     }
 
     public function login(Request $request)
@@ -145,6 +145,15 @@ class ApiAuthenticationController extends Controller
         
         // Revoke all previous tokens (optional)
         $user->tokens()->delete();
+        
+        if (!$user->hasVerifiedEmail()) {
+            $user->sendEmailVerificationNotification();
+            return response()->json([
+                'message' => 'User registered successfully. Please check your email for verification.',
+                'mustverify' => true,
+            ], 200);
+        }
+        
         $ban = $user->activeBan();
         if ($ban) {
             return response()->json([
@@ -181,7 +190,7 @@ class ApiAuthenticationController extends Controller
         ]);
     }
 
-    protected function generateOTP(User $user){
+    public static function generateOTP(User $user){
         $otp = rand(100000, 999999);
         $expiresAt = now()->addMinutes(5); // OTP valid for 5 minutes
         

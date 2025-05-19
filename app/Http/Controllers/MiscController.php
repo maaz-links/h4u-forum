@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ContactRequest;
 use App\Models\EuropeCountry;
 use App\Models\HostessService;
 use App\Models\Interest;
+use App\Models\Page;
 use App\Models\SpokenLanguage;
 use App\Models\UserProfile;
 use App\Services\UserValidation;
@@ -140,5 +142,51 @@ class MiscController extends Controller
         $user->delete();
         
         return response()->json(['message'=>'User account successfully deleted']);
+    }
+
+    public function apiGetTerms(Request $request){
+        $page = Page::where('slug', 'terms-and-conditions')->firstOrFail();
+        return response()->json(['page' => $page], 200);
+    }
+    public function apiGetPrivacy(Request $request){
+        $page = Page::where('slug', 'privacy-policy')->firstOrFail();
+        return response()->json(['page' => $page], 200);
+    }
+
+    public function apiGetCookiesInfo(Request $request){
+        $page = Page::where('slug', 'cookies-info')->firstOrFail();
+        return response()->json(['page' => $page], 200);
+    }
+    public function apiGetPaymentsCredits(Request $request){
+        $page = Page::where('slug', 'credits-and-payment')->firstOrFail();
+        return response()->json(['page' => $page], 200);
+    }
+
+    public function apiContactForm(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'message' => 'required|string',
+            //'termsAccepted' => 'required|accepted'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'formError' => $validator->errors()
+            ], 422);
+        }
+
+        $contact = ContactRequest::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'message' => $request->message,
+            //'terms_accepted' => $request->termsAccepted
+        ]);
+
+        return response()->json([
+            'message' => 'Contact request submitted successfully',
+            'data' => $contact
+        ], 201);
     }
 }

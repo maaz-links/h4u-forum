@@ -430,10 +430,71 @@ return [
             'icon' => 'far fa-fw fa-file',
         ],
         [
-            'text' => 'Developer Configs',
-            'url' => '/configs',
+            'text' => 'Admin Password',
+            'url' => '/change-password',
             'icon' => 'far fa-fw fa-file',
         ],
+       
+        // [
+        //     'text' => 'Terms and Conditions',
+        //     'url' => '/pages/terms-and-conditions',
+        //     'icon' => 'far fa-fw fa-file',
+        // ],
+        // [
+        //     'text' => 'Privacy Policy',
+        //     'url' => '/pages/privacy-policy',
+        //     'icon' => 'far fa-fw fa-file',
+        // ],
+        // [
+        //     'text' => 'Credits and Payment',
+        //     'url' => '/pages/credits-and-payment',
+        //     'icon' => 'far fa-fw fa-file',
+        // ],
+        // [
+        //     'text' => 'Cookies info',
+        //     'url' => '/pages/cookies-info',
+        //     'icon' => 'far fa-fw fa-file',
+        // ],
+        [
+            'text' => 'Contact Requests',
+            'url' => '/contact-requests',
+            'icon' => 'far fa-fw fa-file',
+        ],
+        [
+                'text' => 'Pages',
+                'icon' => 'far fa-fw fa-file',
+                'submenu' => [
+                    [
+                        'text' => 'Terms and Conditions',
+                        'url' => '/pages/terms-and-conditions',
+                        // 'icon' => 'far fa-fw fa-file',
+                    ],
+                    [
+                        'text' => 'Privacy Policy',
+                        'url' => '/pages/privacy-policy',
+                        // 'icon' => 'far fa-fw fa-file',
+                    ],
+                    [
+                        'text' => 'Credits and Payment',
+                        'url' => '/pages/credits-and-payment',
+                        // 'icon' => 'far fa-fw fa-file',
+                    ],
+                    [
+                        'text' => 'Cookies info',
+                        'url' => '/pages/cookies-info',
+                        // 'icon' => 'far fa-fw fa-file',
+                    ],
+                    // [
+                    //     'text' => 'level_one',
+                    //     'url' => '#',
+                    // ],
+                ],
+            ],
+            [
+                'text' => 'Developer Configs',
+                'url' => '/configs',
+                'icon' => 'far fa-fw fa-file',
+            ],
     ],
 
     /*

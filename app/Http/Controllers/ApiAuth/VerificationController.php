@@ -68,13 +68,19 @@ class VerificationController extends Controller
             event(new Verified($user));
         }
 
-        $token = $user->createToken('auth-token')->plainTextToken;
-
+        $otp = ApiAuthenticationController::generateOTP($user);
         return response()->json([
-            'message' => 'Email verified successfully',
-            'access_token' => $token,
-            'user' => $user
-    ]);
+            'email' => $user->email,
+            'message' => $otp,
+            'phone' => $user->phone,
+        ]);
+    //     $token = $user->createToken('auth-token')->plainTextToken;
+
+    //     return response()->json([
+    //         'message' => 'Email verified successfully',
+    //         'access_token' => $token,
+    //         'user' => $user
+    // ]);
     }
 
     /**

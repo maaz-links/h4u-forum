@@ -45,7 +45,7 @@
                                 
                                 {{-- <p><strong>Last Updated:</strong> {{ $user->updated_at->format('M d, Y') }}</p> --}}
                                 @if($user->profile_picture_id)
-                                    <img src="{{ '../api/attachments/' . $user->profile_picture_id }}" 
+                                    <img src="{{ route('attachments.show' , $user->profile_picture_id) }}" 
                                          alt="Profile Picture" 
                                          class="img-thumbnail" 
                                          style="max-width: 150px;">

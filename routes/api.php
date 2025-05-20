@@ -78,7 +78,7 @@ Route::get('/ban-report/{username}',[UserProfileController::class, 'banReport'])
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('check.banned')->group(function () {
-    Route::middleware('reset.msglimit')->group(function () {
+    // Route::middleware('reset.msglimit')->group(function () {
 
         // Route::get('/user', function (Request $request) {
         //     $user = User::with('profile')->where('id', '=', $request->user()->id)->first();
@@ -132,7 +132,7 @@ Route::middleware('auth:sanctum')->group(function () {
             // Route::post('/set-customer-credits/{amount}', [UserProfileController::class, 'setCustomerCredits']);
 
         Route::delete('/delete-account',[MiscController::class,'deleteAccount']);
-    });
+    //});
     });
     Route::get('shops',[ShopController::class,'index']);
     Route::get('shop/{id}',[ShopController::class,'shop']);

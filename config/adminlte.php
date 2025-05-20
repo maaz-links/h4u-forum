@@ -413,7 +413,11 @@ return [
         //     'url' => '/admin-logs',
         //     'icon' => 'far fa-fw fa-file',
         // ],
-
+        [
+            'text' => 'View Chats',
+            'url' => '/all-chats',
+            'icon' => 'far fa-fw fa-file',
+        ],
          [
             'text' => 'Shops',
             'url' => '/shops/all',

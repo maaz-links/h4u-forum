@@ -15,6 +15,13 @@
 
 @section('content')
 <div class="container-fluid">
+    @if (session('success'))
+    <div class="mt-3 alert alert-success alert-dismissible fade show">{{ session('success') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    @endif
     <div class="row">
         <div class="col-md-4">
             <div class="card">
@@ -27,7 +34,7 @@
                         <div class="d-flex align-items-center mb-3">
                             <div class="mr-3">
                                 @if($chat->user1->profile_picture_id)
-                                <img src="{{ '../api/attachments/' . $chat->user1->profile_picture_id }}" 
+                                <img src="{{ route('attachments.show' , $chat->user1->profile_picture_id) }}" 
                                      class="img-circle elevation-2" 
                                      width="50" 
                                      alt="User Image">
@@ -50,7 +57,7 @@
                         <div class="d-flex align-items-center">
                             <div class="mr-3">
                                 @if($chat->user2->profile_picture_id)
-                                <img src="{{ '../api/attachments/' . $chat->user2->profile_picture_id }}" 
+                                <img src="{{ route('attachments.show' , $chat->user2->profile_picture_id) }}" 
                                      class="img-circle elevation-2" 
                                      width="50" 
                                      alt="User Image">
@@ -112,6 +119,7 @@
                                 </span>
                                 <span class="direct-chat-timestamp {{ $message->sender_id == $chat->user1_id ? 'float-right' : 'float-right' }}">
                                     {{ \Carbon\Carbon::parse($message->created_at)->format('M d, h:i A') }}
+                                    <a href='{{route('chat.messages.edit',[$chat->id,$message->id])}}'><span class="badge bg-secondary"> Edit Message</span></a>
                                 </span>
                             </div>
                             

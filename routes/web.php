@@ -52,10 +52,15 @@ Route::group(['middleware' => ['auth']], function () {
 Route::group(['middleware' => ['admin']], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/user-profile/{name}', [HomeController::class, 'profile'])->name('user-profile');
-    Route::get('/user-profile/{name}/chat', [UserChatController::class, 'allchats'])->name('user-profile.chat');
-
+    
+    Route::get('/user-profile/{name}/chat', [UserChatController::class, 'userchats'])->name('user-profile.chat');
     // Route::post('/opened-conversation', [UserChatController::class, 'conversation'])->name('open.conversation');
-    Route::get('/opened-conversation/{chat}', [UserChatController::class, 'conversation'])->name('open.conversation');
+    Route::get('/all-chats', [UserChatController::class, 'index'])->name('chats.index');
+    Route::get('/all-chats/{chat}', [UserChatController::class, 'conversation'])->name('open.conversation');
+    Route::get('/all-chats/{chat}/message/{msg}', [UserChatController::class, 'editMsg'])->name('chat.messages.edit');
+    Route::put('/all-chats/message/{msg}', [UserChatController::class, 'updateMsg'])->name('chat.messages.update');
+    Route::delete('/all-chats/message/{msg}', [UserChatController::class, 'destroyMsg'])->name('chat.messages.destroy');
+
 
     Route::get('/user-profile/{name}/reviews', [UserReviewController::class, 'allreviews'])->name('user-profile.reviews');
     Route::get('/user-profile/{review}/reviews/edit', [UserReviewController::class, 'editReview'])->name('edit.review');

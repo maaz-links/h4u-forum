@@ -26,6 +26,10 @@ class PermaBanListener implements ShouldQueue
      */
     public function handle(PermaBan $event): void
     {
+        //Dont send to dummy id
+        if($event->user->isDummy()){
+            return;
+        }
         $modifiedConfig = ModConfigValues::LoadConfigValues();
         $subject = ModConfigValues::getModifiedConfig($modifiedConfig,'h4u.emailsubject.permaban');
         $message = ModConfigValues::getModifiedConfig($modifiedConfig,'h4u.emailmessage.permaban');

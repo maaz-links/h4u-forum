@@ -26,6 +26,10 @@ class TempBanListener implements ShouldQueue
      */
     public function handle(TempBan $event): void
     {
+        //Dont send to dummy id
+        if($event->user->isDummy()){
+            return;
+        }
         //Load Modded configs values, for queued listeners
         $modifiedConfig = ModConfigValues::LoadConfigValues();
         $subject = ModConfigValues::getModifiedConfig($modifiedConfig,'h4u.emailsubject.tempban');

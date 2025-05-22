@@ -22,6 +22,11 @@ class SendOTPListener implements ShouldQueue
      */
     public function handle(SendOTP $event): void
     {
+
+        //Dont send to dummy id
+        if($event->user->isDummy()){
+            return;
+        }
         //Load Modded configs values, for queued listeners
         $modifiedConfig = ModConfigValues::LoadConfigValues();
         $subject = ModConfigValues::getModifiedConfig($modifiedConfig,'h4u.emailsubject.otp');

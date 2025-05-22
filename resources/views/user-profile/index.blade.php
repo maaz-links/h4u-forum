@@ -19,6 +19,13 @@
 
 @section('content')
     <div class="container-fluid">
+        @if (session('success'))
+        <div class="mt-3 alert alert-success alert-dismissible fade show">{{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -78,10 +85,17 @@
                                 <p><strong>Verified Profile:</strong> {{ $user->profile->verified_profile ? 'Yes' : 'No' }}</p>
                                 <p><strong>Eye Color:</strong> {{ ucwords($user->profile->eye_color) }}</p>
                                 <p><strong>Shoe Size:</strong> {{ $user->profile->shoe_size }}</p>
-                                <p><strong>Credits:</strong> {{ $user->profile->credits }}</p>
+                                <p><strong>
+                                    @if ($user->role == \App\Models\User::ROLE_HOSTESS)
+                                    Free Message limit today:
+                                    @else
+                                    Credits:
+                                    @endif
+                                </strong> {{ $user->profile->credits }}</p>
                             </div>
-                            @if ($user->role == \App\Models\User::ROLE_HOSTESS)
+                            
                             <div class="col-md-6">
+                                @if ($user->role == \App\Models\User::ROLE_HOSTESS)
                                 <p><strong>Weight:</strong> {{ $user->profile->weight }} kg</p>
                                 <p><strong>Dress Size:</strong> {{ $user->profile->dress_size }}</p>
                                 <p><strong>Is Model:</strong> {{ $user->profile->is_user_model ? 'Yes' : 'No' }}</p>
@@ -89,15 +103,30 @@
                                 {{-- <p><strong>Verified Female:</strong> {{ $user->profile->verified_female ? 'Yes' : 'No' }}</p> --}}
                                 
                                 <p><strong>Travel Available:</strong> {{ $user->profile->travel_available ? 'Yes' : 'No' }}</p>
-                                
+                                <p><strong>Telegram:</strong> {{ $user->profile->telegram ?: 'N/A' }}</p>
+                                @endif
                             </div>
-                            @endif
+                           
+                            <div class="flex col-6">
+                                <form class="d-inline" method="POST" action="{{ route('user-profile.toggle-verified', $user->id) }}">
+                                    @csrf
+                                    <button class="btn btn-{{ $user->profile->verified_profile ? 'secondary' : 'info' }}">
+                                        {{ $user->profile->verified_profile ? 'Remove Verification' : 'Declare Verified' }}
+                                    </button>
+                                </form>
                             
+                                <form class="d-inline" method="POST" action="{{ route('user-profile.toggle-top', $user->id) }}">
+                                    @csrf
+                                    <button class="btn btn-{{ $user->profile->top_profile ? 'secondary' : 'warning' }}">
+                                        {{ $user->profile->top_profile ? 'Remove Top Profile' : 'Declare Top Profile' }}
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="card mt-4">
+                {{-- <div class="card mt-4">
                     <div class="card-header bg-info">
                         <h3 class="card-title">Social Media</h3>
                     </div>
@@ -113,7 +142,7 @@
                                 <p><strong>OnlyFans:</strong> {{ $user->profile->onlyfans ?: 'N/A' }}</p>
                                 <p><strong>Personal Website:</strong> {{ $user->profile->personal_website ?: 'N/A' }}</p>
                             </div>
-                        </div>
+                        </div> --}}
                         {{-- <hr> --}}
                         {{-- <div class="row mt-3">
                             <div class="col-md-6">
@@ -143,8 +172,8 @@
                                 </ul>
                             </div>
                         </div> --}}
-                    </div>
-                </div>
+                    {{-- </div>
+                </div> --}}
                 @else
                 <div class="card mt-4">
                     <div class="card-body">

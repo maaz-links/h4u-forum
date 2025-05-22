@@ -500,6 +500,16 @@ return [
                 'icon' => 'far fa-fw fa-file',
             ],
             [
+                'text' => 'FAQ',
+                'url' => '/faqs/all',
+                'icon' => 'far fa-fw fa-file',
+            ],
+            [
+                'text' => 'Profile Scripts',
+                'url' => '/profile-scripts',
+                'icon' => 'far fa-fw fa-file',
+            ],
+            [
                 'text' => 'Developer Configs',
                 'url' => '/configs',
                 'icon' => 'far fa-fw fa-file',

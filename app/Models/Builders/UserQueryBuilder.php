@@ -140,4 +140,13 @@ class UserQueryBuilder extends Builder
             ->orWhere('expired_at', '>', now()); // Active temporary bans
         });
     }
+
+    public function scopeFake($script_id = null)
+    {
+        if($script_id){
+            return $this->where('dummy_id', $script_id);
+        }
+        return $this->where('dummy_id', '!=',null);
+        
+    }
 }

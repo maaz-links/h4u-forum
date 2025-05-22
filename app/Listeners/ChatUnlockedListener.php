@@ -27,6 +27,10 @@ class ChatUnlockedListener implements ShouldQueue
      */
     public function handle(ChatUnlocked $event): void
     {
+        //Dont send to dummy id
+        if($event->other_user->isDummy()){
+            return;
+        }
         $modifiedConfig = ModConfigValues::LoadConfigValues();
         $subject = ModConfigValues::getModifiedConfig($modifiedConfig,'h4u.emailsubject.unlockchat');
         $message = ModConfigValues::getModifiedConfig($modifiedConfig,'h4u.emailmessage.unlockchat');

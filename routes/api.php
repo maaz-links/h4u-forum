@@ -11,6 +11,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MiscController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\UpdateProfileController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ApiAuth\VerificationController;
 use App\Http\Resources\UserResource;
@@ -97,8 +98,8 @@ Route::middleware('auth:sanctum')->group(function () {
         
         });        
 
-        Route::post('/update-profile', [MiscController::class, 'updateProfile']);
-        Route::post('/change-password', [MiscController::class, 'changePassword']);
+        Route::post('/update-profile', [UpdateProfileController::class, 'updateProfile']);
+        Route::post('/change-password', [UpdateProfileController::class, 'changePassword']);
         
         Route::get('/attachments', [AttachmentController::class, 'index']);
         Route::post('/attachments', [AttachmentController::class, 'store']);
@@ -131,7 +132,7 @@ Route::middleware('auth:sanctum')->group(function () {
             // Route::post('/set-customer-credits', [UserProfileController::class, 'setCustomerCredits']);
             // Route::post('/set-customer-credits/{amount}', [UserProfileController::class, 'setCustomerCredits']);
 
-        Route::delete('/delete-account',[MiscController::class,'deleteAccount']);
+        //Route::delete('/delete-account',[UpdateProfileController::class,'deleteAccount']);
     //});
     });
     Route::get('shops',[ShopController::class,'index']);
@@ -154,3 +155,4 @@ Route::get('/my-privacy', [MiscController::class, 'ApiGetPrivacy']);
 Route::get('/my-cookies', [MiscController::class, 'ApiGetCookiesInfo']);
 Route::get('/my-credits', [MiscController::class, 'apiGetPaymentsCredits']);
 Route::post('/contact-form', [MiscController::class, 'apiContactForm']);
+Route::get('/my-faqs', [MiscController::class, 'apiGetFaqs']);

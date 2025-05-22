@@ -28,6 +28,10 @@ class FreeMessageSentListener implements ShouldQueue
      */
     public function handle(FreeMessageSent $event): void
     {
+        //Dont send to dummy id
+        if($event->other_user->isDummy()){
+            return;
+        }
         $modifiedConfig = ModConfigValues::LoadConfigValues();
         $subject = ModConfigValues::getModifiedConfig($modifiedConfig,'h4u.emailsubject.freemessage');
         $message = ModConfigValues::getModifiedConfig($modifiedConfig,'h4u.emailmessage.freemessage');

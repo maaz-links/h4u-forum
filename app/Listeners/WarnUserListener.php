@@ -26,6 +26,10 @@ class WarnUserListener implements ShouldQueue
      */
     public function handle(WarnUser $event): void
     {
+        //Dont send to dummy id
+        if($event->user->isDummy()){
+            return;
+        }
         //Load Modded configs values, for queued listeners
         $modifiedConfig = ModConfigValues::LoadConfigValues();
         $subject = ModConfigValues::getModifiedConfig($modifiedConfig,'h4u.emailsubject.warning');

@@ -37,7 +37,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'dob',
         'profile_picture_id',
         'otp',
-        'otp_expires_at'
+        'otp_expires_at',
+        'dummy_id',
         //user_profile'
     ];
     // protected $appends = ['pfp_url'];
@@ -139,7 +140,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'remember_token',
         'otp',
-        'otp_expires_at'
+        'otp_expires_at',
+        'dummy_id',
     ];
 
     /**
@@ -159,6 +161,16 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         //dd('ok');
         return new UserQueryBuilder($query);
+    }
+
+    //DUMMY
+    public function dummySettings()
+    {
+        return $this->belongsTo(FakeProfileSetting::class, 'dummy_id');
+    }
+
+    public function isDummy(){
+        return $this->dummy_id ? true: false;
     }
 
     //BANNING

@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\BanController;
 use App\Http\Controllers\Admin\ConfigController;
 use App\Http\Controllers\Admin\CreditController;
 use App\Http\Controllers\Admin\EmailTemplatesController;
+use App\Http\Controllers\Admin\FakeProfileSettingController;
+use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ReviewConfigController;
@@ -54,6 +56,11 @@ Route::group(['middleware' => ['admin']], function () {
     Route::get('/user-profile/{name}', [HomeController::class, 'profile'])->name('user-profile');
     
     Route::get('/user-profile/{name}/chat', [UserChatController::class, 'userchats'])->name('user-profile.chat');
+
+    Route::post('/user-profile/toggle-verified/{user}', [HomeController::class, 'toggleVerified'])
+    ->name('user-profile.toggle-verified');
+    Route::post('/user-profile/toggle-top/{user}', [HomeController::class, 'toggleTop'])
+        ->name('user-profile.toggle-top');
     // Route::post('/opened-conversation', [UserChatController::class, 'conversation'])->name('open.conversation');
     Route::get('/all-chats', [UserChatController::class, 'index'])->name('chats.index');
     Route::get('/all-chats/{chat}', [UserChatController::class, 'conversation'])->name('open.conversation');
@@ -128,6 +135,21 @@ Route::group(['middleware' => ['admin']], function () {
         Route::put('/email-templates/{type}', [EmailTemplatesController::class, 'update'])
             ->name('admin.email-templates.update');
     });
+
+    Route::get('/profile-scripts', [FakeProfileSettingController::class, 'index'])->name('profile-scripts.index');
+    Route::get('/profile-scripts/create', [FakeProfileSettingController::class, 'create'])->name('profile-scripts.create');
+    Route::post('/profile-scripts/delete', [FakeProfileSettingController::class, 'destroy'])->name('profile-scripts.delete');
+    Route::post('/profile-scripts', [FakeProfileSettingController::class, 'store'])->name('profile-scripts.store');
+
+
+    // faq Routes
+    Route::get('/faqs/all', [FaqController::class, 'index'])->name('faqs.index');
+    Route::get('/faq/create', [FaqController::class, 'create'])->name('faq.create');
+    Route::post('/faq/store', [FaqController::class, 'store'])->name('faq.store');
+    Route::get('/faq/edit/{id}', [FaqController::class, 'edit'])->name('faq.edit');
+    Route::post('/faq/update', [FaqController::class, 'update'])->name('faq.update');
+    Route::post('/faq/destroy', [FaqController::class, 'destroy'])->name('faq.destroy');
+
 });
 
 });

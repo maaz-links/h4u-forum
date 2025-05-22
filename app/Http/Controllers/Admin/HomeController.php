@@ -7,6 +7,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Chat;
 use App\Models\Review;
 use App\Models\User;
+use App\Models\UserProfile;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -40,6 +41,33 @@ class HomeController extends Controller
         $user = new UserResource($user);
         return view('user-profile.index',compact('user'));
     }
+
+    public function toggleVerified(User $user)
+    {
+        $prof = UserProfile::where('user_id',$user->id)->first();
+        // dd($user,$prof);
+        $msg = $prof->verified_profile ? 'This user is no longer Verified' : 'This user is now Verified';
+        $prof->update([
+            'verified_profile' => !$prof->verified_profile
+        ]);
+
+        return redirect()->route('user-profile', $user->name)
+            ->with('success', $msg);
+    }
+
+    public function toggleTop(User $user)
+    {
+        $prof = UserProfile::where('user_id',$user->id)->first();
+        // dd($user,$prof);
+        $msg = $prof->top_profile ? 'This user is no longer Top Profile' : 'This user is now Top Profile';
+        $prof->update([
+            'top_profile' => !$prof->top_profile
+        ]);
+
+        return redirect()->route('user-profile', $user->name)
+            ->with('success', $msg);
+    }
+
 
     // public function allchats(string $name){
     //     $user = User::select('id','name','role')->forUsername($name)->forRoleAny()->first();

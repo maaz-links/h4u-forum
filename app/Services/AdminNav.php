@@ -1,0 +1,151 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\AdminLog;
+use Auth;
+use Config;
+use Illuminate\Http\Request;
+
+class AdminNav
+{
+    public static function generateNavs(){
+        $admin = Auth::user();
+
+        $admin->load(['roles.permissions']);
+
+        // Get all permission slugs in one array
+        $permissionSlugs = [];
+        foreach ($admin->roles as $role) {
+            foreach ($role->permissions as $permission) {
+                $permissionSlugs[] = $permission->slug;
+            }
+        }
+        // Remove duplicates if needed
+        $permissionSlugs = array_unique($permissionSlugs);
+
+        // dd($permissionSlugs);
+        
+        $menu = [
+            [
+                'text' => 'Home',
+                'url' => '/home',
+                'icon' => '',
+            ],
+            [
+                'text' => 'Admin Password',
+                'url' => '/change-password',
+                'icon' => '',
+            ],
+        ];
+        if (in_array('manage_chat',$permissionSlugs)) {
+            $menu[] = [
+                'text' => 'View Chats',
+                'url' => '/all-chats',
+                'icon' => '',
+            ];
+        }
+        if (in_array('manage_shop',$permissionSlugs)) {
+            $menu[] = [
+                'text' => 'Shops',
+                'url' => '/shops/all',
+                'icon' => '',
+            ];
+            $menu[] = [
+                'text' => 'Shops Transaction',
+                'url' => '/shop/transactions',
+                'icon' => '',
+            ];
+            $menu[] = [
+                'text' => 'Credits Configuration',
+                'url' => '/credits-config',
+                'icon' => '',
+            ];
+        }
+        if (in_array('user_bans',$permissionSlugs)) {
+            $menu[] = [
+                'text' => 'Reported Users',
+                'url' => '/reports',
+                'icon' => '',
+            ];
+            $menu[] = [
+                'text' => 'Contact Requests',
+                'url' => '/contact-requests',
+                'icon' => '',
+            ];
+        }
+        if (in_array('configure_reviews',$permissionSlugs)) {
+            $menu[] = [
+                'text' => 'Reviews Configuration',
+                'url' => '/reviews-config',
+                'icon' => '',
+            ];
+        }
+        if (in_array('edit_templates',$permissionSlugs)) {
+            $menu[] = [
+                'text' => 'Pages',
+                'icon' => '',
+                'submenu' => [
+                    [
+                        'text' => 'Terms and Conditions',
+                        'url' => '/pages/terms-and-conditions',
+                        // 'icon' => 'far fa-fw fa-file',
+                    ],
+                    [
+                        'text' => 'Privacy Policy',
+                        'url' => '/pages/privacy-policy',
+                        // 'icon' => 'far fa-fw fa-file',
+                    ],
+                    [
+                        'text' => 'Credits and Payment',
+                        'url' => '/pages/credits-and-payment',
+                        // 'icon' => 'far fa-fw fa-file',
+                    ],
+                    [
+                        'text' => 'Cookies info',
+                        'url' => '/pages/cookies-info',
+                        // 'icon' => 'far fa-fw fa-file',
+                    ],
+                ],
+            ];
+            $menu[] =  [
+                'text' => 'Templates',
+                'url' => '/admin/email-templates',
+                'icon' => '',
+            ];
+            $menu[] =  [
+                'text' => 'FAQ',
+                'url' => '/faqs/all',
+                'icon' => '',
+            ];
+        
+        }
+
+        if (in_array('generate_profiles',$permissionSlugs)) {
+            $menu[] = [
+                'text' => 'Profile Scripts',
+                'url' => '/profile-scripts',
+                'icon' => '',
+            ];
+        }
+
+        if (in_array('change_email_settings',$permissionSlugs)) {
+            $menu[] = [
+                'text' => 'Change Email Settings',
+                'url' => '/mail-config',
+                'icon' => '',
+            ];
+        }
+
+        if (in_array('manage_admins',$permissionSlugs)) {
+            $menu[] = [
+                'text' => 'Admins List',
+                'url' => '/admin/users',
+                'icon' => '',
+            ];
+        }
+
+        Config::set('adminlte.menu',$menu);
+    }
+
+}

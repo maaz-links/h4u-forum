@@ -42,9 +42,18 @@
                                 <p><strong>Date of Birth:</strong> {{ \Carbon\Carbon::parse($user->dob)->format('M d, Y') }}</p>
                                 <p><strong>Joined:</strong> {{ $user->created_at->format('M d, Y') }}</p>
                                 <p><strong>Rating:</strong> {{ number_format($user->rating, 2) }} ⭐</p>
+                                @if (\Auth::user()->hasPermission('manage_chat'))
                                 <p><a href="{{route('user-profile.chat',[$user->name])}}">Check chat list</a></p>
+                                @endif
+                                @if (\Auth::user()->hasPermission('manage_reviews'))
                                 <p><a href="{{route('user-profile.reviews',[$user->name])}}">Check reviews</a></p>
-                                <p><a href="{{route('admin.users.ban.show',[$user->name])}}">Manage bans</a>
+                                @endif
+                                @if (\Auth::user()->hasPermission('user_bans'))
+                                <p><a href="{{route('admin.users.ban.show',[$user->name])}}">Manage bans</a></p>
+                                @endif
+                                {{-- <p><a href="{{route('user-profile.chat',[$user->name])}}">Check chat list</a></p> --}}
+                                {{-- <p><a href="{{route('user-profile.reviews',[$user->name])}}">Check reviews</a></p>
+                                <p><a href="{{route('admin.users.ban.show',[$user->name])}}">Manage bans</a> --}}
                                    
                                 </p>
                             </div>
@@ -107,6 +116,7 @@
                                 @endif
                             </div>
                            
+                            @if (\Auth::user()->hasPermission('declare_badges'))
                             <div class="flex col-6">
                                 <form class="d-inline" method="POST" action="{{ route('user-profile.toggle-verified', $user->id) }}">
                                     @csrf
@@ -122,6 +132,7 @@
                                     </button>
                                 </form>
                             </div>
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -300,57 +300,173 @@ return [
     */
 
     'menu' => [
+        // Navbar items:
+        // [
+        //     'type' => 'navbar-search',
+        //     'text' => 'search',
+        //     'topnav_right' => true,
+        // ],
+        // [
+        //     'type' => 'fullscreen-widget',
+        //     'topnav_right' => true,
+        // ],
+
+        // // Sidebar items:
+        // [
+        //     'type' => 'sidebar-menu-search',
+        //     'text' => 'search',
+        // ],
+        // [
+        //     'text' => 'blog',
+        //     'url' => 'admin/blog',
+        //     'can' => 'manage-blog',
+        // ],
+        // [
+        //     'text' => 'pages',
+        //     'url' => 'admin/pages',
+        //     'icon' => 'far fa-fw fa-file',
+        //     'label' => 4,
+        //     'label_color' => 'success',
+        // ],
+        // ['header' => 'account_settings'],
+        // [
+        //     'text' => 'profile',
+        //     'url' => 'admin/settings',
+        //     'icon' => 'fas fa-fw fa-user',
+        // ],
+        // [
+        //     'text' => 'change_password',
+        //     'url' => 'admin/settings',
+        //     'icon' => 'fas fa-fw fa-lock',
+        // ],
+        // [
+        //     'text' => 'multilevel',
+        //     'icon' => 'fas fa-fw fa-share',
+        //     'submenu' => [
+        //         [
+        //             'text' => 'level_one',
+        //             'url' => '#',
+        //         ],
+        //         [
+        //             'text' => 'level_one',
+        //             'url' => '#',
+        //             'submenu' => [
+        //                 [
+        //                     'text' => 'level_two',
+        //                     'url' => '#',
+        //                 ],
+        //                 [
+        //                     'text' => 'level_two',
+        //                     'url' => '#',
+        //                     'submenu' => [
+        //                         [
+        //                             'text' => 'level_three',
+        //                             'url' => '#',
+        //                         ],
+        //                         [
+        //                             'text' => 'level_three',
+        //                             'url' => '#',
+        //                         ],
+        //                     ],
+        //                 ],
+        //             ],
+        //         ],
+        //         [
+        //             'text' => 'level_one',
+        //             'url' => '#',
+        //         ],
+        //     ],
+        // ],
+        // ['header' => 'labels'],
+        // [
+        //     'text' => 'important',
+        //     'icon_color' => 'red',
+        //     'url' => '#',
+        // ],
+        // [
+        //     'text' => 'warning',
+        //     'icon_color' => 'yellow',
+        //     'url' => '#',
+        // ],
+        // [
+        //     'text' => 'information',
+        //     'icon_color' => 'cyan',
+        //     'url' => '#',
+        // ],
         [
             'text' => 'Home',
             'url' => '/home',
-            'icon' => '',
+            'icon' => 'far fa-fw fa-file',
         ],
-        [
-            'text' => 'View Chats',
-            'url' => '/all-chats',
-            'icon' => '',
-        ],
-         [
-            'text' => 'Shops',
-            'url' => '/shops/all',
-            'icon' => '',
-        ],
-        [
-            'text' => 'Shops Transaction',
-            'url' => '/shop/transactions',
-            'icon' => '',
-        ],
-        [
-            'text' => 'Reported Users',
-            'url' => '/reports',
-            'icon' => '',
-        ],
-        [
-            'text' => 'Admin Password',
-            'url' => '/change-password',
-            'icon' => '',
-        ],
-       
-        [
-            'text' => 'Contact Requests',
-            'url' => '/contact-requests',
-            'icon' => '',
-        ],
-
         [
             'text' => 'Credits Configuration',
             'url' => '/credits-config',
-            'icon' => '',
+            'icon' => 'far fa-fw fa-file',
         ],
         [
             'text' => 'Reviews Configuration',
             'url' => '/reviews-config',
-            'icon' => '',
+            'icon' => 'far fa-fw fa-file',
         ],
-      
+        // [
+        //     'text' => 'Admin Logs',
+        //     'url' => '/admin-logs',
+        //     'icon' => 'far fa-fw fa-file',
+        // ],
+        [
+            'text' => 'View Chats',
+            'url' => '/all-chats',
+            'icon' => 'far fa-fw fa-file',
+        ],
+         [
+            'text' => 'Shops',
+            'url' => '/shops/all',
+            'icon' => 'far fa-fw fa-file',
+        ],
+        [
+            'text' => 'Shops Transaction',
+            'url' => '/shop/transactions',
+            'icon' => 'far fa-fw fa-file',
+        ],
+        [
+            'text' => 'Reported Users',
+            'url' => '/reports',
+            'icon' => 'far fa-fw fa-file',
+        ],
+        [
+            'text' => 'Admin Password',
+            'url' => '/change-password',
+            'icon' => 'far fa-fw fa-file',
+        ],
+       
+        // [
+        //     'text' => 'Terms and Conditions',
+        //     'url' => '/pages/terms-and-conditions',
+        //     'icon' => 'far fa-fw fa-file',
+        // ],
+        // [
+        //     'text' => 'Privacy Policy',
+        //     'url' => '/pages/privacy-policy',
+        //     'icon' => 'far fa-fw fa-file',
+        // ],
+        // [
+        //     'text' => 'Credits and Payment',
+        //     'url' => '/pages/credits-and-payment',
+        //     'icon' => 'far fa-fw fa-file',
+        // ],
+        // [
+        //     'text' => 'Cookies info',
+        //     'url' => '/pages/cookies-info',
+        //     'icon' => 'far fa-fw fa-file',
+        // ],
+        [
+            'text' => 'Contact Requests',
+            'url' => '/contact-requests',
+            'icon' => 'far fa-fw fa-file',
+        ],
         [
                 'text' => 'Pages',
-                'icon' => '',
+                'icon' => 'far fa-fw fa-file',
                 'submenu' => [
                     [
                         'text' => 'Terms and Conditions',
@@ -372,32 +488,31 @@ return [
                         'url' => '/pages/cookies-info',
                         // 'icon' => 'far fa-fw fa-file',
                     ],
+                    // [
+                    //     'text' => 'level_one',
+                    //     'url' => '#',
+                    // ],
                 ],
             ],
             [
-                'text' => 'Templates',
+                'text' => 'Email Templates',
                 'url' => '/admin/email-templates',
-                'icon' => '',
+                'icon' => 'far fa-fw fa-file',
             ],
             [
                 'text' => 'FAQ',
                 'url' => '/faqs/all',
-                'icon' => '',
+                'icon' => 'far fa-fw fa-file',
             ],
             [
                 'text' => 'Profile Scripts',
                 'url' => '/profile-scripts',
-                'icon' => '',
+                'icon' => 'far fa-fw fa-file',
             ],
             [
-                'text' => 'Change Email Settings',
-                'url' => '/mail-config',
-                'icon' => '',
-            ],
-            [
-                'text' => 'Admins List',
-                'url' => '/admin/users',
-                'icon' => '',
+                'text' => 'Developer Configs',
+                'url' => '/configs',
+                'icon' => 'far fa-fw fa-file',
             ],
     ],
 

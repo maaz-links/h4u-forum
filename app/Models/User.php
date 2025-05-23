@@ -219,4 +219,23 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->bans()->delete();
     }
+
+
+    //ADMIN ROLES
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function hasRole($role)
+    {
+        return $this->roles()->where('name', $role)->exists();
+    }
+
+    public function hasPermission($permission)
+    {
+        return $this->roles()->whereHas('permissions', function($q) use ($permission) {
+            $q->where('slug', $permission);
+        })->exists();
+    }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\AdminNav;
 use Closure;
+use Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,6 +28,9 @@ class AdminMiddleware
                 ->route('login')
                 ->withErrors(['email' => 'Administrator access only']);
         }
+
+        AdminNav::generateNavs();
+        //Config::set('adminlte.menu',[]);
         return $next($request);
     }
 }

@@ -91,6 +91,11 @@ class ApiAuthenticationController extends Controller
         ->orderBy('display_order')
         ->value('id') ?? null;
 
+        $initialCredits = [];
+        if($user->role = User::ROLE_HOSTESS){
+            $initialCredits = ['credits' => 5];
+        }
+
         $profile = new UserProfile([
             'user_id' => $user->id,
             'nationality' => 'Italian',
@@ -98,7 +103,7 @@ class ApiAuthenticationController extends Controller
             'country_id' => $firstCountryId,
             'province_id' => $firstProvinceId,
             'is_user_model' => $request->isModel ?? 0,
-        ]);
+        ] + $initialCredits);
 
         $profile->save();
 

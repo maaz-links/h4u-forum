@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             LanguageSeeder::class,
             AdminSeeder::class,
             PagesTableSeeder::class,
+            PermissionSeeder::class,
         ]);
     }
 }

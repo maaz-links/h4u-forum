@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'reset.msglimit' => \App\Http\Middleware\ResetDailyMsgLimit::class,
             'check.banned' => \App\Http\Middleware\CheckBanned::class,
+            'admin.perm' => \App\Http\Middleware\CheckAdminPermission::class,
         ]);
         // $middleware->alias([
             

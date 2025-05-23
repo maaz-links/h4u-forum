@@ -239,7 +239,7 @@ class GenerateFakeProfilesListener
 
             $profile->save();
 
-            $user->update(['profile_picture_id' => $this->assignRandomProfilePicture($user->id,$gender)]);
+            $user->update(['profile_picture_id' => $this->assignRandomFakeProfilePicture($user->id,$randomProfile['Foto'])]);
             
 
             //$RegistrationDate = $randomProfile['Data Registrazione'];
@@ -276,6 +276,50 @@ class GenerateFakeProfilesListener
 
     }
 
+    private function assignRandomFakeProfilePicture($userId, $pictureName = '')
+    {
+        $disk = Storage::build([
+            'driver' => 'local',
+            'root' => storage_path('app/private'),
+        ]);
+        $sourcePath = "/fakedata/pictures/";
+        $specificFile = $sourcePath . $pictureName;
+    
+        if ($disk->exists($specificFile)) {
+            $myFile = $specificFile; // or process it as needed
+        }
+        else{
+            $sourcePath = "/fakedata/pictures/default/";
+            $files = $disk->files($sourcePath);
+
+            if (empty($files)) {
+                throw new \Exception("No images found");
+            }
+            $myFile = $files[array_rand($files)];
+        }   
+        
+        $extension = pathinfo($myFile, PATHINFO_EXTENSION);
+        //$newFilename = "attachments/{$userId}/profile_".time().".{$extension}";
+        
+
+            $newFilename = 'attachments/' . $userId . '/' . Str::uuid()->toString() . '.'.$extension;
+            $fullPath = storage_path('app/private/' . $newFilename);
+
+            // Ensure the directory exists
+            $directory = dirname($fullPath);
+            if (!File::exists($directory)) {
+                File::makeDirectory($directory, 0755, true);
+            }
+
+        $disk->copy($myFile, $newFilename);
+
+        $attachment = Attachment::create([
+            'user_id' => $userId,
+            'path' => $newFilename,
+        ]);
+        
+        return $attachment->id;
+    }
     private function assignRandomProfilePicture($userId, $gender = 'female')
     {
         $disk = Storage::build([

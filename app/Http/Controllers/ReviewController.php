@@ -35,6 +35,8 @@ class ReviewController extends Controller
                 'reviewed_user_id' => 'required|exists:users,id',
                 'rating' => "required|integer|between:{$leastrating},5",
                 'comment' => 'nullable|string|max:500',
+            ],[
+                'rating.between' => "Rating must be at least {$leastrating} stars",
             ]
         );
         if ($validator->fails()) {

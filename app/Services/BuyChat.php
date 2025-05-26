@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Events\Chat\NewMessageSent;
 use App\Events\ChatUnlocked;
+use App\Events\FreeMessageSent;
 use App\Models\Chat;
 use App\Models\User;
 use DB;
@@ -52,6 +54,43 @@ class BuyChat
 
             event(new ChatUnlocked($user->id,$other_user_id));
             return response()->json(['message' => 'Chat Created','chat' => $newChat]);
+        });
+    }
+
+    public function freechat(User $user,$other_user_id){
+
+        $userA = $other_user_id;
+        $userB = $user->id;
+
+        $existingChat = Chat::findBetweenUsers($user->id, $other_user_id);
+        
+        if($existingChat){
+            return response()->json(['message' => 'Chat already exists'],200);
+        }
+
+        $profile = DB::table('user_profiles')->where('user_id', $user->id)->first();
+
+        if (!$profile || $profile->credits < 1) {
+            return response()->json(['message' => 'You have reached the limit of free messages today'], 400);
+        }
+        $king_id = $other_user_id;
+        return DB::transaction(function () use ($user, $king_id) {
+
+            DB::table('user_profiles')
+                ->where('user_id', $user->id)
+                ->decrement('credits', 1);
+
+                $newChat = $this->fullChatInstance($king_id,$user->id);
+        
+                $newChat->messages()->create([
+                    'sender_id' => $user->id,
+                    'message' => "Hi! Nice to meet you, wanna chat?",
+                ]);
+
+                event(new FreeMessageSent($user->id, $king_id));
+                event(new NewMessageSent($newChat->messages[0],$newChat));
+        
+                return response()->json(['message' => 'Message Given','chat' => $newChat]);
         });
     }
 

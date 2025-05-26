@@ -22,6 +22,13 @@ use App\Services\TwilioService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/send-message', function () {
+    $message = 'Hello from Laravel at ' . now();
+    event(new App\Events\Chat\MessageSent($message));
+    return response()->json(['status' => 'Message sent!']);
+});
+
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 Route::apiResource('hostess-services', HostessServiceController::class);
 
@@ -125,6 +132,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/chats/{chat}/messages', [MessageController::class, 'index']);
         Route::post('/chats/{chat}/messages', [MessageController::class, 'store']);
         Route::get('/chats/{chat}/messages/poll', [MessageController::class, 'poll']);
+
+        Route::post('/chats/{chat}/messages/read', [MessageController::class, 'markAsRead']);
 
         Route::post('/reviews', [ReviewController::class, 'store']);
         Route::get('/reviews', [ReviewController::class, 'index']);

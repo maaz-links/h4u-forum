@@ -399,6 +399,11 @@ return [
                 'url' => '/admin/users',
                 'icon' => '',
             ],
+            [
+                'text' => 'Admins Logs',
+                'url' => '/admin-logs',
+                'icon' => '',
+            ],
     ],
 
     /*

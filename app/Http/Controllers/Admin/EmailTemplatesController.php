@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\UserConfig;
+use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -45,6 +46,8 @@ class EmailTemplatesController extends Controller
             ['key' => "h4u.emailmessage.$type"],
             ['value' => $request->template]
         );
+
+        AuditAdmin::audit("EmailTemplatesController@update");
 
         return redirect()->route('admin.email-templates.index')
             ->with('success', 'Template updated successfully');

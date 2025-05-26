@@ -144,6 +144,11 @@ class AdminNav
                 'icon' => '',
             ];
         }
+        $menu[] = [
+            'text' => 'Admin Logs',
+            'url' => '/admin-logs',
+            'icon' => '',
+        ];
 
         Config::set('adminlte.menu',$menu);
     }

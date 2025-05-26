@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class AuditAdmin
 {
-    public static function audit($action,$reason){
+    public static function audit($action,$reason = ''){
         $admin = Auth::user();
         //dd($admin);
             AdminLog::create([

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Chat;
 use App\Models\Message;
 use App\Models\User;
+use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
 
 class UserChatController extends Controller
@@ -82,9 +83,7 @@ class UserChatController extends Controller
         ])
         ->first();
 
-        // AuditAdmin::audit(
-        //     "Opened conversation between {$chat->user1->name} (ID: {$chat->user1->id}) and {$chat->user2->name} (ID: {$chat->user2->id})",
-        //     $request->admin_reason);
+        AuditAdmin::audit("UserChatController@openConversation");
 
         return view('chats.openconversation',compact('chat'));
     }
@@ -102,6 +101,9 @@ class UserChatController extends Controller
 
         $msg->update($validated);
 
+        AuditAdmin::audit("UserChatController@editMessage");
+
+
         return redirect()->back()
             ->with('success', 'Message updated successfully');
     }
@@ -111,6 +113,8 @@ class UserChatController extends Controller
         //dd($msg);
         $chat_id = $msg->chat_id;
         $msg->delete();
+
+        AuditAdmin::audit("UserChatController@destroyMessage");
 
         return redirect()->route('open.conversation',['chat' => $chat_id])
             ->with('success', 'Message deleted successfully');

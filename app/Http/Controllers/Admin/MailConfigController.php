@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\UserConfig;
+use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -80,6 +81,8 @@ class MailConfigController extends Controller
             ['key' => 'mail.mailers.smtp.password'],
             ['value' => $request->mail_smtp_password]
         );
+
+        AuditAdmin::audit("MailConfigController@update");
         
         return redirect()->route('mail-config.edit')
             ->with('success', 'Mail configuration updated successfully!');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ShopTransactionHistory;
+use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
 
 class ShopTransactionController extends Controller
@@ -35,6 +36,9 @@ class ShopTransactionController extends Controller
     {
         $shop = ShopTransactionHistory::where('id',$request->id)->first();
         $shop->delete();
+
+        AuditAdmin::audit("ShopTransactionController@destroy");
+
 
         return redirect()->route('shops.index')->with('success', 'Shop transaction deleted successfully.');
     }

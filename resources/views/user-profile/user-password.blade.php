@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Change Password')
+@section('title', 'Change User Password')
 
 @section('content_header')
-    <h1>Change Admin Password</h1>
+    <h1>Change User Password of {{$user->name}}</h1>
 @stop
 
 @section('content')
@@ -11,8 +11,8 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header bg-primary">
-                    <h3 class="card-title">Change Admin Password</h3>
+                <div class="card-header bg-info">
+                    <h3 class="card-title">Change User Password</h3>
                 </div>
                 <div class="card-body">
                     @if(session('success'))
@@ -21,10 +21,10 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('password.update') }}">
+                    <form method="POST" action="{{ route('user-profile.password.update') }}">
                         @csrf
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="current_password">Current Password</label>
                             <input id="current_password" type="password" 
                                    class="form-control @error('current_password') is-invalid @enderror" 
@@ -34,7 +34,7 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div>
+                        </div> --}}
 
                         <div class="form-group mt-3">
                             <label for="new_password">New Password</label>
@@ -46,6 +46,9 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
+                            <input id="new_password" type="hidden" 
+                            class="form-control @error('new_password') is-invalid @enderror" 
+                            name="user_id" value={{$user->id}} required>
                         </div>
 
                         <div class="form-group mt-3">
@@ -56,9 +59,12 @@
                         </div>
 
                         <div class="form-group mt-4">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-info">
                                 Change Password
                             </button>
+                            <a href="{{route('user-profile',$user->name)}}" class="btn btn-secondary">
+                                Back to Profile
+                            </a>
                         </div>
                     </form>
                 </div>

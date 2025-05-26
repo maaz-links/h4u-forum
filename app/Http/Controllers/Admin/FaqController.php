@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Faq;
+use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
 
 class FaqController extends Controller
@@ -39,6 +40,8 @@ class FaqController extends Controller
         $faq->answer = $request->answer;
         $faq->save();
 
+        AuditAdmin::audit("FaqController@store");
+
         return redirect()->route('faqs.index')->with('success', 'FAQ created successfully.');
     }
 
@@ -61,6 +64,8 @@ class FaqController extends Controller
         $faq->answer = $request->answer;
         $faq->save();
 
+        AuditAdmin::audit("FaqController@update");
+
         return redirect()->route('faqs.index')->with('success', 'FAQ updated successfully.');
     }
 
@@ -68,6 +73,8 @@ class FaqController extends Controller
     {
         $faq = Faq::findOrFail($request->id);
         $faq->delete();
+
+        AuditAdmin::audit("FaqController@destroy");
 
         return redirect()->route('faqs.index')->with('success', 'FAQ deleted successfully.');
     }

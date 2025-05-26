@@ -25,6 +25,7 @@ class PermissionSeeder extends Seeder
             'shop_admin',
             'badge_admin',
             'email_admin',
+            'password_admin',
         ];
 
         $roleModels = [];
@@ -53,7 +54,9 @@ class PermissionSeeder extends Seeder
 
             ['name' => 'Change Email Settings', 'slug' => 'change_email_settings'],
 
-            ['name' => 'Change Email Settings', 'slug' => 'read_contact_requests'],
+            ['name' => 'Can read Contact Requests', 'slug' => 'read_contact_requests'],
+
+            ['name' => 'Can change user password', 'slug' => 'change_user_password'],
         ];
 
         $permissionModels = [];
@@ -100,6 +103,10 @@ class PermissionSeeder extends Seeder
 
         $roleModels['email_admin']->permissions()->attach([
             $permissionModels['change_email_settings']->id,
+        ]);
+
+        $roleModels['password_admin']->permissions()->attach([
+            $permissionModels['change_user_password']->id,
         ]);
 
         $admin = User::where('name', 'admin2')->first();

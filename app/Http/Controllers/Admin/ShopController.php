@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\_Shop;
 use App\Models\Shop;
+use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -68,6 +69,8 @@ class ShopController extends Controller
 
 
     $shop->save();
+    AuditAdmin::audit("ShopController@store");
+
 
         return redirect()->route('shops.index')->with('success', 'Shop created successfully.');
     }
@@ -109,6 +112,8 @@ class ShopController extends Controller
 
 
         $shop->save();
+        AuditAdmin::audit("ShopController@update");
+
         return redirect()->route('shops.index')->with('success', 'Shop updated successfully.');
     }
 
@@ -116,6 +121,8 @@ class ShopController extends Controller
     {
         $shop = Shop::where('id',$request->id)->first();
         $shop->delete();
+
+        AuditAdmin::audit("ShopController@destroy");
 
         return redirect()->route('shops.index')->with('success', 'Shop deleted successfully.');
     }

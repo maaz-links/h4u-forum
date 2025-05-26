@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Report;
+use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -35,6 +36,7 @@ class ReportController extends Controller
     public function destroy(Report $report)
     {
         $report->delete();
+        AuditAdmin::audit("ReportController@destroy");
         
         return redirect()->route('reports.index')
                         ->with('success', 'Report deleted successfully');

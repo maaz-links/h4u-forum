@@ -8,7 +8,10 @@ use App\Models\Chat;
 use App\Models\Review;
 use App\Models\User;
 use App\Models\UserProfile;
+use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Validator;
 
 class HomeController extends Controller
 {
@@ -51,6 +54,8 @@ class HomeController extends Controller
             'verified_profile' => !$prof->verified_profile
         ]);
 
+        AuditAdmin::audit("HomeController@toggleVerified");
+
         return redirect()->route('user-profile', $user->name)
             ->with('success', $msg);
     }
@@ -63,9 +68,62 @@ class HomeController extends Controller
         $prof->update([
             'top_profile' => !$prof->top_profile
         ]);
-
+        AuditAdmin::audit("HomeController@toggleTop");
         return redirect()->route('user-profile', $user->name)
             ->with('success', $msg);
+    }
+
+    public function editUserPassword($id)
+    {
+        $user = User::where('id','=', $id)
+        ->forRoleAny()
+        ->first();
+        if(!$user){
+            abort(404);
+        }
+        return view('user-profile.user-password',compact('user'));
+    }
+
+    public function updateUserPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|integer',
+            //'current_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        
+        //dd($validator);
+        $user = User::where('id','=', $request->user_id)
+        ->forRoleAny()
+        ->first();
+        if(!$user){
+            abort(404);
+        }
+
+        // $validator->after(function ($validator) use ($request) {
+        //     if (!Hash::check($request->current_password, auth()->user()->password)) {
+        //         $validator->errors()->add('current_password', 'Your current password is incorrect.');
+        //     }
+        // });
+        //dd($validator);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        
+        
+        // Update password
+        $user->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        AuditAdmin::audit("HomeController@updateUserPassword");
+
+
+        return redirect()->route('user-profile.password.edit', $user->id)
+            ->with('success', "$user->name's Password changed successfully!");
     }
 
 

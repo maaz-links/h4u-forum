@@ -43,13 +43,16 @@
                                 <p><strong>Joined:</strong> {{ $user->created_at->format('M d, Y') }}</p>
                                 <p><strong>Rating:</strong> {{ number_format($user->rating, 2) }} ⭐</p>
                                 @if (\Auth::user()->hasPermission('manage_chat'))
-                                <p><a href="{{route('user-profile.chat',[$user->name])}}">Check chat list</a></p>
+                                <p><a href="{{route('user-profile.chat',[$user->name])}}">Check Chat List</a></p>
+                                @endif
+                                @if (\Auth::user()->hasPermission('change_user_password'))
+                                <p><a href="{{route('user-profile.password.edit',[$user->id])}}">Change Password</a></p>
                                 @endif
                                 @if (\Auth::user()->hasPermission('manage_reviews'))
-                                <p><a href="{{route('user-profile.reviews',[$user->name])}}">Check reviews</a></p>
+                                <p><a href="{{route('user-profile.reviews',[$user->name])}}">Check Reviews</a></p>
                                 @endif
                                 @if (\Auth::user()->hasPermission('user_bans'))
-                                <p><a href="{{route('admin.users.ban.show',[$user->name])}}">Manage bans</a></p>
+                                <p><a href="{{route('admin.users.ban.show',[$user->name])}}">Manage Bans</a></p>
                                 @endif
                                 {{-- <p><a href="{{route('user-profile.chat',[$user->name])}}">Check chat list</a></p> --}}
                                 {{-- <p><a href="{{route('user-profile.reviews',[$user->name])}}">Check reviews</a></p>

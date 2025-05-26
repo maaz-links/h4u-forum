@@ -52,6 +52,8 @@ class FakeProfileSettingController extends Controller
         // );
         $script->delete();
 
+        AuditAdmin::audit("FakeProfileSettingController@destroy");
+
         return back()->with("success","All users associated with the script are deleted");
     }
     public function store(Request $request){
@@ -78,6 +80,8 @@ class FakeProfileSettingController extends Controller
         $setting = FakeProfileSetting::create([
             'script_name' => $request->script_name,
         ]);
+
+        AuditAdmin::audit("FakeProfileSettingController@store");
 
         event(new GenerateFakeProfiles($validatedData, $setting));
 

@@ -9,6 +9,9 @@
 
 @section('content')
 <div class="container-fluid">
+    @if(session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
     <div class="card">
         <div class="card-header bg-primary">
             <h3 class="card-title">Available Templates</h3>

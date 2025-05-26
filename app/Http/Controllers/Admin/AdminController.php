@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
@@ -57,6 +58,7 @@ class AdminController extends Controller
         // if ($request->has('permissions')) {
         //     $role->permissions()->sync($request->permissions);
         // }
+        AuditAdmin::audit("AdminController@store");
 
         return redirect()->route('admin.users.index')
             ->with('success', 'Admin user created successfully');
@@ -121,7 +123,7 @@ class AdminController extends Controller
         // if ($request->has('permissions')) {
         //     $role->permissions()->sync($request->permissions);
         // }
-
+        AuditAdmin::audit("AdminController@update");
         return redirect()->route('admin.users.index')
             ->with('success', 'Admin user roles updated successfully');
     }
@@ -138,6 +140,7 @@ class AdminController extends Controller
         }
 
         $user->delete();
+        AuditAdmin::audit("AdminController@destroy");
         return redirect()->route('admin.users.index')
             ->with('success', 'Admin user deleted successfully');
     }

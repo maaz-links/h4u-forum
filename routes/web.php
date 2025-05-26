@@ -67,6 +67,13 @@ Route::group(['middleware' => ['admin']], function () {
     Route::post('/user-profile/toggle-top/{user}', [HomeController::class, 'toggleTop'])
         ->name('user-profile.toggle-top')->middleware('admin.perm:declare_badges');
 
+    Route::get('/user-profile/change-password/{id}', [HomeController::class, 'editUserPassword'])
+        ->name('user-profile.password.edit')->middleware('admin.perm:change_user_password');
+        ;
+    Route::post('/user-profile/change-password', [HomeController::class, 'updateUserPassword'])
+        ->name('user-profile.password.update')->middleware('admin.perm:change_user_password');
+        ;
+
     Route::group(['middleware' => ['admin.perm:manage_chat']], function () {
         Route::get('/user-profile/{name}/chat', [UserChatController::class, 'userchats'])->name('user-profile.chat');
         // Route::post('/opened-conversation', [UserChatController::class, 'conversation'])->name('open.conversation');

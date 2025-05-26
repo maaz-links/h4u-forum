@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Review;
 use App\Models\User;
+use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
 
 class UserReviewController extends Controller
@@ -36,12 +37,8 @@ class UserReviewController extends Controller
         ->first();
 
         //return $review;
-        // AuditAdmin::audit(
-        //     "Deleted review of " . 
-        //         ($review->reviewedUser->name ?? 'Unknown User') . " (ID: " . ($review->reviewedUser->id ?? 'N/A') . ") by ".   ($review->reviewer->name ?? '[deleted]') . " (ID: " . ($review->reviewer->id ?? 'N/A') . ")",
-        //     $request->admin_reason
-        // );
         $review->delete();
+        AuditAdmin::audit("UserReviewController@deleteReview");
 
         return back()->with("success","Review deleted");
     }
@@ -80,7 +77,7 @@ class UserReviewController extends Controller
         ])->first();
         
         $review->update(['rating' => $validated_data['rating']]);;
-        
+        AuditAdmin::audit("UserReviewController@updateReview");
         // AuditAdmin::audit(
         //     "Modified review of " . 
         //         ($review->reviewedUser->name ?? 'Unknown User') . " (ID: " . ($review->reviewedUser->id ?? 'N/A') . ") by ".   ($review->reviewer->name ?? '[deleted]') . " (ID: " . ($review->reviewer->id ?? 'N/A') . ")",

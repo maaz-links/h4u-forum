@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\UserConfig;
+use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
 
 class ReviewConfigController extends Controller
@@ -56,6 +57,7 @@ class ReviewConfigController extends Controller
             
             // AuditAdmin::audit($messages[0],$request->admin_reason);
 
+            AuditAdmin::audit("ReviewConfigController@store");
             return $results;
         });
         return redirect()->route('reviews-config.index')->with('success', 'Review Configs modified successfully.');

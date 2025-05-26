@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\UserConfig;
+use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
 
 class CreditController extends Controller
@@ -39,7 +40,7 @@ class CreditController extends Controller
             
             
             // AuditAdmin::audit("Modified Credits Cost",$request->admin_reason);
-
+            AuditAdmin::audit("CreditController@store");
             return $results;
         });
         return redirect()->route('credits.index')->with('success', 'Credits modified successfully.');

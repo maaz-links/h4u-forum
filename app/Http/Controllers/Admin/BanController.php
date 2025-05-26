@@ -9,6 +9,7 @@ use App\Events\WarnUser;
 use App\Http\Controllers\Controller;
 use App\Models\Ban;
 use App\Models\User;
+use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
 
 class BanController extends Controller
@@ -40,7 +41,7 @@ class BanController extends Controller
             'user_id' => $user->id,
             //'reason'=> $request->reason
         ]);
-
+        AuditAdmin::audit("BanController@ban");
         event(new PermaBan($user));
         
         return redirect()->route('admin.users.ban.show', $user->name)
@@ -64,7 +65,7 @@ class BanController extends Controller
             //'reason'=> $request->reason,
             'expired_at' => now()->addDays((int) $request->days),
         ]);
-
+        AuditAdmin::audit("BanController@tempban");
         event(new TempBan($user,$ban->expired_at));
         
         return redirect()->route('admin.users.ban.show', $user->name)
@@ -74,6 +75,7 @@ class BanController extends Controller
     public function unban(User $user)
     {
         $user->unban();
+        AuditAdmin::audit("BanController@unban");
         event(new UnBanUser($user));
         return redirect()->route('admin.users.ban.show', $user->name)
             ->with('success', 'User ban has been lifted.');
@@ -82,6 +84,7 @@ class BanController extends Controller
     public function warn(User $user)
     {
         $user->profile()->increment('warnings');
+        AuditAdmin::audit("BanController@warning");
         event(new WarnUser($user));
         return redirect()->route('admin.users.ban.show', $user->name)
             ->with('success', 'User has been warned.');

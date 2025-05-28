@@ -42,6 +42,7 @@ Route::post('/email/resend', [VerificationController::class, 'resend'])
 
 Route::post('/login', [ApiAuthenticationController::class, 'login'])->name('login');
 Route::post('/verify-otp', [ApiAuthenticationController::class, 'verifyOtp']);
+Route::post('/resend-otp', [ApiAuthenticationController::class, 'resendOtp']);
 Route::post('/logout', [ApiAuthenticationController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail'])
@@ -51,7 +52,7 @@ Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkE
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])
     ->middleware('guest:sanctum')
     ->name('password.update');
-
+    
 Route::get('/miscdata', [MiscController::class, 'miscdata']);
 
 
@@ -135,6 +136,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/chats/{chat}/messages/read', [MessageController::class, 'markAsRead']);
 
+        Route::get('/unread-messages-count', [MessageController::class, 'unreadCount']);
+
         Route::post('/reviews', [ReviewController::class, 'store']);
         Route::get('/reviews', [ReviewController::class, 'index']);
 
@@ -143,19 +146,20 @@ Route::middleware('auth:sanctum')->group(function () {
 
         //Route::delete('/delete-account',[UpdateProfileController::class,'deleteAccount']);
     //});
+        Route::get('shops',[ShopController::class,'index']);
+        Route::get('shop/{id}',[ShopController::class,'shop']);
+        Route::post('/add/user-credits',[ShopController::class,'addCredits']);
+        Route::get('/user-purchased',[ShopController::class,'userPurchased']);
+
+        Route::post('/report-user', [UserProfileController::class, 'reportUser']);
+
+        Route::post('/create-payment-intent',[PaymentController::class,'createPaymentIntent']);
+        Route::post('/paypal/create-order', [PaymentController::class, 'createOrder']);
+        Route::get('/paypal/success', [PaymentController::class, 'success']);
+        Route::get('/paypal/cancel', [PaymentController::class, 'cancel']);
+
     });
-    Route::get('shops',[ShopController::class,'index']);
-    Route::get('shop/{id}',[ShopController::class,'shop']);
-    Route::post('/add/user-credits',[ShopController::class,'addCredits']);
-    Route::get('/user-purchased',[ShopController::class,'userPurchased']);
-
-    Route::post('/report-user', [UserProfileController::class, 'reportUser']);
-
-    Route::post('/create-payment-intent',[PaymentController::class,'createPaymentIntent']);
-    Route::post('/paypal/create-order', [PaymentController::class, 'createOrder']);
-    Route::get('/paypal/success', [PaymentController::class, 'success']);
-    Route::get('/paypal/cancel', [PaymentController::class, 'cancel']);
-
+    
 });
 
 // Route::get('/randomize-profiles', [UserProfileController::class, 'randomize']);

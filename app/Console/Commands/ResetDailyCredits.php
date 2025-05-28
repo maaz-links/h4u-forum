@@ -15,10 +15,10 @@ class ResetDailyCredits extends Command
     public function handle()
     {
         // Only reset once per day
-        $lastReset = cache()->get('last_credit_reset');
+        // $lastReset = cache()->get('last_credit_reset');
 
         //dd($lastReset);
-        if (!$lastReset || !Carbon::parse($lastReset)->isToday()) {
+        // if (!$lastReset || !Carbon::parse($lastReset)->isToday()) {
             $this->info('Resetting daily free messages for hostesses...');
             
             $updated = DB::table('user_profiles')
@@ -30,9 +30,9 @@ class ResetDailyCredits extends Command
             //dd('wat');
             $this->info("Successfully reset free messages for {$updated} hostesses.");
             
-        } else {
-            $this->info('free messages were already reset today. Skipping...');
-        }
+        // } else {
+            // $this->info('free messages were already reset today. Skipping...');
+        // }
         
         return 0;
     }

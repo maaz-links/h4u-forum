@@ -141,6 +141,13 @@ class UserQueryBuilder extends Builder
         });
     }
 
+    public function NotShadowBanned()
+    {
+        return $this->whereDoesntHave('shadow_bans', function($q) {
+            $q->where('expired_at', '>', now());
+        });
+    }
+
     public function scopeFake($script_id = null)
     {
         if($script_id){

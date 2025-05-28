@@ -46,6 +46,7 @@ class SearchController extends Controller
         ->select('id', 'name', 'email', 'role', 'profile_picture_id')
         ->hasProfilePicture()
         ->NotBanned()
+        ->NotShadowBanned()
         ->forOppositeRole($role)
         ->get();
 

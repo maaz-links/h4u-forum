@@ -8,6 +8,7 @@ use App\Events\UnBanUser;
 use App\Events\WarnUser;
 use App\Http\Controllers\Controller;
 use App\Models\Ban;
+use App\Models\ShadowBan;
 use App\Models\User;
 use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
@@ -24,6 +25,10 @@ class BanController extends Controller
         $user->load(['bans' => function($query) {
             $query->whereNull('expired_at') // Permanent bans
                   ->orWhere('expired_at', '>', now()); // Active temporary bans
+        }]);
+
+        $user->load(['shadow_bans' => function($query) {
+            $query->where('expired_at', '>', now()); // Active shadow bans
         }]);
         return view('user-profile.ban', compact('user'));
     }
@@ -88,5 +93,39 @@ class BanController extends Controller
         event(new WarnUser($user));
         return redirect()->route('admin.users.ban.show', $user->name)
             ->with('success', 'User has been warned.');
+    }
+
+
+    public function shadowBan(User $user, Request $request)
+    {
+        $request->validate([
+            //'reason' => 'required|string|max:255',
+            'days' => 'required|integer|min:1'
+        ]);
+        
+        // $user->ban([
+        //     'expired_at' => now()->addDays($request->days),
+        //     'reason' => $request->reason
+        // ]);
+        $user->removeShadowBan();
+        $shadowban = ShadowBan::create([
+            'user_id' => $user->id,
+            //'reason'=> $request->reason,
+            'expired_at' => now()->addDays((int) $request->days),
+        ]);
+        
+        
+        
+        return redirect()->route('admin.users.ban.show', $user->name)
+            ->with('success', "User has been temporarily shadowbanned for {$request->days} days.");
+    }
+
+    public function removeShadowBan(User $user)
+    {
+        $user->removeShadowBan();
+        // AuditAdmin::audit("BanController@unban");
+        // event(new UnBanUser($user));
+        return redirect()->route('admin.users.ban.show', $user->name)
+            ->with('success', 'User shadowban has been lifted.');
     }
 }

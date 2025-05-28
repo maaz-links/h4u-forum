@@ -185,8 +185,10 @@ class GenerateFakeProfilesListener
             //     ? random_int(65, 95)    // Male weight range in kg
             //     : random_int(45, 75);   // Female weight range in kg
 
-            $top_profile = random_int(0,1);
-            $verified_profile = random_int(0,1);
+            // $top_profile = random_int(0,1);
+            // $verified_profile = random_int(0,1);
+            $top_profile = 0;
+            $verified_profile = 0;
             
             // Generate European sizes based on gender
             $dressSize = $gender === $MALE

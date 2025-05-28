@@ -8,8 +8,9 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('credits:reset-daily')
-    ->dailyAt('00:00')
-    ->timezone('America/New_York') // Set your timezone
+    // ->dailyAt('00:00')
+    // ->timezone('America/New_York') // Set your timezone
+    ->daily()
     ->before(function () {
         logger('Starting daily credit reset');
     })

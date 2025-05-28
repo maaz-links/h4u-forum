@@ -220,6 +220,32 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->bans()->delete();
     }
 
+    //Shadowban
+    public function shadow_bans()
+    {
+        return $this->hasOne(ShadowBan::class);
+    }
+
+    public function activeShadowBan()
+    {
+        return $this->shadow_bans()
+            ->where(function($query) {
+                $query->where('expired_at', '>', now());
+            })
+            ->latest()
+            ->first();
+    }
+
+    public function isShadowBanned(): bool
+    {
+        return !is_null($this->activeShadowBan());
+    }
+
+    public function removeShadowBan(): void
+    {
+        $this->shadow_bans()->delete();
+    }
+
 
     //ADMIN ROLES
     public function roles()

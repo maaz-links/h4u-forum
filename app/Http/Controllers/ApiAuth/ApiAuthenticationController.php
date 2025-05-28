@@ -22,6 +22,7 @@ class ApiAuthenticationController extends Controller
 {
     public function register(Request $request)
     {
+        //dd(env('TWILIO_SID'));
         // $validator = Validator::make($request->all(), [
         //     'name' => 'required|string|max:255|unique:users',
         //     'email' => 'required|string|email|max:255|unique:users',
@@ -265,5 +266,37 @@ class ApiAuthenticationController extends Controller
             'user' => $user,
             'email_verified' => $user->hasVerifiedEmail(),
         ]);
+    }
+
+    public function resendOtp(Request $request){
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'email' => 'required|email',
+                'phone' => 'required|string',
+                //'otp' => 'integer|digits:6',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['formError' => $validator->errors()], 422);
+        }
+
+        $user = User::where('email', $request->email)
+            ->where('phone', $request->phone)
+            ->where('otp', '!=',null)
+            ->where('otp_expires_at', '>', now())
+            ->first();
+
+            if (!$user) {
+                return response()->json([
+                    //'message' => 'Invalid login credentials',
+                    'formError' => ['otp' => ['OTP Invalid or Expired']],
+                    'noreload' => true
+                ], 422);
+            }
+            event(new SendOTP($user, $user->otp));
+
+            return response()->json(['message' => "OTP is resent"], 200);
     }
 }

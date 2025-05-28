@@ -8,6 +8,7 @@ use App\Events\Chat\NewMessageSent;
 use App\Http\Resources\MessageResource;
 use App\Models\Chat;
 use App\Models\Message;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -134,5 +135,30 @@ class MessageController extends Controller
 
     protected function authorizeChat(Chat $chat){
         return $chat->hasParticipant(Auth::id());
+    }
+
+    public function unreadCount(Request $request){
+        $user = $request->user();
+        $count = Chat::myChats($user->id)->whereHas('messages', function ($query) use ($user) {
+            // $query->select(DB::raw(1))
+            //       ->whereColumn('messages.chat_id', 'chats.id')
+            //       ->orderByDesc('messages.created_at')
+            //       ->limit(1)
+            //       ->where('is_read', 0)
+            //       ->where('sender_id', '!=', $user->id);
+            
+                $query->where('is_read', 0) //Unread msg
+                      ->where('sender_id', '!=', $user->id) //Not cureent user's message
+                      //Must be the last message of the chat
+                      ->whereRaw('messages.id = (
+                          SELECT id FROM messages 
+                          WHERE chat_id = chats.id 
+                          ORDER BY created_at DESC 
+                          LIMIT 1
+                      )');
+            
+        })->count();
+
+        return $count;
     }
 }

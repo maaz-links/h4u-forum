@@ -139,6 +139,8 @@ Route::group(['middleware' => ['admin']], function () {
         Route::post('/user-profile/{user}/temp-ban', [BanController::class, 'tempBan'])->name('admin.users.temp-ban');
         Route::post('/user-profile/{user}/unban', [BanController::class, 'unban'])->name('admin.users.unban');
         Route::post('/user-profile/{user}/warn', [BanController::class, 'warn'])->name('admin.users.warn');
+        Route::post('/user-profile/{user}/shadowban', [BanController::class, 'shadowBan'])->name('admin.users.shadowban');
+        Route::post('/user-profile/{user}/remove-shadowban', [BanController::class, 'removeShadowBan'])->name('admin.users.remove-shadowban');
         
 
     });

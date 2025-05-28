@@ -75,6 +75,7 @@ class UserProfileController extends Controller
         ->forUsername($username)
         ->forOppositeRole($role)
         ->NotBanned()
+        ->NotShadowBanned()
         // ->whereHas('profile', function($q) use ($check_visibility) {
         //     $q->whereIn('visibility_status', $check_visibility);
         // })

@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class ReportChat extends Model
+{
+    use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'reporter_id',
+        'reported_chat_id',
+        'reason',
+        'additional_info',
+    ];
+
+    /**
+     * Default status values.
+     *
+     * @var array
+     */
+    public const STATUSES = [
+        'pending' => 'Pending',
+        'reviewed' => 'Reviewed',
+        'resolved' => 'Resolved',
+        'rejected' => 'Rejected',
+    ];
+
+    /**
+     * Get the user who made the report.
+     */
+    public function reporter()
+    {
+        return $this->belongsTo(User::class, 'reporter_id');
+    }
+
+    /**
+     * Get the user being reported.
+     */
+    public function reportedChat()
+    {
+        return $this->belongsTo(Chat::class, 'reported_chat_id');
+    }
+
+}

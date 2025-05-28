@@ -127,10 +127,15 @@ Route::group(['middleware' => ['admin']], function () {
     Route::group(['middleware' => ['admin.perm:view_reports']], function () {
         Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])
             ->name('reports.index')->middleware('admin.perm:view_reports',);
-        Route::get('/reports/{report}', [\App\Http\Controllers\Admin\ReportController::class, 'show'])
-            ->name('reports.show')->middleware('admin.perm:view_reports');
+        // Route::get('/reports/{report}', [\App\Http\Controllers\Admin\ReportController::class, 'show'])
+        //     ->name('reports.show')->middleware('admin.perm:view_reports');
         Route::delete('/reports/{report}', [\App\Http\Controllers\Admin\ReportController::class, 'destroy'])
             ->name('reports.destroy');
+
+        Route::get('/report-chats', [\App\Http\Controllers\Admin\ReportChatController::class, 'index'])
+            ->name('report-chats.index')->middleware('admin.perm:view_reports',);
+        Route::delete('/report-chats/{report}', [\App\Http\Controllers\Admin\ReportChatController::class, 'destroy'])
+            ->name('report-chats.destroy');
     });
 
     Route::group(['middleware' => ['admin.perm:user_bans']], function () {

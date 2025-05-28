@@ -152,6 +152,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/user-purchased',[ShopController::class,'userPurchased']);
 
         Route::post('/report-user', [UserProfileController::class, 'reportUser']);
+        Route::post('/report-chat', [UserProfileController::class, 'reportChat']);
 
         Route::post('/create-payment-intent',[PaymentController::class,'createPaymentIntent']);
         Route::post('/paypal/create-order', [PaymentController::class, 'createOrder']);

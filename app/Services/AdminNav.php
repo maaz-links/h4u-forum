@@ -62,10 +62,15 @@ class AdminNav
                 'icon' => '',
             ];
         }
-        if (in_array('user_bans',$permissionSlugs)) {
+        if (in_array('view_reports',$permissionSlugs)) {
             $menu[] = [
                 'text' => 'Reported Users',
                 'url' => '/reports',
+                'icon' => '',
+            ];
+            $menu[] = [
+                'text' => 'Reported Chats',
+                'url' => '/report-chats',
                 'icon' => '',
             ];
             $menu[] = [

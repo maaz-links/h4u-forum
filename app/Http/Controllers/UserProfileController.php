@@ -8,6 +8,7 @@ use App\Models\Ban;
 use App\Models\Chat;
 use App\Models\ProfileView;
 use App\Models\Report;
+use App\Models\ReportChat;
 use App\Models\User;
 use App\Models\UserProfile;
 use Carbon\Carbon;
@@ -195,6 +196,37 @@ class UserProfileController extends Controller
         $report = Report::create([
             'reporter_id' => auth()->id(),
             'reported_user_id' => $request->reported_user_id,
+            'reason' => $request->reason,
+            //'additional_info' => $request->additional_info ?? null,
+            
+        ]);
+    
+        return response()->json([
+            'message' => 'Report submitted successfully',
+            'data' => $report
+        ], 201);
+    }
+
+    public function reportChat(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),[
+                'reported_chat_id' => 'required|exists:chats,id',
+                'reason' => 'required|string|max:1000',
+                //'additional_info' => 'nullable|string|max:1000',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Invalid Data'], 422);
+        }
+
+        if(ReportChat::where('reporter_id',auth()->id())->where('reported_chat_id',$request->reported_chat_id)->first()){
+            return response()->json(['message' => 'Already Reported'], 422);
+        } 
+        $report = ReportChat::create([
+            'reporter_id' => auth()->id(),
+            'reported_chat_id' => $request->reported_chat_id,
             'reason' => $request->reason,
             //'additional_info' => $request->additional_info ?? null,
             

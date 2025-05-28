@@ -326,6 +326,11 @@ return [
             'icon' => '',
         ],
         [
+            'text' => 'Reported Chats',
+            'url' => '/report-chats',
+            'icon' => '',
+        ],
+        [
             'text' => 'Admin Password',
             'url' => '/change-password',
             'icon' => '',

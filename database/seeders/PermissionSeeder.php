@@ -14,6 +14,17 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
+        // \DB::table('permission_role')->truncate();
+        // \DB::table('role_user')->truncate();
+
+        // Truncate roles and permissions
+        // Role::truncate();
+        // Permission::truncate();
+        Role::query()->delete();
+        Permission::query()->delete();
+
+        //return true;
+
         // Create roles
         $roles = [
             'power_admin',
@@ -41,7 +52,8 @@ class PermissionSeeder extends Seeder
             ['name' => 'Can Configure reviews settings', 'slug' => 'configure_reviews'], // Fixed duplicate slug
 
             ['name' => 'Can Manage Chats and Messages', 'slug' => 'manage_chat'],
-            ['name' => 'Can Edit Templates and FAQs', 'slug' => 'edit_templates'],
+            ['name' => 'Can Edit Templates, FAQs and Shown Services', 'slug' => 'edit_templates'],
+            ['name' => 'Can Manage Data Selected by Users', 'slug' => 'manage_webdata'],
 
             ['name' => 'Can View Reports', 'slug' => 'view_reports'],
             ['name' => 'Can Manage Bans of users', 'slug' => 'user_bans'],
@@ -78,6 +90,7 @@ class PermissionSeeder extends Seeder
 
         $roleModels['template_admin']->permissions()->attach([
             $permissionModels['edit_templates']->id,
+            $permissionModels['manage_webdata']->id,
         ]);
 
         $roleModels['chat_admin']->permissions()->attach([

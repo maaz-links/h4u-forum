@@ -37,8 +37,8 @@ class WarnUserListener implements ShouldQueue
 
         $message = str_replace("{username}", $event->user->name, $message);
         //dd(config('mail.mailers.smtp.password'));
-        Mail::to($event->user->email)->send(new pastelinkmail($message, $subject));
-
+        //Mail::to($event->user->email)->send(new pastelinkmail($message, $subject));
+        $event->user->notify(new \App\Notifications\GenericNotification($subject, $message));
         //Send SMS
         $shouldSMS = CheckNotifPreference::isSMSEnabled($event->user->id);
         if ($shouldSMS) {

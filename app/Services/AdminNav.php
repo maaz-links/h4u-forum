@@ -123,6 +123,31 @@ class AdminNav
                 'url' => '/faqs/all',
                 'icon' => '',
             ];
+
+            $menu[] =  [
+                'text' => 'Shown Services',
+                'url' => '/shown-services',
+                'icon' => '',
+            ];
+            $menu[] =   [
+                'text' => 'Web Data',
+                'icon' => '',
+                'submenu' => [
+                    [
+                        'text' => 'Hostess Services',
+                        'url' => '/webdata/hostess-services',
+                    ],
+                    [
+                        'text' => 'Interests',
+                        'url' => '/webdata/interests',
+                    ],
+                    [
+                        'text' => 'Spoken Languages',
+                        'url' => '/webdata/spoken-languages',
+                    ],
+                   
+                ],
+            ];
         
         }
 

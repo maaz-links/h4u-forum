@@ -37,7 +37,7 @@ class ChatUnlockedListener implements ShouldQueue
         $message = str_replace("{username}", $event->other_user->name, $message);
         $message = str_replace("{other_username}", $event->my_user->name, $message);
         Mail::to($event->other_user->email)->send(new pastelinkmail($message, $subject));
-
+        $event->other_user->notify(new \App\Notifications\GenericNotification($subject, $message));
         //Send SMS
         $shouldSMS = CheckNotifPreference::isSMSEnabled($event->other_user->id);
         if ($shouldSMS) {

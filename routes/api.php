@@ -6,7 +6,6 @@ use App\Http\Controllers\ApiAuth\ApiAuthenticationController;
 use App\Http\Controllers\ApiAuth\PasswordResetController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\ChatController;
-use App\Http\Controllers\HostessServiceController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MiscController;
 use App\Http\Controllers\ReviewController;
@@ -17,8 +16,8 @@ use App\Http\Controllers\ApiAuth\VerificationController;
 use App\Http\Resources\UserResource;
 use App\Models\EuropeCountry;
 use App\Models\EuropeProvince;
+use App\Models\ShownService;
 use App\Models\User;
-use App\Services\TwilioService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,8 +28,6 @@ Route::get('/send-message', function () {
 });
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
-
-Route::apiResource('hostess-services', HostessServiceController::class);
 
 Route::post('register', [ApiAuthenticationController::class, 'register']);
 Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])
@@ -170,3 +167,10 @@ Route::get('/my-cookies', [MiscController::class, 'ApiGetCookiesInfo']);
 Route::get('/my-credits', [MiscController::class, 'apiGetPaymentsCredits']);
 Route::post('/contact-form', [MiscController::class, 'apiContactForm']);
 Route::get('/my-faqs', [MiscController::class, 'apiGetFaqs']);
+Route::get('my-shown-services',function () {
+    $shownServices = ShownService::orderBy('display_order')->get();
+    foreach ($shownServices as $s) {
+        $s->image_path = asset('storage/'.$s->image_path);
+    }
+    return response()->json($shownServices);
+});

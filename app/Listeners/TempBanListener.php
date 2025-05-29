@@ -37,8 +37,8 @@ class TempBanListener implements ShouldQueue
 
         $message = str_replace("{username}", $event->user->name, $message);
         $message = str_replace("{suspension_time}", $event->banduration, $message);
-        Mail::to($event->user->email)->send(new pastelinkmail($message, $subject));
-
+        //Mail::to($event->user->email)->send(new pastelinkmail($message, $subject));
+        $event->user->notify(new \App\Notifications\GenericNotification($subject, $message));
         //Send SMS
         $shouldSMS = CheckNotifPreference::isSMSEnabled($event->user->id);
         if ($shouldSMS) {

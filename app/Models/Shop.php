@@ -17,7 +17,7 @@ class Shop extends Model
    public function getIconUrlAttribute()
 {
     return $this->icon
-        ? asset('shops/' . $this->icon)
+        ? asset('storage/' . $this->icon)
         : null;
 }
 }

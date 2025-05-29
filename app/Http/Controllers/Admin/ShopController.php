@@ -8,6 +8,7 @@ use App\Models\Shop;
 use App\Services\AuditAdmin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Storage;
 
 class ShopController extends Controller
 {
@@ -39,9 +40,9 @@ class ShopController extends Controller
     {
         $request->validate([
             'title'    => 'required|string|max:100',
-            'price'    => 'required',
-            'credits'  => 'required|integer',
-            'icon'     => 'nullable',
+            'price'    => 'required|numeric|min:0|max:10000|decimal:0,2',
+            'credits'  => 'required|integer|min:0|max:10000|',
+            'icon'     => 'required|image|max:2048',
 
         ]);
 
@@ -53,18 +54,19 @@ class ShopController extends Controller
         $shop->user_id = Auth::user()->id ?? null;
 
         if ($request->hasFile('icon')) {
-            $file = $request->file('icon');
+            //$file = $request->file('icon');
 
-            $filename = time() . '_' . mt_rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+            // $filename = time() . '_' . mt_rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
 
-            $destinationPath = public_path('shops');
+            // $destinationPath = public_path('shops');
 
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0755, true);
-            }
+            // if (!file_exists($destinationPath)) {
+            //     mkdir($destinationPath, 0755, true);
+            // }
 
-            $file->move($destinationPath, $filename);
-            $shop->icon = $filename;
+            // $file->move($destinationPath, $filename);
+            $imagePath = $request->file('icon')->store('shop-portfolio', 'public');
+            $shop->icon = $imagePath;//$filename;
         }
 
 
@@ -85,9 +87,9 @@ class ShopController extends Controller
     {
         $request->validate([
             'title'    => 'required|string|max:100',
-            'price'    => 'required',
-            'credits'  => 'required|integer',
-            'icon'     => 'nullable',
+            'price'    => 'required|numeric|min:0|max:10000|decimal:0,2',
+            'credits'  => 'required|integer|min:0|max:10000',
+            'icon'     => 'nullable|image|max:2048',
 
         ]);
 
@@ -99,15 +101,19 @@ class ShopController extends Controller
         $shop->user_id = Auth::user()->id ?? null;
 
         if ($request->hasFile('icon')) {
-            $file = $request->file('icon');
-            $filename = time() . '_' . mt_rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
-            $destinationPath = public_path('shops');
+            // $file = $request->file('icon');
+            // $filename = time() . '_' . mt_rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+            // $destinationPath = public_path('shops');
          
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0755, true);
+            // if (!file_exists($destinationPath)) {
+            //     mkdir($destinationPath, 0755, true);
+            // }
+            // $file->move($destinationPath, $filename);
+            // $shop->icon = $filename;
+            if ($shop->icon) {
+                Storage::disk('public')->delete($shop->icon);
             }
-            $file->move($destinationPath, $filename);
-            $shop->icon = $filename;
+            $shop['icon'] = $request->file('icon')->store('shop-portfolio', 'public');
         }
 
 
@@ -120,6 +126,9 @@ class ShopController extends Controller
     public function destroy(Request $request)
     {
         $shop = Shop::where('id',$request->id)->first();
+        if ($shop->icon) {
+            Storage::disk('public')->delete($shop->icon);
+        }
         $shop->delete();
 
         AuditAdmin::audit("ShopController@destroy");

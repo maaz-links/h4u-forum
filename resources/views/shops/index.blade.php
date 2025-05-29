@@ -48,7 +48,7 @@
             @foreach($shops as $key => $shop)
             <tr>
                 <td>{{ $key+1 }}</td>
-                <td> <img src="{{ asset('shops/'.$shop->icon ?? '') }}" alt="" style="width: 40px"></td>
+                <td> <img src="{{ asset('storage/'.$shop->icon ?? '') }}" alt="" style="width: 40px"></td>
                 <td>{{ $shop->user ? $shop->user->name : 'N/A' }}</td>
                 <td>{{ $shop->title }}</td>
                 <td>{{ $shop->price }}</td>

@@ -352,7 +352,28 @@ return [
             'url' => '/reviews-config',
             'icon' => '',
         ],
-      
+        [
+            'text' => 'Web Data',
+            'icon' => '',
+            'submenu' => [
+                [
+                    'text' => 'Hostess Services',
+                    'url' => '/webdata/hostess-services',
+                ],
+                [
+                    'text' => 'Interests',
+                    'url' => '/webdata/interests',
+                ],
+                [
+                    'text' => 'Spoken Languages',
+                    'url' => '/webdata/spoken-languages',
+                ],
+                [
+                    'text' => 'Shown Services',
+                    'url' => '/webdata/shown-services',
+                ],
+            ],
+        ],
         [
                 'text' => 'Pages',
                 'icon' => '',
@@ -409,6 +430,7 @@ return [
                 'url' => '/admin-logs',
                 'icon' => '',
             ],
+            
     ],
 
     /*

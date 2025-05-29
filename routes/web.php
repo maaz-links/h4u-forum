@@ -5,6 +5,10 @@ use App\Http\Controllers\Admin\AdminLogController;
 use App\Http\Controllers\Admin\BanController;
 use App\Http\Controllers\Admin\ConfigController;
 use App\Http\Controllers\Admin\CreditController;
+use App\Http\Controllers\Admin\DataFeed\HostessServiceController;
+use App\Http\Controllers\Admin\DataFeed\InterestController;
+use App\Http\Controllers\Admin\DataFeed\ShownServiceController;
+use App\Http\Controllers\Admin\DataFeed\SpokenLanguageController;
 use App\Http\Controllers\Admin\EmailTemplatesController;
 use App\Http\Controllers\Admin\FakeProfileSettingController;
 use App\Http\Controllers\Admin\FaqController;
@@ -174,6 +178,20 @@ Route::group(['middleware' => ['admin']], function () {
         Route::post('/faq/update', [FaqController::class, 'update'])->name('faq.update');
         Route::post('/faq/destroy', [FaqController::class, 'destroy'])->name('faq.destroy');
 
+        Route::resource('/shown-services', ShownServiceController::class)->parameters([
+            'shown-services' => 'shownService'
+        ]);
+
+    
+    });
+
+    Route::group(['middleware' => ['admin.perm:manage_webdata']], function () {
+        Route::prefix('webdata')->group(function () {
+            Route::resource('/interests', InterestController::class);
+            Route::resource('/hostess-services', HostessServiceController::class);
+            Route::resource('/spoken-languages', SpokenLanguageController::class);
+            
+        });
     });
 
     Route::group(['middleware' => ['admin.perm:generate_profiles']], function () {

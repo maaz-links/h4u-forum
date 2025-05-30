@@ -9,6 +9,13 @@
 @section('content')
 {{-- <div class="card">
     <div class="card-body p-0"> --}}
+        @if (session('success'))
+    <div class="mt-3 alert alert-success alert-dismissible fade show">{{ session('success') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+@endif
         <table id="usersTable" class="table table-striped">
             <thead>
                 <tr>

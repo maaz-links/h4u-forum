@@ -10,16 +10,19 @@ use App\Models\Interest;
 use App\Models\SpokenLanguage;
 use App\Models\User;
 use App\Models\UserProfile;
+use App\Services\ProfileValidation;
 use Carbon\Carbon;
 use DB;
 use File;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Log;
 use Storage;
 use Str;
 use Faker\Factory as Faker;
+use Validator;
 
 class GenerateFakeProfilesListener
 {
@@ -215,15 +218,41 @@ class GenerateFakeProfilesListener
 
             $description = $randomProfile['Descrizione'];
 
+            $toValidate = [
+                'description' => $description,
+                'other_data'=> [
+                    'shoeSize' => $shoeSize,
+                    'height' => $height,
+                    'weight' => $weight,
+                    'eyeColor' => $eyeColors[array_rand($eyeColors)],
+                    'telegram' => $telegram,
+                    'dressSize' => $dressSize,
+                ],
+                'nationality' => "Italian",
+            ];
+
+            $validator = Validator::make(
+                $toValidate,
+                ProfileValidation::rules([
+                    'description','other_data','other_data.shoeSize','other_data.height',
+                    'other_data.weight','other_data.eyeColor','other_data.telegram','other_data.dressSize','nationality'
+                ]),
+                ProfileValidation::messages()
+            );
+    
+            
+            if ($validator->fails()) {
+                throw new ValidationException($validator);
+            }
             $mainAttrib = [
                 'user_id' => $user->id,
-                'nationality' => 'Italian',
-                'description' => $description,
-                'shoe_size' => $shoeSize,
-                'height' => $height,
+                'nationality' => $toValidate['nationality'],
+                'description' => $toValidate['description'],
+                'shoe_size' => $toValidate['other_data']['shoeSize'],
+                'height' => $toValidate['other_data']['height'],
                 'country_id' => $myProvince->country->id ?? null,
                 'province_id' => $myProvince->id,
-                'eye_color' => $eyeColors[array_rand($eyeColors)],
+                'eye_color' => $toValidate['other_data']['eyeColor'],
                 'top_profile' => $top_profile,
                 'verified_profile' => $verified_profile,
             ];
@@ -231,10 +260,9 @@ class GenerateFakeProfilesListener
             $femaleAttrib = $gender === $MALE
                 ?   []:
                 [
-                    'shoe_size' => $shoeSize,
-                    'dress_size' => $dressSize,
-                    'weight' => $weight,
-                    'telegram' => $telegram,
+                    'dress_size' => $toValidate['other_data']['dressSize'],
+                    'weight' => $toValidate['other_data']['weight'],
+                    'telegram' => $toValidate['other_data']['telegram'],
                 ];
             
             $profile = new UserProfile($mainAttrib + $femaleAttrib);

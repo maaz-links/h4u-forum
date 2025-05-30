@@ -125,6 +125,8 @@ class ReviewController extends Controller
             //$reviews = User::whereIn('id',$otherUserIds)
             $reviews = User::
             hasProfilePicture()
+            ->NotBanned()
+            ->NotShadowBanned()
             ->forOppositeRole($user->role)
             ->whereHas('reviewsGiven', function($query) use ($currentUserId) {
                 // Users who have reviewed the current user
@@ -183,6 +185,8 @@ class ReviewController extends Controller
 
             $reviews = User::whereIn('id',$otherUserIds)
             ->hasProfilePicture()
+            ->NotBanned()
+            ->NotShadowBanned()
             ->forOppositeRole($user->role)
             ->whereDoesntHave('reviewsReceived', function($query) use ($currentUserId) {
                     $query->where('reviewer_id', $currentUserId);

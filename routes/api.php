@@ -142,6 +142,8 @@ Route::middleware('auth:sanctum')->group(function () {
             // Route::post('/set-customer-credits/{amount}', [UserProfileController::class, 'setCustomerCredits']);
 
         //Route::delete('/delete-account',[UpdateProfileController::class,'deleteAccount']);
+        Route::post('/send-cancellation-request',[UpdateProfileController::class,'sendCancellationRequest'])
+        ->middleware('throttle:1,60');
     //});
         Route::get('shops',[ShopController::class,'index']);
         Route::get('shop/{id}',[ShopController::class,'shop']);
@@ -165,7 +167,7 @@ Route::get('/my-terms', [MiscController::class, 'ApiGetTerms']);
 Route::get('/my-privacy', [MiscController::class, 'ApiGetPrivacy']);
 Route::get('/my-cookies', [MiscController::class, 'ApiGetCookiesInfo']);
 Route::get('/my-credits', [MiscController::class, 'apiGetPaymentsCredits']);
-Route::post('/contact-form', [MiscController::class, 'apiContactForm']);
+Route::post('/contact-form', [MiscController::class, 'apiContactForm'])->middleware('throttle:1,60');
 Route::get('/my-faqs', [MiscController::class, 'apiGetFaqs']);
 Route::get('my-shown-services',function () {
     $shownServices = ShownService::orderBy('display_order')->get();

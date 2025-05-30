@@ -95,6 +95,16 @@ class BanController extends Controller
             ->with('success', 'User has been warned.');
     }
 
+    public function destroyUser(User $user)
+    {
+        $user->tokens()->delete();
+        $user->delete();
+        AuditAdmin::audit("BanController@destroyUser");
+        
+        return redirect()->route('home')
+            ->with('success', 'User account has been deleted permanently.');
+    }
+
 
     public function shadowBan(User $user, Request $request)
     {

@@ -56,7 +56,7 @@ class PermissionSeeder extends Seeder
             ['name' => 'Can Manage Data Selected by Users', 'slug' => 'manage_webdata'],
 
             ['name' => 'Can View Reports', 'slug' => 'view_reports'],
-            ['name' => 'Can Manage Bans of users', 'slug' => 'user_bans'],
+            ['name' => 'Can Manage Bans and Delete User Accounts', 'slug' => 'user_bans'],
 
             ['name' => 'Create/Delete Admins', 'slug' => 'manage_admins'],
             ['name' => 'Manage Permissions of other Admins', 'slug' => 'manage_permissions'],
@@ -68,7 +68,7 @@ class PermissionSeeder extends Seeder
 
             ['name' => 'Can read Contact Requests', 'slug' => 'read_contact_requests'],
 
-            ['name' => 'Can change user password', 'slug' => 'change_user_password'],
+            ['name' => 'Can change User Password', 'slug' => 'change_user_password'],
         ];
 
         $permissionModels = [];

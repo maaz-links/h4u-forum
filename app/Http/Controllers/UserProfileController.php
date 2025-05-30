@@ -127,49 +127,16 @@ class UserProfileController extends Controller
                     'created_at',
                     'profile_picture_id',
                 )->hasProfilePicture()
+                ->NotBanned()
+                ->NotShadowBanned()
                 ->forOppositeRole($request->user()->role);
             }
         )
         ->where('viewed_id', $request->user()->id)        // Only views of this profile
         ->latest()                             // Newest first
-        // ->take(5)                             // Limit to 5
+        ->take(5)                             // Limit to 5
         ->get();                               // Execute query
         return response()->json($lastViewers);
-    }
-
-    public function randomize()
-    {
-        // Get all user profiles
-        $profiles = UserProfile::all();
-//dd($profiles->only(['user_id','verified_profile','top_profile']));
-        foreach ($profiles as $profile) {
-            $profile->verified_profile = rand(0, 1);
-            $profile->top_profile = rand(0, 1);
-            $profile->save();
-        }
-
-        //$result = UserProfile::only(['user_id','verified_profile','top_profile'])->all;
-        
-        return response()->json([
-            $profiles//'message' => 'All profiles have been randomized.',
-        ]);
-    }
-
-    public function setCustomerCredits(Request $request, $amount = '100')
-    {
-        // $data1 = DB::table('user_profiles')
-        // ->join('users', 'user_profiles.user_id', '=', 'users.id')
-        // ->where('users.role', User::ROLE_KING)
-        // ->update(['user_profiles.credits' => 100]);
-        if($request->user()->role == User::ROLE_KING){
-            $data1 = UserProfile::where('user_id',$request->user()->id)->first();
-            $data1->update(['credits' => 100]);
-            return response()->json($data1);
-        }
-        else{
-            return response()->json('not good');
-        }
-        
     }
     
     public function reportUser(Request $request)

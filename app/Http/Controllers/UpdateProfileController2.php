@@ -2,28 +2,47 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\CancellationRequest;
 use App\Models\UserProfile;
-use App\Services\ProfileValidation;
 use App\Services\UserValidation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 
-class UpdateProfileController extends Controller
+class UpdateProfileController2 extends Controller
 {
     public function updateProfile(Request $request){
         $profile = UserProfile::where('user_id','=',$request->user()->id)->first();
       //option_available_for_ids
-        $validator = Validator::make(
-            $request->all(),
-            ProfileValidation::rules(),
-            ProfileValidation::messages()
-        );
+        $validated = $request->validate([
+            'description' => 'required|string',
+            'travel_available' => 'required|integer',
+            'notification_pref' => 'required|integer',
+            'visibility_status' => 'required|integer',
 
-        if ($validator->fails()) {
-            return response()->json(['formError' => $validator->errors()], 422);
-        }
+            'option_ids' => 'array',
+            'option_ids.*' => 'integer|exists:interests,id',
+            'option_available_for_ids' => 'array',
+            'option_available_for_ids.*' => 'integer|exists:hostess_services,id',
+            'option_language_ids' => 'array',
+            'option_language_ids.*' => 'integer|exists:spoken_languages,id',
+
+            'other_data' => 'array|required',
+            'other_data.shoeSize' => 'required',
+            'other_data.height' => 'required',
+            'other_data.weight' => 'required',
+            'other_data.eyeColor' => 'required',
+            //'other_data.telegram' => 'required',
+            'other_data.dressSize' => 'required',
+
+            'nationality' => 'required|string',
+            // 'province' => 'required|string',
+            // 'country' => 'required|string',
+            'selectedCountry' => 'integer|required|exists:europe_countries,id',
+            'selectedProvince' => 'integer|required|exists:europe_provinces,id'
+
+            //'other_options.*' => 'integer|exists:spoken_languages,id',
+        
+        ]);
         //return response()->json(['message' => $request->other_data['dressSize']], 200);
         $profile->shoe_size = $request->other_data['shoeSize'];
         $profile->height = $request->other_data['height'];
@@ -95,12 +114,5 @@ class UpdateProfileController extends Controller
         $user->delete();
         
         return response()->json(['message'=>'User account successfully deleted']);
-    }
-    public function sendCancellationRequest(Request $request){
-        $user = $request->user();
-
-        event(new CancellationRequest($user));
-        
-        return response()->json(['message'=>'Cancellation Request Sent']);
     }
 }

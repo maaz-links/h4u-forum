@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use URL;
 
-class CustomVerifyEmail extends Notification implements ShouldQueue
+class CustomVerifyEmail extends Notification
 {
     use Queueable;
 

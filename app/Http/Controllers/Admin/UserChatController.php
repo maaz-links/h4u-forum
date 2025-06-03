@@ -78,7 +78,7 @@ class UserChatController extends Controller
                     'sender' => function($query) {
                         $query->select('id','name','role','profile_picture_id');
                     },            
-            ]);
+            ])->orderBy('created_at');
             },
         ])
         ->first();

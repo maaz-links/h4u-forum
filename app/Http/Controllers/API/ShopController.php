@@ -39,6 +39,9 @@ class ShopController extends Controller
         $shops_transaction_history->user_id = $user->id;
         $shops_transaction_history->payment_id = $request->paymentIntentId ?? null;
         $shops_transaction_history->shop_id = $shop->id;
+        $shops_transaction_history->rec_title = $shop->title;
+        $shops_transaction_history->rec_price = $shop->price;
+        $shops_transaction_history->rec_credits = $shop->credits;
         $shops_transaction_history->payment_method = $request->payment_method;
         $shops_transaction_history->save();
 

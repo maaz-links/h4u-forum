@@ -74,6 +74,11 @@ class AdminNav
                 'icon' => '',
             ];
             $menu[] = [
+                'text' => 'Message Alerts',
+                'url' => '/message-alerts',
+                'icon' => '',
+            ];
+            $menu[] = [
                 'text' => 'Contact Requests',
                 'url' => '/contact-requests',
                 'icon' => '',

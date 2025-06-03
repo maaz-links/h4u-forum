@@ -17,12 +17,13 @@ class ShopTransactionController extends Controller
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('payment_id', 'like', "%{$search}%")
+                    ->orWhere('rec_title', 'like', "%{$search}%")
                     ->orWhereHas('user', function ($q2) use ($search) {
                         $q2->where('name', 'like', "%{$search}%");
-                    })
-                    ->orWhereHas('shop', function ($q3) use ($search) {
-                        $q3->where('title', 'like', "%{$search}%");
                     });
+                    // ->orWhereHas('shop', function ($q3) use ($search) {
+                    //     $q3->where('title', 'like', "%{$search}%");
+                    // });
                 });
             })
             ->orderBy('created_at', 'desc')

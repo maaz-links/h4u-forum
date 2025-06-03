@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\FakeProfileSettingController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\MailConfigController;
+use App\Http\Controllers\Admin\MessageAlertController;
+use App\Http\Controllers\Admin\ModerationReportController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ReviewConfigController;
@@ -151,7 +153,14 @@ Route::group(['middleware' => ['admin']], function () {
         Route::post('/user-profile/{user}/delete-permanently', [BanController::class, 'destroyUser'])->name('admin.users.delete-permanently');
         // Route::post('/user-profile/{user}/shadowban', [BanController::class, 'shadowBan'])->name('admin.users.shadowban');
         // Route::post('/user-profile/{user}/remove-shadowban', [BanController::class, 'removeShadowBan'])->name('admin.users.remove-shadowban');
-        
+        // Route::get('/moderation-reports', [ModerationReportController::class, 'index'])
+        // ->name('admin.moderation.reports');
+      
+            // Message Alerts
+            Route::get('/message-alerts', [MessageAlertController::class, 'index'])->name('admin.message-alerts.index');
+            Route::get('/message-alerts/{alert}', [MessageAlertController::class, 'show'])->name('admin.message-alerts.show');
+            Route::put('/message-alerts/{alert}', [MessageAlertController::class, 'update'])->name('admin.message-alerts.update');
+               
 
     });
 

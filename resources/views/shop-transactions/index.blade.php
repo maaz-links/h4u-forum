@@ -53,9 +53,12 @@
                 <td>{{ $key+1 }}</td>
                 <td>{{ $transaction->payment_id ?? 'N/A' }}</td>
                 <td>{{ $transaction->user ? $transaction->user->name : 'N/A' }}</td>
-                <td>{{ $transaction->shop->title ?? 'N/A' }}</td>
+                {{-- <td>{{ $transaction->shop->title ?? 'N/A' }}</td>
                 <td>{{ $transaction->shop->price ?? 'N/A' }}</td>
-                <td>{{ $transaction->shop->credits ?? 'N/A' }}</td>
+                <td>{{ $transaction->shop->credits ?? 'N/A' }}</td> --}}
+                <td>{{ $transaction->rec_title ?? 'N/A' }}</td>
+                <td>{{ $transaction->rec_price ?? 'N/A' }}</td>
+                <td>{{ $transaction->rec_credits ?? 'N/A' }}</td>
                 <td class="text-center">{{ $transaction->payment_method }}</td>
                 <td>{{ $transaction->created_at->format('F j, Y g:i A') }}</td>
             </tr>

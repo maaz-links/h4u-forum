@@ -24,7 +24,7 @@
 
         <div class="mb-3">
             <label>Price</label>
-            <input type="number" name="price" value="{{ $shop->price }}" placeholder="Enter price here eg:10"
+            <input type="number" min='0' step="0.01" name="price" value="{{ $shop->price }}" placeholder="Enter price here eg:10"
                 class="form-control" required>
             @error('price')
             <span class="text-danger">{{$message}}</span>

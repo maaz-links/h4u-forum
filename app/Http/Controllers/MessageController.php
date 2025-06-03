@@ -8,9 +8,12 @@ use App\Events\Chat\NewMessageSent;
 use App\Http\Resources\MessageResource;
 use App\Models\Chat;
 use App\Models\Message;
+use App\Models\MessageAlert;
+use App\Services\MessageModerator;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Notification;
 
 class MessageController extends Controller
 {
@@ -49,14 +52,45 @@ class MessageController extends Controller
         if(!$this->authorizeChat($chat)){
             return response()->json(["message"=> "Unauthorized"],401);
         };
+
+        if(!$chat->unlocked){
+            return response()->json(["message"=> "Forbidden"],403);
+        }
         
         $request->validate([
             'message' => 'required|string|max:1000',
         ]);
         
+
+        //MODERATION
+        $moderator = new MessageModerator();
+        $violations = $moderator->analyze($request->message);
+
+        if (!empty($violations)) {
+            $alert = MessageAlert::create([
+                'user_id' => $request->user()->id,
+                'chat_id' => $chat->id,
+                'message_body' => $request->message,
+                'message_created_at' => now(),
+                'detected_rules' => $violations,
+                //'status' => 'pending'
+            ]);
+
+            //SEND EMAIL TO ADMINS
+            // Dispatch event/notification to recipient
+            Notification::route('mail', env('SUPPORT_EMAIL_ADDRESS','support@hostessforyou.com'))
+            ->notify(new \App\Notifications\MessageViolationNotif($alert));
+
+            
+            return response()->json([
+                'message' => 'Your message is under review due to a potential policy violation and will be delivered upon approval.'
+            ], 202);
+        }
+
         $message = $chat->messages()->create([
             'sender_id' => Auth::id(),
             'message' => $request->message,
+            'is_read' => false,
         ]);
 
         // $messageFormatted = [
@@ -68,7 +102,8 @@ class MessageController extends Controller
         //     // 'sender_name' => $message->sender->name,
         // ];
         $messageFormatted = new MessageResource($message);
-        $messageFormatted->sent = false;
+        //$messageFormatted->sent = false;
+
         //dd($messageFormatted->sent);
         event(new NewMessageSent($message, $chat));
         // broadcast(new NewMessageSent($message,$chat->id))->toOthers();

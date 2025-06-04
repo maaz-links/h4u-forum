@@ -27,7 +27,7 @@ class ShopTransactionController extends Controller
                 });
             })
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->paginate(10)->appends($request->except('page'));
 
         return view('shop-transactions.index', compact('transactions'));
     }

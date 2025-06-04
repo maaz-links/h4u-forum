@@ -17,6 +17,18 @@
         @endif
         <div class="row">
             <div class="col-md-12">
+                <form method="GET" action="{{ route('profile-scripts.index') }}" class="mb-3">
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            name="search"
+                            value="{{ request('search') }}"
+                            class="form-control"
+                            placeholder="Search by Script ID or Name"
+                        >
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
                 <div class="card">
                     {{-- <div class="card-header bg-primary">
                         <h3 class="card-title">Active Conversations</h3>
@@ -27,20 +39,22 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Script ID</th>
+                                    <th>S/L</th>
                                     <th>Script Name</th>
+                                    <th>Script ID</th>
                                     <th>Created</th>
                                     <th>Number of Users</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($scripts as $s)
+                                @forelse($scripts as $key => $s)
                                     <tr>
-                                        <td>{{ $s['id'] }}</td>
+                                        <td>{{$loop->index + $scripts->firstItem()}}</td>
                                         <td>
                                                 {{ $s['script_name'] }}
                                         </td>
+                                        <td>{{ $s['id'] }}</td>
                                         <td>{{ \Carbon\Carbon::parse($s['created_at'])->format('M d, Y h:i A') }}</td>
                                         {{-- <td>{{ \Carbon\Carbon::parse($chat['updated_at'])->format('M d, Y h:i A') }}</td> --}}
                                         <td>
@@ -90,6 +104,11 @@
                             </div>
                         </div>
                     @endif
+                </div>
+                <div class="container">
+                    <div class="d-flex justify-content-end">
+                        {{ $scripts->links() }}
+                    </div>
                 </div>
             </div>
         </div>

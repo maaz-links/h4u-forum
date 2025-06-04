@@ -33,7 +33,7 @@
     </form>
 
 
-    <div class='mt-3' style="overflow:auto;max-height:50vh">
+    <div class='mt-3'>
     <table class="table">
         <thead>
             <tr>
@@ -50,7 +50,7 @@
         <tbody>
             @foreach($transactions as $key => $transaction)
             <tr>
-                <td>{{ $key+1 }}</td>
+                <td>{{ $loop->index + $transactions->firstItem() }}</td>
                 <td>{{ $transaction->payment_id ?? 'N/A' }}</td>
                 <td>{{ $transaction->user ? $transaction->user->name : 'N/A' }}</td>
                 {{-- <td>{{ $transaction->shop->title ?? 'N/A' }}</td>

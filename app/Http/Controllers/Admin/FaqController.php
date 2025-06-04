@@ -19,7 +19,7 @@ class FaqController extends Controller
                   ->orWhere('answer', 'like', "%{$searchTerm}%");
         }
 
-        $faqs = $query->paginate(10);
+        $faqs = $query->paginate(10)->appends($request->except('page'));
         return view('faqs.index', compact('faqs'));
     }
 

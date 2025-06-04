@@ -19,7 +19,8 @@ class MessageResource extends JsonResource
             "id"=> $this->id,
             'text'=> $this->message,
             'time'=> $this->created_at,
-            'sent'=> $this->sender_id === auth()->id(),
+            // 'sent'=> $this->sender_id === auth()->id(),
+            'sent'=> $this->sender_id,
             'is_read'=> $this->is_read,
         ];
     }

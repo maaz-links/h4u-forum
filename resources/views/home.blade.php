@@ -16,13 +16,26 @@
         </button>
     </div>
 @endif
+<form method="GET" action="{{ route('home') }}" class="mb-3">
+    <div class="input-group">
+        <input
+            type="text"
+            name="search"
+            value="{{ request('search') }}"
+            class="form-control"
+            placeholder="Search by Username"
+        >
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
         <table id="usersTable" class="table table-striped">
             <thead>
                 <tr>
+                    <th>S/L</th>
                     <th>Role</th>
                     <th>Username</th>
-                    <th>Verified Profile</th>
-                    <th>Top Profile</th>
+                    {{-- <th>Verified Profile</th>
+                    <th>Top Profile</th> --}}
                     <th>Credits</th>
                     <th>Joined</th>
                     <th>Details</th>
@@ -31,6 +44,7 @@
             <tbody>
                 @foreach ($users as $user)
                     <tr>
+                        <th>{{$loop->index + $users->firstItem()}}</th>
                         <td>
                             @if ($user->role == \App\Models\User::ROLE_HOSTESS)
                                 Hostess
@@ -39,7 +53,7 @@
                             @endif
                         </td>
                         <td>{{ $user->name }}</td>
-                        <td>
+                        {{-- <td>
                             @if ($user->profile->verified_profile)
                                 <span class="badge bg-success">Yes</span>
                             @else
@@ -52,7 +66,7 @@
                             @else
                                 <span class="badge bg-secondary">No</span>
                             @endif
-                        </td>
+                        </td> --}}
                         <td>{{ $user->profile->credits }} {!!($user->role == \App\Models\User::ROLE_HOSTESS) ? 'Free Messages':'<i class="fas fa-coins"></i> '!!}</td>
                         <td>{{ \Carbon\Carbon::parse($user->created_at)->format('M d, Y') }}</td>
                         <td>
@@ -64,6 +78,9 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="d-flex justify-content-center mt-3">
+            {{ $users->links() }}
+        </div>
     {{-- </div> --}}
 {{-- </div> --}}
 {{-- @php
@@ -79,16 +96,16 @@ phpinfo();
 @stop
 
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.slim.js"
         integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
-        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        {{-- <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script>
     $(document).ready(function () {
         $('#usersTable').DataTable();
     });
-</script>
+</script> --}}
 
 @stop

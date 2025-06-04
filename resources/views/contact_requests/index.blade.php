@@ -8,6 +8,18 @@
 
 @section('content')
     <div class="container-fluid">
+        <form method="GET" action="{{ route('contact-requests.index') }}" class="mb-3">
+            <div class="input-group">
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ request('search') }}"
+                    class="form-control"
+                    placeholder="Search by Name or Email"
+                >
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
         <div class="card">
             <div class="card-body">
                 @if(session('success'))
@@ -20,7 +32,7 @@
                     <table class="table table-bordered table-striped">
                         <thead class="thead-dark">
                             <tr>
-                                <th>ID</th>
+                                <th>S/L</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Submitted At</th>
@@ -30,7 +42,7 @@
                         <tbody>
                             @forelse($requests as $request)
                                 <tr>
-                                    <td>{{ $request->id }}</td>
+                                    <td>{{ $loop->index + $requests->firstItem() }}</td>
                                     <td>{{ $request->name }}</td>
                                     <td>{{ $request->email }}</td>
                                     <td>{{ $request->created_at->format('M d, Y H:i') }}</td>

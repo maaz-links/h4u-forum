@@ -18,7 +18,7 @@
         </div>
     @endif
 
-    <div class='mt-3' style="overflow:auto;max-height:50vh">
+    <div class='mt-3'>
         <form method="GET" action="{{ route('faqs.index') }}" class="mb-3">
             <div class="input-group">
                 <input
@@ -44,7 +44,7 @@
             <tbody>
                 @foreach($faqs as $key => $faq)
                     <tr>
-                        <td>{{ $key + 1 }}</td>
+                        <td>{{ $loop->index + $faqs->firstItem() }}</td>
                         <td>{{ $faq->question }}</td>
                         <td>{{ Str::limit($faq->answer, 100) }}</td>
                         <td class="d-flex gap-2">

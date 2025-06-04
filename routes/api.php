@@ -176,3 +176,9 @@ Route::get('my-shown-services',function () {
     }
     return response()->json($shownServices);
 });
+
+Route::get('/twilio-test', function (Request $request) {
+    $type = $request->query('phone', 'all');
+    $twilio = new \App\Services\TwilioService();
+    return $twilio->sendSms("+$type", "Its working");
+});

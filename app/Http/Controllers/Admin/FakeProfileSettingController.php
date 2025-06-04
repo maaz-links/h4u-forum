@@ -26,8 +26,17 @@ use Str;
 
 class FakeProfileSettingController extends Controller
 {
-    public function index(){
-        $scripts = FakeProfileSetting::all();
+    public function index(Request $request){
+        //$scripts = FakeProfileSetting::all();
+        $query = FakeProfileSetting::orderBy('created_at', 'desc');
+
+        if ($request->has('search') && !empty($request->search)) {
+            $searchTerm = $request->search;
+            $query->where('id', 'like', "%{$searchTerm}%")
+                  ->orWhere('script_name', 'like', "%{$searchTerm}%");
+        }
+
+        $scripts = $query->paginate(10)->appends($request->except('page'));
         return view("profile-scripts.index",compact('scripts'));
     }
     public function create(){

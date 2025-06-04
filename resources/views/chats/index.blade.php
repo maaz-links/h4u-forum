@@ -7,11 +7,22 @@
 @stop
 
 @section('content')
-
+<form method="GET" action="{{ route('chats.index') }}" class="mb-3">
+    <div class="input-group">
+        <input
+            type="text"
+            name="search"
+            value="{{ request('search') }}"
+            class="form-control"
+            placeholder="Search by Participant Names"
+        >
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
     <table id="chatsTable" class="table table-striped">
         <thead>
             <tr>
-                {{-- <th>ID</th> --}}
+                <th>S/L</th>
                 <th>Participants</th>
                
                 <th>Created At</th>
@@ -23,7 +34,7 @@
         <tbody>
             @foreach ($chats as $chat)
                 <tr>
-                    {{-- <td>{{ $chat['id'] }}</td> --}}
+                    <td>{{ $loop->index + $chats->firstItem() }}</td>
                     <td>
                         {{ $chat['user1']['name'] }} & {{ $chat['user2']['name'] }}
                     </td>
@@ -47,6 +58,9 @@
             @endforeach
         </tbody>
     </table>
+    <div class="d-flex justify-content-center mt-3">
+        {{ $chats->links() }}
+    </div>
 @stop
 
 @section('css')
@@ -60,7 +74,7 @@
         integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-    <script>
+    {{-- <script>
         $(document).ready(function () {
             $('#chatsTable').DataTable({
                 // responsive: true,
@@ -69,5 +83,5 @@
                 // lengthMenu: [10, 25, 50, 100]
             });
         });
-    </script>
+    </script> --}}
 @stop

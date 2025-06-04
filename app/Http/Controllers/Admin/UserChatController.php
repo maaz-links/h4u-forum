@@ -11,19 +11,52 @@ use Illuminate\Http\Request;
 
 class UserChatController extends Controller
 {
-    public function index(Request $request){
-        $chats = Chat::with([
-            'user1' => function($query)  {
-                $query->select('id','name');
-            },
-            'user2' => function($query)  {
-                $query->select('id','name');
-            }
+    // public function index(Request $request){
+    //     $chats = Chat::with([
+    //         'user1' => function($query)  {
+    //             $query->select('id','name');
+    //         },
+    //         'user2' => function($query)  {
+    //             $query->select('id','name');
+    //         }
         
-        ])->get();
+    //     ])->get();
 
-        return view('chats.index',compact('chats'));
+    //     return view('chats.index',compact('chats'));
+    // }
+
+    public function index(Request $request)
+    {
+        $query = Chat::with([
+            'user1' => function($query) {
+                $query->select('id', 'name');
+            },
+            'user2' => function($query) {
+                $query->select('id', 'name');
+            }
+        ])->latest();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+               //$q->where('id', 'like', "%{$searchTerm}%")
+                $q->whereHas('user1', function($userQuery) use ($searchTerm) {
+                    $userQuery->where('name', 'like', "%{$searchTerm}%");
+                })
+                ->orWhereHas('user2', function($userQuery) use ($searchTerm) {
+                    $userQuery->where('name', 'like', "%{$searchTerm}%");
+                });
+                
+            });
+        }
+
+        $chats = $query->paginate(10)
+            ->appends($request->except('page'));
+
+        return view('chats.index', compact('chats'));
     }
+
     public function userchats(string $name){
         $user = User::select('id','name','role')->forUsername($name)->forRoleAny()->first();
         if(!$user){

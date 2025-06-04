@@ -20,16 +20,65 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        $users = User::with(['profile' => function ($query) {
-            $query->select('user_id','top_profile','verified_profile','credits'); // select only needed columns
-        }])
-        ->select('id', 'name', 'role', 'created_at')
-        ->whereIn('role', [User::ROLE_KING, User::ROLE_HOSTESS])
-        ->get();
+    // public function index()
+    // {
+    //     $users = User::with(['profile' => function ($query) {
+    //         $query->select('user_id','top_profile','verified_profile','credits'); // select only needed columns
+    //     }])
+    //     ->select('id', 'name', 'role', 'created_at')
+    //     ->whereIn('role', [User::ROLE_KING, User::ROLE_HOSTESS])
+    //     ->get();
 
-        return view('home',compact('users'));
+    //     return view('home',compact('users'));
+    // }
+    public function index(Request $request)
+    {
+        $query = User::with(['profile' => function($query) {
+                $query->select('user_id', 'top_profile', 'verified_profile', 'credits');
+            }])
+            ->select('id', 'name', 'role', 'created_at')
+            ->whereIn('role', [User::ROLE_KING, User::ROLE_HOSTESS])
+            ->latest();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                //$q->where('id', 'like', "%{$searchTerm}%")
+                $q->where('name', 'like', "%{$searchTerm}%")
+                //->orWhere('role', 'like', "%{$searchTerm}%")
+                // ->orWhereHas('profile', function($profileQuery) use ($searchTerm) {
+                //     $profileQuery->where('top_profile', 'like', "%{$searchTerm}%")
+                //                 ->orWhere('verified_profile', 'like', "%{$searchTerm}%");
+                //                 // Note: Searching numeric 'credits' field as string for simplicity
+                //                 // For exact number matching, use where('credits', $searchTerm)
+                // })
+                ;
+            });
+        }
+
+        // Optional role filter
+        if ($request->filled('role')) {
+            $query->where('role', $request->role);
+        }
+
+        // Optional profile status filters
+        if ($request->filled('top_profile')) {
+            $query->whereHas('profile', function($q) use ($request) {
+                $q->where('top_profile', $request->top_profile);
+            });
+        }
+        
+        if ($request->filled('verified_profile')) {
+            $query->whereHas('profile', function($q) use ($request) {
+                $q->where('verified_profile', $request->verified_profile);
+            });
+        }
+
+        $users = $query->paginate(10)
+            ->appends($request->except('page'));
+
+        return view('home', compact('users'));
     }
 
     public function profile(string $name){

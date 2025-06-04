@@ -11,9 +11,18 @@ use Validator;
 
 class AdminLogController extends Controller
 {
-    public function index(){
-        $logs = AdminLog::latest()->get();
+    public function index(Request $request){
+        //$logs = AdminLog::latest()->get();
         //return $logs;
+        $query = AdminLog::orderBy('created_at', 'desc');
+
+        if ($request->has('search') && !empty($request->search)) {
+            $searchTerm = $request->search;
+            $query->where('admin_name', 'like', "%{$searchTerm}%")
+                  ->orWhere('action', 'like', "%{$searchTerm}%");
+        }
+
+        $logs = $query->paginate(10)->appends($request->except('page'));
         return view("admin-logs.index",compact("logs"));
     }
 

@@ -10,6 +10,18 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
+                <form method="GET" action="{{ route('admin-logs.index') }}" class="mb-3">
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            name="search"
+                            value="{{ request('search') }}"
+                            class="form-control"
+                            placeholder="Search by Admin Name or Action"
+                        >
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
                 <div class="card">
                     {{-- <div class="card-header">
                         <h3 class="card-title">Admin Logs</h3>
@@ -36,7 +48,12 @@
                                     </tr>
                                 @endforelse
                             </tbody>
-                        </table>
+                        </table>            
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="d-flex justify-content-end">
+                        {{ $logs->links() }}
                     </div>
                 </div>
             </div>
@@ -55,7 +72,7 @@
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
     
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             $('#logsTable').DataTable({
                 responsive: true,
@@ -73,5 +90,5 @@
                 }
             });
         });
-    </script>
+    </script> --}}
 @stop

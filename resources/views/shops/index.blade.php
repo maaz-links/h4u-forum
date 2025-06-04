@@ -19,7 +19,7 @@
     @endif
 
     
-    <div class='mt-3' style="overflow:auto;max-height:50vh">
+    <div class='mt-3'>
          <form method="GET" action="{{ route('shops.index') }}" class="mb-3">
         <div class="input-group">
             <input
@@ -47,7 +47,7 @@
         <tbody>
             @foreach($shops as $key => $shop)
             <tr>
-                <td>{{ $key+1 }}</td>
+                <td>{{ $loop->index + $shops->firstItem() }}</td>
                 <td> <img src="{{ asset('storage/'.$shop->icon ?? '') }}" alt="" style="width: 40px"></td>
                 <td>{{ $shop->user ? $shop->user->name : 'N/A' }}</td>
                 <td>{{ $shop->title }}</td>

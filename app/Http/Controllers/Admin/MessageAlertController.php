@@ -13,11 +13,30 @@ use Illuminate\Http\Request;
 
 class MessageAlertController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $alerts = MessageAlert::with(['user', 'chat'])
-            ->orderBy('message_created_at', 'desc')
-            ->paginate(10);
+        $query = MessageAlert::with(['user', 'chat']) // Eager load relationships
+            ->latest(); // Same as orderBy('created_at', 'desc')
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('message_body', 'like', "%{$searchTerm}%")
+                  ->orWhere('status', 'like', "%{$searchTerm}%")
+                  ->orWhere('detected_rules', 'like', "%{$searchTerm}%")
+                  ->orWhereHas('user', function($userQuery) use ($searchTerm) {
+                      $userQuery->where('name', 'like', "%{$searchTerm}%");
+                  })
+                //   ->orWhereHas('chat', function($chatQuery) use ($searchTerm) {
+                //       $chatQuery->where('name', 'like', "%{$searchTerm}%");
+                //   })
+                  ;
+            });
+        }
+
+        $alerts = $query->paginate(10)
+            ->appends($request->except('page'));
             
         return view('admin.message-alerts.index', compact('alerts'));
     }

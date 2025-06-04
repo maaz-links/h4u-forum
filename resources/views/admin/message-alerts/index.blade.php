@@ -14,6 +14,18 @@
       </button>
 </div>
 @endif
+<form method="GET" action="{{ route('admin.message-alerts.index') }}" class="mb-3">
+    <div class="input-group">
+        <input
+            type="text"
+            name="search"
+            value="{{ request('search') }}"
+            class="form-control"
+            placeholder="Search by User, Message Preview, Rules or Status"
+        >
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
 <div class="card">
     <div class="card-header bg-primary">
         <h3 class="card-title">All Message Alerts</h3>
@@ -22,7 +34,7 @@
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    {{-- <th>ID</th> --}}
+                    <th>S/L</th>
                     <th>User</th>
                     
                     <th>Message Preview</th>
@@ -35,7 +47,7 @@
             <tbody>
                 @foreach($alerts as $alert)
                 <tr>
-                    {{-- <td>{{ $alert->id }}</td> --}}
+                    <td>{{ $loop->index + $alerts->firstItem() }}</td>
                     <td>
                         {{-- <a href="{{ route('admin.users.show', $alert->user_id) }}"> --}}
                             {{ $alert->user->name ?? 'Deleted User' }}

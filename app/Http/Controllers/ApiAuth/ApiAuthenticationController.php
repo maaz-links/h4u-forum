@@ -93,7 +93,7 @@ class ApiAuthenticationController extends Controller
         ->value('id') ?? null;
 
         $initialCredits = [];
-        if($user->role = User::ROLE_HOSTESS){
+        if($user->role == User::ROLE_HOSTESS){
             $initialCredits = ['credits' => 5];
         }
 

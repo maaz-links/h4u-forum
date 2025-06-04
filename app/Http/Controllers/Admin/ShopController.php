@@ -27,7 +27,7 @@ class ShopController extends Controller
             });
         }
         
-        $shops = $query->paginate(10);
+        $shops = $query->paginate(10)->appends($request->except('page'));
         return view('shops.index', compact('shops'));
     }
 

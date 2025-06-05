@@ -73,6 +73,15 @@ class AdminNav
                 'url' => '/report-chats',
                 'icon' => '',
             ];
+        }
+        if (in_array('read_contact_requests',$permissionSlugs)) {
+            $menu[] = [
+                'text' => 'Contact Requests',
+                'url' => '/contact-requests',
+                'icon' => '',
+            ];
+        }
+        if (in_array('message_moderation',$permissionSlugs)) {
             $menu[] = [
                 'text' => 'Message Alerts',
                 'url' => '/message-alerts',
@@ -81,11 +90,6 @@ class AdminNav
             $menu[] = [
                 'text' => ' Message Moderation Rules',
                 'url' => '/moderation-rules',
-                'icon' => '',
-            ];
-            $menu[] = [
-                'text' => 'Contact Requests',
-                'url' => '/contact-requests',
                 'icon' => '',
             ];
         }

@@ -28,10 +28,10 @@ class PermissionSeeder extends Seeder
         // Create roles
         $roles = [
             'power_admin',
-            'report_admin',
+            'moderator_admin',
             'template_admin',
-            'chat_admin',
-            'review_admin',
+            // 'chat_admin',
+            // 'review_admin',
             'script_admin',
             'shop_admin',
             'badge_admin',
@@ -57,6 +57,8 @@ class PermissionSeeder extends Seeder
 
             ['name' => 'Can View Reports', 'slug' => 'view_reports'],
             ['name' => 'Can Manage Bans and Delete User Accounts', 'slug' => 'user_bans'],
+            ['name' => 'Can read Contact Requests', 'slug' => 'read_contact_requests'],
+            ['name' => 'Can Moderate Messages', 'slug' => 'message_moderation'],
 
             ['name' => 'Create/Delete Admins', 'slug' => 'manage_admins'],
             ['name' => 'Manage Permissions of other Admins', 'slug' => 'manage_permissions'],
@@ -66,7 +68,7 @@ class PermissionSeeder extends Seeder
 
             ['name' => 'Change Email Settings', 'slug' => 'change_email_settings'],
 
-            ['name' => 'Can read Contact Requests', 'slug' => 'read_contact_requests'],
+           
 
             ['name' => 'Can change User Password', 'slug' => 'change_user_password'],
         ];
@@ -82,10 +84,20 @@ class PermissionSeeder extends Seeder
             $permissionModels['manage_permissions']->id,
         ]);
 
-        $roleModels['report_admin']->permissions()->attach([
+        $roleModels['moderator_admin']->permissions()->attach([
             $permissionModels['view_reports']->id,
             $permissionModels['user_bans']->id,
             $permissionModels['read_contact_requests']->id,
+            $permissionModels['message_moderation']->id,
+        // ]);
+
+        // $roleModels['chat_admin']->permissions()->attach([
+            $permissionModels['manage_chat']->id,
+        // ]);
+
+        // $roleModels['review_admin']->permissions()->attach([
+            $permissionModels['manage_reviews']->id,
+            $permissionModels['configure_reviews']->id,
         ]);
 
         $roleModels['template_admin']->permissions()->attach([
@@ -93,14 +105,7 @@ class PermissionSeeder extends Seeder
             $permissionModels['manage_webdata']->id,
         ]);
 
-        $roleModels['chat_admin']->permissions()->attach([
-            $permissionModels['manage_chat']->id,
-        ]);
-
-        $roleModels['review_admin']->permissions()->attach([
-            $permissionModels['manage_reviews']->id,
-            $permissionModels['configure_reviews']->id,
-        ]);
+        
 
         $roleModels['shop_admin']->permissions()->attach([
             $permissionModels['manage_shop']->id,

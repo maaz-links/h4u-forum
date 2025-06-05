@@ -79,6 +79,11 @@ class AdminNav
                 'icon' => '',
             ];
             $menu[] = [
+                'text' => ' Message Moderation Rules',
+                'url' => '/moderation-rules',
+                'icon' => '',
+            ];
+            $menu[] = [
                 'text' => 'Contact Requests',
                 'url' => '/contact-requests',
                 'icon' => '',

@@ -106,6 +106,11 @@ class ChatController extends Controller
                       ->where('is_archived', $type === 'archived');
             })
             ->
+                //Exclude chats with banned users
+            // whereDoesntHave('participants', function($query) use ($user, $type) {
+            //     $query->IsBanned()->IsShadowBanned();
+            // })
+            // ->
             with([
               
                 'participants' => function($query) use($user) {

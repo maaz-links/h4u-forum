@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attachment;
+use App\Services\ImageService;
 use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,32 +34,40 @@ class AttachmentController extends Controller
         //dd('ok');
         $user = Auth::user();
         $uploadedImages = [];
-
+        $imageService = new ImageService();
         foreach ($request->file('images') as $file) {
             //$path = $file->store('attachments/' . $user->id, 'local');
             
-            $manager = new ImageManager(
-                new \Intervention\Image\Drivers\Gd\Driver()
+            
+            $path = $imageService->processAndSaveImage(
+                $file,
+                'attachments/' . $user->id,
+                true,
             );
-            $image = $manager->read($file->getRealPath());
-            $image->scale(1000, 1000);
-            // Process the image
-            //$image->resize(800, 800);
-            $encoded = $image->toWebp();
+    
+            // $manager = new ImageManager(
+            //     new \Intervention\Image\Drivers\Gd\Driver()
+            // );
+            // $image = $manager->read($file->getRealPath());
+            // $image->scale(1000, 1000);
+            // // Process the image
+            // //$image->resize(800, 800);
+            // $encoded = $image->toWebp();
+            // // $path = 'attachments/' . $user->id . '/' . Str::uuid()->toString() . '.webp';
+            // // $encoded->save(storage_path('app/private/'. $path));
+
             // $path = 'attachments/' . $user->id . '/' . Str::uuid()->toString() . '.webp';
-            // $encoded->save(storage_path('app/private/'. $path));
+            // $fullPath = storage_path('app/private/' . $path);
 
-            $path = 'attachments/' . $user->id . '/' . Str::uuid()->toString() . '.webp';
-            $fullPath = storage_path('app/private/' . $path);
+            // // Ensure the directory exists
+            // $directory = dirname($fullPath);
+            // if (!File::exists($directory)) {
+            //     File::makeDirectory($directory, 0755, true);
+            // }
 
-            // Ensure the directory exists
-            $directory = dirname($fullPath);
-            if (!File::exists($directory)) {
-                File::makeDirectory($directory, 0755, true);
-            }
-
-            // Now save the image
-            $encoded->save($fullPath);
+            // // Now save the image
+            // $encoded->save($fullPath);
+            
             //dd($encoded);
         // ->resize(800, 800, function ($constraint) {
         //     $constraint->aspectRatio();

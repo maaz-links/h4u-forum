@@ -160,7 +160,9 @@ Route::group(['middleware' => ['admin']], function () {
             Route::get('/message-alerts', [MessageAlertController::class, 'index'])->name('admin.message-alerts.index');
             Route::get('/message-alerts/{alert}', [MessageAlertController::class, 'show'])->name('admin.message-alerts.show');
             Route::put('/message-alerts/{alert}', [MessageAlertController::class, 'update'])->name('admin.message-alerts.update');
-               
+
+            Route::resource('moderation-rules', \App\Http\Controllers\Admin\ModerationRuleController::class)
+            ->except(['show']);
 
     });
 

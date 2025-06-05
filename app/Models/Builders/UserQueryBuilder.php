@@ -141,9 +141,24 @@ class UserQueryBuilder extends Builder
         });
     }
 
+    public function IsBanned()
+    {
+        return $this->whereHas('bans', function($q) {
+            $q->whereNull('expired_at') // Permanent bans
+            ->orWhere('expired_at', '>', now()); // Active temporary bans
+        });
+    }
+
     public function NotShadowBanned()
     {
         return $this->whereDoesntHave('shadow_bans', function($q) {
+            $q->where('expired_at', '>', now());
+        });
+    }
+
+    public function IsShadowBanned()
+    {
+        return $this->whereHas('shadow_bans', function($q) {
             $q->where('expired_at', '>', now());
         });
     }

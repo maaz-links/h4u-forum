@@ -26,7 +26,6 @@ class ModerationReportController extends Controller
                 'month' => 'Last 30 Days',
                 'quarter' => 'Last 3 Months',
                 'year' => 'Last Year',
-                'all' => 'All Time'
             ]
         ]);
     }

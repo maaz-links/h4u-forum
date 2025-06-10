@@ -56,7 +56,9 @@ class PayPalService
         $token = $this->getAccessToken();
 
         $response = Http::withToken($token)
-            ->post("{$this->baseUrl}/v2/checkout/orders/{$orderId}/capture");
+            ->post("{$this->baseUrl}/v2/checkout/orders/{$orderId}/capture",[
+                'intent' => 'CAPTURE',
+            ]);
 
         return $response->json();
     }

@@ -153,8 +153,6 @@ Route::group(['middleware' => ['admin']], function () {
         Route::post('/user-profile/{user}/delete-permanently', [BanController::class, 'destroyUser'])->name('admin.users.delete-permanently');
         // Route::post('/user-profile/{user}/shadowban', [BanController::class, 'shadowBan'])->name('admin.users.shadowban');
         // Route::post('/user-profile/{user}/remove-shadowban', [BanController::class, 'removeShadowBan'])->name('admin.users.remove-shadowban');
-        // Route::get('/moderation-reports', [ModerationReportController::class, 'index'])
-        // ->name('admin.moderation.reports');
       
            
     });
@@ -164,6 +162,9 @@ Route::group(['middleware' => ['admin']], function () {
         Route::get('/message-alerts', [MessageAlertController::class, 'index'])->name('admin.message-alerts.index');
         Route::get('/message-alerts/{alert}', [MessageAlertController::class, 'show'])->name('admin.message-alerts.show');
         Route::put('/message-alerts/{alert}', [MessageAlertController::class, 'update'])->name('admin.message-alerts.update');
+
+        Route::get('/moderation-reports', [ModerationReportController::class, 'index'])
+        ->name('admin.moderation-reports');
 
         Route::resource('moderation-rules', \App\Http\Controllers\Admin\ModerationRuleController::class)
         ->except(['show']);

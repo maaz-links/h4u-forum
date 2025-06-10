@@ -32,6 +32,7 @@ class UserProfileController extends Controller
         return response()->json([
             'user'=>new UserResource($result),
             'unlockChat'=>false,
+            'canReport'=>false,
         ]);
     }
 
@@ -40,12 +41,13 @@ class UserProfileController extends Controller
         $user = $request->user(); //DONT USE $request->user()->role()
 
         // LOOK AT YOUR OWN PROFILE
-        if($user->name === $username){
+        if(($user->name === $username) && $user->profile_picture_id){
             $user = User::with('profile')->where('id', '=', $request->user()->id)->first();
             return response()->json(
                 [
                     'user'=>new UserResource($user),
                     'unlockChat'=>false,
+                    'canReport'=>false,
                 ]
             );
         }
@@ -54,15 +56,20 @@ class UserProfileController extends Controller
             return response()->json('Terrible code',500);
         }
         if (!$result) {
-            return response()->json(['user'=>$result,'unlockChat'=>false]);
+            return response()->json(['user'=>$result,'unlockChat'=>false,'canReport'=>false,]);
         }
-        $existingChat = Chat::findBetweenUsers($user->id, $result->id);
-        $unlockChat = $existingChat ? false : true;
-        
+        if(!$user->profile_picture_id){
+            $unlockChat = false;
+            $canReport = false;
+        }else{
+            $existingChat = Chat::findBetweenUsers($user->id, $result->id);
+            $unlockChat = $existingChat ? false : true;
+            $canReport = true;
+        }
         $this->recordProfileView($user->id, $result->id);
         // ProfileViewed::dispatch($user->id, $result->id);
 
-        return response()->json(['user'=>new UserResource($result),'unlockChat'=>$unlockChat]);
+        return response()->json(['user'=>new UserResource($result),'unlockChat'=>$unlockChat,'canReport'=>$canReport]);
     }
 
     public function getFullProfile($username,$check_visibility,$role = User::ROLE_KING){

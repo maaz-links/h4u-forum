@@ -37,6 +37,7 @@
                             <div class="col-md-6">
                                 <p><strong>Name:</strong> {{ $user->name }}</p>
                                 <p><strong>Email:</strong> {{ $user->email }}</p>
+                                <p><strong>Is Email Verified:</strong> {{ $user->email_verified_at ? 'Yes' : 'No' }}</p>
                                 <p><strong>Phone:</strong> {{ $user->phone }}</p>
                                 <p><strong>Role:</strong> {{ ucfirst($user->role) }}</p>
                                 <p><strong>Date of Birth:</strong> {{ \Carbon\Carbon::parse($user->dob)->format('M d, Y') }}</p>

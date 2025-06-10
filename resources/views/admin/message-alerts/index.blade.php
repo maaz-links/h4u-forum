@@ -14,6 +14,8 @@
       </button>
 </div>
 @endif
+
+<a href="{{route('admin.moderation-reports')}}" class="my-2 btn btn-secondary">Moderation Trend Reports</a>
 <form method="GET" action="{{ route('admin.message-alerts.index') }}" class="mb-3">
     <div class="input-group">
         <input

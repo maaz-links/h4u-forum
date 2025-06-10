@@ -22,43 +22,6 @@ class ApiAuthenticationController extends Controller
 {
     public function register(Request $request)
     {
-        //dd(env('TWILIO_SID'));
-        // $validator = Validator::make($request->all(), [
-        //     'name' => 'required|string|max:255|unique:users',
-        //     'email' => 'required|string|email|max:255|unique:users',
-        //     'password' => [
-        //         'required',
-        //         'confirmed',
-        //         Password::min(8)
-        //             ->letters()
-        //             ->mixedCase()
-        //             ->numbers()
-        //             ->symbols(),
-        //     ],
-        //     'role' => 'string|max:255',
-        //     'phone' => [
-        //         'required',
-        //         'string',
-        //         'phone:AUTO', // Validates international phone numbers
-        //     ],
-        //     'dob' => [
-        //         'required',
-        //         'date',
-        //         'after:1900-01-01',
-        //         'before_or_equal:' . now()->subYears(18)->format('Y-m-d'),
-        //     ],
-        // ], [
-        //     'password.required' => 'Password is required',
-        //     'password.confirmed' => 'Passwords do not match',
-        //     'password.min' => 'Password must be at least 8 characters',
-        //     'password.mixed' => 'Password must contain both uppercase and lowercase letters',
-        //     'password.numbers' => 'Password must contain at least one number',
-        //     'password.symbols' => 'Password must contain at least one special character',
-        //     //
-        //     'dob.before_or_equal' => 'You must be at least 18 years old',
-        //     'phone.required' => 'Phone number is required',
-        //     'phone.phone' => 'Please enter a valid phone number',
-        // ]);
         $validator = Validator::make(
             $request->all(),
             UserValidation::rules(['name', 'email', 'password', 'dob','role','phone','newsletter','isModel']),
@@ -79,10 +42,17 @@ class ApiAuthenticationController extends Controller
             'phone' => $phoneNumber,
             'dob' => $request->dob,
         ]);
-        if ($request->role) {
-            $user->role = $request->role;
-        } else {
-            $user->role = User::ROLE_KING; // Default value
+        //Set up Role
+        switch ($request->role) {
+            case 'KING':
+                $user->role = User::ROLE_KING;
+                break;
+            case 'HOSTESS':
+                $user->role = User::ROLE_HOSTESS;
+                break;
+            default:
+                $user->role = User::ROLE_KING;
+                break;
         }
         //return response()->json($user);
         $user->save();
@@ -143,13 +113,18 @@ class ApiAuthenticationController extends Controller
 
         if (!Auth::attempt($credentials)) {
             return response()->json([
-                //'message' => 'Invalid login credentials',
                 'formError' => ['email' => ['Invalid login credentials']],
                 'noreload' => true
             ], 422);
         }
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->forRoleAny()->first();
+        if(!$user){
+            return response()->json([
+                'formError' => ['email' => ['Invalid login credentials']],
+                'noreload' => true
+            ], 422);
+        }
         
         // Revoke all previous tokens (optional)
         $user->tokens()->delete();

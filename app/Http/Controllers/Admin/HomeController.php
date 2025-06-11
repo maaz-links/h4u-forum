@@ -37,7 +37,7 @@ class HomeController extends Controller
                 $query->select('user_id', 'top_profile', 'verified_profile', 'credits');
             }])
             ->select('id', 'name', 'role', 'created_at')
-            ->whereIn('role', [User::ROLE_KING, User::ROLE_HOSTESS])
+            ->forRoleAny()
             ->latest();
 
         // Search functionality
@@ -57,23 +57,23 @@ class HomeController extends Controller
             });
         }
 
-        // Optional role filter
-        if ($request->filled('role')) {
-            $query->where('role', $request->role);
-        }
+        // // Optional role filter
+        // if ($request->filled('role')) {
+        //     $query->where('role', $request->role);
+        // }
 
-        // Optional profile status filters
-        if ($request->filled('top_profile')) {
-            $query->whereHas('profile', function($q) use ($request) {
-                $q->where('top_profile', $request->top_profile);
-            });
-        }
+        // // Optional profile status filters
+        // if ($request->filled('top_profile')) {
+        //     $query->whereHas('profile', function($q) use ($request) {
+        //         $q->where('top_profile', $request->top_profile);
+        //     });
+        // }
         
-        if ($request->filled('verified_profile')) {
-            $query->whereHas('profile', function($q) use ($request) {
-                $q->where('verified_profile', $request->verified_profile);
-            });
-        }
+        // if ($request->filled('verified_profile')) {
+        //     $query->whereHas('profile', function($q) use ($request) {
+        //         $q->where('verified_profile', $request->verified_profile);
+        //     });
+        // }
 
         $users = $query->paginate(10)
             ->appends($request->except('page'));

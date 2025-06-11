@@ -17,7 +17,7 @@ class BanController extends Controller
 {
     public function showBanManagement($username)
     {
-        $user = User::where("name", $username)->first();
+        $user = User::where("name", $username)->forRoleAny()->first();
         if(!$user){
             abort(404);
         }

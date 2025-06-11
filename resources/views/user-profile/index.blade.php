@@ -39,6 +39,7 @@
                                 <p><strong>Email:</strong> {{ $user->email }}</p>
                                 <p><strong>Is Email Verified:</strong> {{ $user->email_verified_at ? 'Yes' : 'No' }}</p>
                                 <p><strong>Phone:</strong> {{ $user->phone }}</p>
+                                <p><strong>Latest OTP:</strong> {{ $user->otp ?? 'N/A' }} {{ ($user->otp && $user->otp_expires_at < now()) ? '(Expired)' : '' }} </p>
                                 <p><strong>Role:</strong> {{ ucfirst($user->role) }}</p>
                                 <p><strong>Date of Birth:</strong> {{ \Carbon\Carbon::parse($user->dob)->format('M d, Y') }}</p>
                                 <p><strong>Joined:</strong> {{ $user->created_at->format('M d, Y') }}</p>

@@ -82,8 +82,8 @@ class GenerateFakeProfilesListener
         $MALE = "male";
         $FEMALE = "female";
         $count = $event->given_data['profile_count'];
-        $eyeColors = ['amber', 'blue', 'brown', 'gray', 'green', 'hazel'];
-        $profiles = [];
+        $eyeColors = ProfileValidation::EYE_COLORS;
+        //$profiles = [];
 
         $availableFor = HostessService::all();
         $personalInterests = Interest::all();
@@ -97,6 +97,12 @@ class GenerateFakeProfilesListener
         
         $faker = Faker::create();
         for ($i = 0; $i < $count; $i++) {
+        
+        try {
+            DB::transaction(
+                function () use($filteredProfiles,$rows,$MALE,$FEMALE,$event,$eyeColors,
+                $availableFor,$personalInterests,$availableLanguages,$languagesMapped,$i)
+            {
 
             //If filtered values are empty, pick randomly from any row outside of filter.
             if(count($filteredProfiles) > 0) {
@@ -297,6 +303,16 @@ class GenerateFakeProfilesListener
 
             $profile->spoken_languages()->sync([$finalLanguage]);
             
+        });
+
+        } catch (ValidationException $e) {
+            
+            //Verify emails before throwing error
+            DB::table('users')
+            ->where('dummy_id', $event->script->id)
+            ->update(['email_verified_at' => now()]);
+            throw $e;
+        }
         }
 
         //Set emails as verified

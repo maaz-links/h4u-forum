@@ -110,6 +110,21 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Review::class, 'reviewed_user_id');
     }
 
+    public function reviewsReceivedCount()
+    {
+        return $this->reviewsReceived()->count();
+    }
+
+    public function checkRatingVisibility()
+    {
+        //dd($this->reviewsReceivedCount(),config('h4u.reviews.minimum_reviews_for_visibility'));
+        return ($this->reviewsReceivedCount() >= config('h4u.reviews.minimum_reviews_for_visibility',3)) ? true : false;
+    }
+
+    public function hasActivatedProfile(){
+        return $this->profile_picture_id !== null; 
+    }
+
     protected static function booted()
     {
         static::deleting(function ($parent) {

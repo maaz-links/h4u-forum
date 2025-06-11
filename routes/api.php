@@ -100,7 +100,6 @@ Route::middleware('auth:sanctum')->group(function () {
             return new UserResource($user);
             // dd($user->profile());
             // return response()->json($user);
-        
         });        
 
         Route::post('/update-profile', [UpdateProfileController::class, 'updateProfile']);
@@ -117,21 +116,37 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/user-profile/{username}',[UserProfileController::class, 'profileByUser']);
         Route::get('/last-views',[UserProfileController::class, 'getLastViews']);
 
-        Route::post('/chats/credits', [ChatController::class, 'create']);
-        // Route::post('/chats/credits', [ChatController::class, 'createChat']);
-        // Route::post('/chats/freemsg', [ChatController::class, 'freeChat']);
-        // Chat routes
-        Route::get('/chats', [ChatController::class, 'index']);
-        Route::get('/chats/{chat}', [ChatController::class, 'show']);
-        Route::post('/chats/{chat}/archive', [ChatController::class, 'archive']);
-        Route::post('/chats/{chat}/unarchive', [ChatController::class, 'unarchive']);
-        
-        // Message routes
-        Route::get('/chats/{chat}/messages', [MessageController::class, 'index']);
-        Route::post('/chats/{chat}/messages', [MessageController::class, 'store']);
-        Route::get('/chats/{chat}/messages/poll', [MessageController::class, 'poll']);
+        Route::middleware('check.activated')->group(function () {
+            Route::post('/chats/credits', [ChatController::class, 'create']);
+            // Route::post('/chats/credits', [ChatController::class, 'createChat']);
+            // Route::post('/chats/freemsg', [ChatController::class, 'freeChat']);
+            // Chat routes
+            Route::get('/chats', [ChatController::class, 'index']);
+            Route::get('/chats/{chat}', [ChatController::class, 'show']);
+            Route::post('/chats/{chat}/archive', [ChatController::class, 'archive']);
+            Route::post('/chats/{chat}/unarchive', [ChatController::class, 'unarchive']);
+            
+            // Message routes
+            Route::get('/chats/{chat}/messages', [MessageController::class, 'index']);
+            Route::post('/chats/{chat}/messages', [MessageController::class, 'store']);
+            //Route::get('/chats/{chat}/messages/poll', [MessageController::class, 'poll']);
 
-        Route::post('/chats/{chat}/messages/read', [MessageController::class, 'markAsRead']);
+            Route::post('/chats/{chat}/messages/read', [MessageController::class, 'markAsRead']);
+
+            Route::get('shops',[ShopController::class,'index']);
+            Route::get('shop/{id}',[ShopController::class,'shop']);
+            Route::post('/add/user-credits',[ShopController::class,'addCredits']);
+            Route::get('/user-purchased',[ShopController::class,'userPurchased']);
+
+            Route::post('/report-user', [UserProfileController::class, 'reportUser']);
+            Route::post('/report-chat', [UserProfileController::class, 'reportChat']);
+
+            Route::post('/create-payment-intent',[PaymentController::class,'createPaymentIntent']);
+            Route::post('/paypal/create-order', [PaymentController::class, 'createOrder']);
+            Route::get('/paypal/success', [PaymentController::class, 'success']);
+            Route::get('/paypal/cancel', [PaymentController::class, 'cancel']);
+
+        });
 
         Route::get('/unread-messages-count', [MessageController::class, 'unreadCount']);
 
@@ -145,18 +160,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/send-cancellation-request',[UpdateProfileController::class,'sendCancellationRequest'])
         ->middleware('throttle:1,60');
     //});
-        Route::get('shops',[ShopController::class,'index']);
-        Route::get('shop/{id}',[ShopController::class,'shop']);
-        Route::post('/add/user-credits',[ShopController::class,'addCredits']);
-        Route::get('/user-purchased',[ShopController::class,'userPurchased']);
-
-        Route::post('/report-user', [UserProfileController::class, 'reportUser']);
-        Route::post('/report-chat', [UserProfileController::class, 'reportChat']);
-
-        Route::post('/create-payment-intent',[PaymentController::class,'createPaymentIntent']);
-        Route::post('/paypal/create-order', [PaymentController::class, 'createOrder']);
-        Route::get('/paypal/success', [PaymentController::class, 'success']);
-        Route::get('/paypal/cancel', [PaymentController::class, 'cancel']);
 
     });
     

@@ -21,6 +21,8 @@ class SearchController extends Controller
 
     protected function search(Request $request,$check_visibility,$role = User::ROLE_KING)
     {
+        $perPage = $request->per_page ?? 50;
+
         //$visibilityStatuses = !empty($check_visibility) ? $check_visibility : [0, 1];
         $users = User::withWhereHas('profile', function ($query) use ($check_visibility, $request) {
             $query->select(
@@ -48,7 +50,8 @@ class SearchController extends Controller
         ->NotBanned()
         ->NotShadowBanned()
         ->forOppositeRole($role)
-        ->get();
+        // ->get();
+        ->paginate($perPage);
 
         
         return response()->json($users);

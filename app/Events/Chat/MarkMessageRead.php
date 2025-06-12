@@ -14,12 +14,14 @@ class MarkMessageRead implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $queue;
     public $messageId;
     public $readerId;
     public $chatId;
 
     public function __construct($messageId, $readerId, $chatId)
     {
+        $this->queue = env('CHAT_MESSAGES_QUEUE_NAME', 'default');
         $this->messageId = $messageId;
         $this->readerId = $readerId;
         $this->chatId = $chatId;

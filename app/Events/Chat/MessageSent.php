@@ -14,10 +14,12 @@ class MessageSent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $queue;
     public $message;
 
     public function __construct($message)
     {
+        $this->queue = env('CHAT_MESSAGES_QUEUE_NAME', 'default');
         $this->message = $message;
     }
 

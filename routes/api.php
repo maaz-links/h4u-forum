@@ -34,8 +34,8 @@ Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])
     ->name('verification.verify')
     ->middleware('signed');
 //Route::get('email/verify/{id}',[ApiAuthentication::class,'verify'])->name('verification.verify');
-Route::post('/email/resend', [VerificationController::class, 'resend'])
-    ->middleware('auth:sanctum');
+// Route::post('/email/resend', [VerificationController::class, 'resend'])
+//     ->middleware('auth:sanctum');
 
 Route::post('/login', [ApiAuthenticationController::class, 'login'])->name('login');
 Route::post('/verify-otp', [ApiAuthenticationController::class, 'verifyOtp']);
@@ -44,7 +44,7 @@ Route::post('/logout', [ApiAuthenticationController::class, 'logout'])->middlewa
 
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail'])
     ->middleware('guest:sanctum')
-    ->name('password.email');
+    ->name('password.email')->middleware('throttle:2,1');
 
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])
     ->middleware('guest:sanctum')

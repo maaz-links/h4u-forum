@@ -16,10 +16,12 @@ class NewMessageSentAfterMod implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $queue;
     public $message;
     public $chat;
 
     public function __construct($message, $chat) {
+        $this->queue = env('CHAT_MESSAGES_QUEUE_NAME', 'default');
         $this->message = $message;
         $this->chat = $chat;
     }

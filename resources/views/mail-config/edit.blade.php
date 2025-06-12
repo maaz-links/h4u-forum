@@ -9,7 +9,7 @@
 @section('content')
 <div class="container">
     <div class="alert alert-info">
-        Server Queue must be restarted in order for changes to take effect.
+        Mail Settings are sometimes cached by the queue. Therefore, Server queue should be restarted in order for changes to take effect.
     </div>
     @if(session('success'))
         <div class="alert alert-success">

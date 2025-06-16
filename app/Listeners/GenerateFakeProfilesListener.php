@@ -266,6 +266,7 @@ class GenerateFakeProfilesListener
             $femaleAttrib = $gender === $MALE
                 ?   []:
                 [
+                    'credits' => 5,
                     'dress_size' => $toValidate['other_data']['dressSize'],
                     'weight' => $toValidate['other_data']['weight'],
                     'telegram' => $toValidate['other_data']['telegram'],
@@ -308,17 +309,13 @@ class GenerateFakeProfilesListener
         } catch (ValidationException $e) {
             
             //Verify emails before throwing error
-            DB::table('users')
-            ->where('dummy_id', $event->script->id)
-            ->update(['email_verified_at' => now()]);
+            $this->verifyDummyUsers($event->script->id);
             throw $e;
         }
         }
 
         //Set emails as verified
-        DB::table('users')
-        ->where('dummy_id', $event->script->id)
-        ->update(['email_verified_at' => now()]);
+        $this->verifyDummyUsers($event->script->id);
 
     }
 
@@ -403,6 +400,12 @@ class GenerateFakeProfilesListener
         ]);
         
         return $attachment->id;
+    }
+
+    protected function verifyDummyUsers($script_id){
+        DB::table('users')
+            ->where('dummy_id', $script_id)
+            ->update(['email_verified_at' => now()]);
     }
 
     protected function generateEuropeanPhone($countryCode = null)

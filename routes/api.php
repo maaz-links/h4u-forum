@@ -138,18 +138,20 @@ Route::middleware('auth:sanctum')->group(function () {
 
             Route::post('/chats/{chat}/messages/read', [MessageController::class, 'markAsRead']);
 
-            Route::get('shops',[ShopController::class,'index']);
-            Route::get('shop/{id}',[ShopController::class,'shop']);
-            Route::post('/add/user-credits',[ShopController::class,'addCredits']);
-            Route::get('/user-purchased',[ShopController::class,'userPurchased']);
+            Route::middleware('check.males-only')->group(function () {
+                Route::get('shops',[ShopController::class,'index']);
+                Route::get('shop/{id}',[ShopController::class,'shop']);
+                Route::post('/add/user-credits',[ShopController::class,'addCredits']);
+                Route::get('/user-purchased',[ShopController::class,'userPurchased']);
 
-            Route::post('/report-user', [UserProfileController::class, 'reportUser']);
-            Route::post('/report-chat', [UserProfileController::class, 'reportChat']);
+                Route::post('/report-user', [UserProfileController::class, 'reportUser']);
+                Route::post('/report-chat', [UserProfileController::class, 'reportChat']);
 
-            Route::post('/create-payment-intent',[PaymentController::class,'createPaymentIntent']);
-            Route::post('/paypal/create-order', [PaymentController::class, 'createOrder']);
-            Route::get('/paypal/success', [PaymentController::class, 'success']);
-            Route::get('/paypal/cancel', [PaymentController::class, 'cancel']);
+                Route::post('/create-payment-intent',[PaymentController::class,'createPaymentIntent']);
+                Route::post('/paypal/create-order', [PaymentController::class, 'createOrder']);
+                Route::get('/paypal/success', [PaymentController::class, 'success']);
+                Route::get('/paypal/cancel', [PaymentController::class, 'cancel']);
+            });
 
         });
 

@@ -14,6 +14,15 @@
             <i class="fas fa-check-circle"></i> Active
         </span> --}}
     @endif
+
+    <form method="GET" action="{{ route('admin.login-as-user',$user->name) }}" class="mx-3" style='float: right;'>
+        <button
+            onclick="return confirm('{{ $user->isDummy() ? '' : 'This user is not Fake. ' }} Are you sure you want to login as {{ $user->name }}?')"
+            type="submit"
+            class="btn btn-warning">
+            <i class="fas fa-key"></i> Login as User
+        </button>
+</form>
     </h1>
 @stop
 
@@ -25,6 +34,13 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
+        @endif
+        @if (session('error'))
+            <div class="mt-3 alert alert-danger alert-dismissible fade show">{{ session('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
         @endif
         <div class="row">
             <div class="col-md-12">
@@ -41,6 +57,7 @@
                                 <p><strong>Phone:</strong> {{ $user->phone }}</p>
                                 <p><strong>Latest OTP:</strong> {{ $user->otp ?? 'N/A' }} {{ ($user->otp && $user->otp_expires_at < now()) ? '(Expired)' : '' }} </p>
                                 <p><strong>Role:</strong> {{ ucfirst($user->role) }}</p>
+                                <p><strong>Is Fake:</strong> {{ $user->isDummy()?'Yes':'No' }}</p>
                                 <p><strong>Date of Birth:</strong> {{ \Carbon\Carbon::parse($user->dob)->format('M d, Y') }}</p>
                                 <p><strong>Joined:</strong> {{ $user->created_at->format('M d, Y') }}</p>
                                 <p><strong>Rating:</strong> {{ number_format($user->rating, 2) }} ⭐</p>

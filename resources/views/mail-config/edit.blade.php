@@ -8,9 +8,6 @@
 
 @section('content')
 <div class="container">
-    <div class="alert alert-info">
-        Mail Settings are sometimes cached by the queue. Therefore, Server queue should be restarted in order for changes to take effect.
-    </div>
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
@@ -28,8 +25,21 @@
     <form method="POST" action="{{ route('mail-config.update') }}">
         @csrf
         @method('PUT')
-        
+
         <div class="card mb-4">
+            <div class="card-header">Support Email Address</div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="h4u.email.support_address">Support Email Address</label>
+                    <input type="text" class="form-control" id="h4u.email.support_address" name="h4u_email_support_address" 
+                           value="{{ config('h4u.email.support_address') }}" required>
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-info">
+            Mail Settings are sometimes cached by the queue. Therefore, Server queue should be restarted in order for changes to take effect.
+        </div>
+        <div class="card mb-6">
             <div class="card-header">General Mail Settings</div>
             <div class="card-body">
                 <div class="form-group">

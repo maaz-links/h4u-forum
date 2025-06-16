@@ -16,6 +16,13 @@
         </button>
     </div>
 @endif
+@if (session('error'))
+    <div class="mt-3 alert alert-danger alert-dismissible fade show">{{ session('error') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+@endif
 <form method="GET" action="{{ route('home') }}" class="mb-3">
     <div class="input-group">
         <input
@@ -34,6 +41,7 @@
                     <th>S/L</th>
                     <th>Role</th>
                     <th>Username</th>
+                    <th></th>
                     {{-- <th>Verified Profile</th>
                     <th>Top Profile</th> --}}
                     <th>Credits</th>
@@ -53,6 +61,11 @@
                             @endif
                         </td>
                         <td>{{ $user->name }}</td>
+                        <td>
+                            @if ($user->isDummy())
+                                <span class="badge bg-secondary">Fake</span>
+                            @endif
+                        </td>
                         {{-- <td>
                             @if ($user->profile->verified_profile)
                                 <span class="badge bg-success">Yes</span>
@@ -70,9 +83,21 @@
                         <td>{{ $user->profile->credits }} {!!($user->role == \App\Models\User::ROLE_HOSTESS) ? 'Free Messages':'<i class="fas fa-coins"></i> '!!}</td>
                         <td>{{ \Carbon\Carbon::parse($user->created_at)->format('M d, Y') }}</td>
                         <td>
-                            <a href="{{route('user-profile',[$user->name])}}" class="btn btn-sm btn-info">
-                                <i class="fas fa-eye"></i> View
-                            </a>
+                            
+                            <form method="GET" action="{{ route('admin.login-as-user',$user->name) }}" class="inline">
+                                    <a href="{{route('user-profile',[$user->name])}}" class="btn btn-sm btn-info">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                    <button
+                                        onclick="return confirm('{{ $user->isDummy() ? '' : 'This user is not Fake. ' }} Are you sure you want to login as {{ $user->name }}?')"
+                                        type="submit"
+                                        class="btn btn-sm btn-warning">
+                                        <i class="fas fa-key"></i> Login
+                                    </button>
+                            </form>
+                            {{-- <a href="{{route('admin.login-as-user',$user->id)}}" class="btn btn-sm btn-warning">
+                                <i class="fas fa-unlock"></i> Login
+                            </a> --}}
                         </td>
                     </tr>
                 @endforeach

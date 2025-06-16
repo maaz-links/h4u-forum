@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Builders\ChatQueryBuilder;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -45,9 +46,16 @@ class Chat extends Model
         });
     }
 
-    public function otherUser()
+    public function otherUser($currentUserId)
     {
-        return auth()->id() === $this->user1_id ? $this->user2 : $this->user1;
+        if($currentUserId === $this->user1_id){
+            return $this->user2;
+        }elseif($currentUserId === $this->user2_id){
+            return $this->user1;
+        }
+        throw new Exception("otherUser function Invalid", 500);
+        
+        //return auth()->id() === $this->user1_id ? $this->user2 : $this->user1;
     }
 
     public static function findBetweenUsers($userAId, $userBId,$unlocked = false,$timePassed = null)

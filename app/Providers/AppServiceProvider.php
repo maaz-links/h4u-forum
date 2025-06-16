@@ -29,6 +29,12 @@ class AppServiceProvider extends ServiceProvider
         
      Paginator::useBootstrap();
         JsonResource::withoutWrapping();
+        // Log the current URL
+        if(env('APP_ENV') == 'production'){
+            if (!app()->runningInConsole()) {
+                Log::info('Requested URL: ' . request()->fullUrl());
+            }
+        }
         // Log::info("__________________________________________");
         // DB::listen(function ($query) {
         //     // Log the query and its execution time

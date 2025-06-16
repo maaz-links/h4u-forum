@@ -61,6 +61,10 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::group(['middleware' => ['auth']], function () {
 
 Route::group(['middleware' => ['admin']], function () {
+
+    Route::get('/admin/login-as-user/{name}', [HomeController::class, 'loginAsUser'])
+     ->name('admin.login-as-user');
+
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/user-profile/{name}', [HomeController::class, 'profile'])->name('user-profile');
     

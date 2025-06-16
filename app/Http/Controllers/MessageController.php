@@ -78,7 +78,7 @@ class MessageController extends Controller
 
             //SEND EMAIL TO ADMINS
             // Dispatch event/notification to recipient
-            Notification::route('mail', env('SUPPORT_EMAIL_ADDRESS','support@hostessforyou.com'))
+            Notification::route('mail', config('h4u.email.support_address'))
             ->notify(new \App\Notifications\MessageViolationNotif($alert));
 
             
@@ -106,6 +106,12 @@ class MessageController extends Controller
 
         //dd($messageFormatted->sent);
         event(new NewMessageSent($message, $chat));
+
+        $otherUser = $chat->otherUser($request->user()->id);
+        if($otherUser->isDummy()){
+            Notification::route('mail', config('h4u.email.support_address'))
+            ->notify(new \App\Notifications\MessageToFakeUserNotif($message,$otherUser));
+        }
         // broadcast(new NewMessageSent($message,$chat->id))->toOthers();
         // event(new \App\Events\Chat\MessageSent($message));
         // return response()->json([

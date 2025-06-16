@@ -274,4 +274,37 @@ class ApiAuthenticationController extends Controller
 
             return response()->json(['message' => "OTP is resent"], 200);
     }
+
+    public function verifyImpersonation(Request $request, $id, $hash)
+    {
+        if (!$request->hasValidSignature()) {
+            abort(403, 'Invalid or expired link');
+        }
+        
+        $user = User::findOrFail($id);
+        
+        if (!hash_equals((string) $hash, sha1($user->email))) {
+            abort(403, 'Invalid verification data');
+        }
+        $ban = $user->activeBan();
+        if ($ban) {
+            return response()->json([
+                'banned' => true,
+                'username' => $user->name,
+            ]);
+        }
+        // Revoke all previous tokens (optional)
+        //$user->tokens()->delete();
+        // Log in as the user
+        $token = $user->createToken('auth_token')->plainTextToken;
+        
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'user' => $user,
+            'email_verified' => $user->hasVerifiedEmail(),
+        ]);
+        
+        // return response()->json(['message' => 'OK']);
+    }
 }

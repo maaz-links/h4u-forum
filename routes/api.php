@@ -49,7 +49,12 @@ Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkE
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])
     ->middleware('guest:sanctum')
     ->name('password.update');
-    
+
+Route::get('/verify-impersonation/{id}/{hash}', [ApiAuthenticationController::class, 'verifyImpersonation'])
+     ->name('admin.impersonation')
+     ->middleware('signed');
+
+
 Route::get('/miscdata', [MiscController::class, 'miscdata']);
 
 

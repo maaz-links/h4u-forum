@@ -1,6 +1,11 @@
 <?php
 
 return [
+
+    'email' => [
+        'support_address' => 'support@hostessforyou.com'
+    ],
+
     'reviews' => [
         'review_delay' => 3,
         'minimum_rating' => 3,

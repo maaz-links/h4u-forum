@@ -39,6 +39,7 @@ class MailConfigController extends Controller
     {
         //dd($request);
         $validated = $request->validate([
+            'h4u_email_support_address' => 'required|email',
             'mail_default' => 'required|string',
             'mail_from_address' => 'required|email',
             'mail_from_name' => 'required|string',
@@ -48,7 +49,11 @@ class MailConfigController extends Controller
             'mail_smtp_username' => 'required|string',
             'mail_smtp_password' => 'required|string',
         ]);
-        
+
+        UserConfig::updateOrCreate(
+            ['key' => 'h4u.email.support_address'],
+            ['value' => $request->h4u_email_support_address]
+        );
         UserConfig::updateOrCreate(
             ['key' => 'mail.default'],
             ['value' => $request->mail_default]

@@ -32,6 +32,6 @@ class CancellationRequestListener implements ShouldQueue
 
         //$message = str_replace("{username}", $event->user->name, $message);
         //Mail::to($event->user->email)->send(new pastelinkmail($message, $subject));
-        Notification::route('mail', env('SUPPORT_EMAIL_ADDRESS','support@hostessforyou.com'))->notify(new \App\Notifications\CancellationRequestNotif($event->user));
+        Notification::route('mail', config('h4u.email.support_address'))->notify(new \App\Notifications\CancellationRequestNotif($event->user));
     }
 }

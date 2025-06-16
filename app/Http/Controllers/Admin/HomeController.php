@@ -36,7 +36,7 @@ class HomeController extends Controller
         $query = User::with(['profile' => function($query) {
                 $query->select('user_id', 'top_profile', 'verified_profile', 'credits');
             }])
-            ->select('id', 'name', 'role', 'created_at')
+            ->select('id', 'name', 'role', 'created_at','dummy_id')
             ->forRoleAny()
             ->latest();
 
@@ -175,71 +175,48 @@ class HomeController extends Controller
             ->with('success', "$user->name's Password changed successfully!");
     }
 
+    public function loginAsUser(string $name)
+    {
+        $user = User::where('name',$name)->forRoleAny()->first();
+        if(!$user){
+            abort(404);
+        }
+        if($user->activeBan()){
+            return redirect()->back()
+            ->with('error', "Cannot Log In as Banned User");
+        }
+        $signedUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+            'admin.impersonation',
+            now()->addMinutes(1),
+            [
+                'id' => $user->id,
+                'hash' => sha1($user->email),
+            ]
+        );
+        // AuditAdmin::audit("HomeController@loginAsUser");
+        // // dd($signedUrl,parse_url($signedUrl, PHP_URL_QUERY));
+        // // Extract just the path and query string to pass to frontend
+        // $pathWithQuery = parse_url($signedUrl, PHP_URL_PATH) . '?' . parse_url($signedUrl, PHP_URL_QUERY);
+        // //dd($pathWithQuery,urlencode($pathWithQuery));
+        // return redirect(env('FRONTEND_URL'). '/secret-login?verify=' . urlencode($pathWithQuery));
 
-    // public function allchats(string $name){
-    //     $user = User::select('id','name','role')->forUsername($name)->forRoleAny()->first();
-    //     if(!$user){
-    //         abort(404);
-    //     }
-    //     $chats = Chat::
-        
-    //         whereHas('participants', function($query) use ($user) {
-    //             $query->where('user_id', $user->id);
-    //         })
-    //         ->
-    //         with([
-    //             'participants' => function($query) use($user) {
-    //             $query->select('id','user_id','name');
-    //             },
-    //         ])->
-    //         where('unlocked',1)->
-    //         get()->map(function($chat) use ($user) {
-    //             //$chat->other_user = $chat->user2_id === $user->id ? $chat->user1 : $chat->user2;
-    //             $other_user_index = $chat->participants[0]->id === $user->id ? 1 : 0;
-    //             //$chat->other_user = $chat->participants[0]->id === $user->id ? $chat->participants[0] : $chat->participants[1];
-    //             $chat->my_user_id = $user->id;
-    //             $chat->other_user = $chat->participants[$other_user_index];
 
-    //             unset($chat->user1, $chat->user2, $chat->other_user->pivot,$chat->participants); //Remove form list after query
-    //             return $chat;
-    //         });
-    //         // return $chats;
-    //         return view('user-profile.chat',compact('chats','name'));
-    // }
+        // Parse the signed URL to extract parameters
+        $parsedUrl = parse_url($signedUrl);
+        parse_str($parsedUrl['query'], $queryParams);
 
-    // public function conversation(Request $request){
-    //     $validated_data = $request->validate([
-    //         'chat_id' => 'required|numeric|exists:chats,id',
-    //         'admin_reason' => 'required|string',
-    //     ]);
+        AuditAdmin::audit("HomeController@loginAsUser");
 
-        
+        // Redirect with separate parameters
+        return redirect(env('FRONTEND_URL') . '/secret-login?' . http_build_query([
+            'id' => $user->id,
+            'hash' => sha1($user->email),
+            'expires' => $queryParams['expires'],
+            'signature' => $queryParams['signature']
+        ]));
 
-    //     //return view('user-profile.chat',compact('chats'));
-    //     $chat = Chat::where('id', $validated_data['chat_id'])
-    //     ->with([
-    //         'user1' => function($query) {
-    //             $query->select('id','name','role','profile_picture_id');
-    //         },
-    //         'user2' => function($query) {
-    //             $query->select('id','name','role','profile_picture_id');
-    //         },
-    //         'messages' => function($query) {
-    //             $query->with([
-    //                 'sender' => function($query) {
-    //                     $query->select('id','name','role','profile_picture_id');
-    //                 },            
-    //         ]);
-    //         },
-    //     ])
-    //     ->first();
+    }
 
-    //     AuditAdmin::audit(
-    //         "Opened conversation between {$chat->user1->name} (ID: {$chat->user1->id}) and {$chat->user2->name} (ID: {$chat->user2->id})",
-    //         $request->admin_reason);
-
-    //     return view('openconversation',compact('chat'));
-    // }
 
     
 }

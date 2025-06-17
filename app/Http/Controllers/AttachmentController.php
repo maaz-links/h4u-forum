@@ -5,14 +5,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Attachment;
 use App\Services\ImageService;
-use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Drivers\Imagick\Driver;
-use Intervention\Image\Image;
-use Intervention\Image\ImageManager;
-use Str;
+use Validator;
 
 class AttachmentController extends Controller
 {
@@ -25,12 +21,32 @@ class AttachmentController extends Controller
 
     public function store(Request $request)
     {
+        $user = Auth::user();
+        $maxAttachments = config('h4u.attachments.limit');
+
+        // Check if the user has already reached the attachment limit
+        $existingAttachmentsCount = Attachment::where('user_id', $user->id)->count();
         
-        $request->validate([
-            'images' => 'required|array',
-            'images.*' => 'image|max:5000',
-            'profile_pic_id' => 'nullable|string'
+        if ($existingAttachmentsCount >= $maxAttachments) {
+            return response()->json([
+                'message' => 'You have reached the maximum limit of ' . $maxAttachments . ' images.'
+            ], 422);
+        }
+        
+        $validator = Validator::make($request->all(), [
+            'images' => 'required|array|size:1',
+            'images.*' => 'image|max:10000',
+        ], [
+            'images.size' => 'Only one image can be uploaded at a time.',
+            'images.*.image' => 'The uploaded file must be an image.',
+            'images.*.max' => 'The image must not be larger than 5MB.',
         ]);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422); // Unprocessable Entity
+        }
         //dd('ok');
         $user = Auth::user();
         $uploadedImages = [];
@@ -45,36 +61,6 @@ class AttachmentController extends Controller
                 true,
             );
     
-            // $manager = new ImageManager(
-            //     new \Intervention\Image\Drivers\Gd\Driver()
-            // );
-            // $image = $manager->read($file->getRealPath());
-            // $image->scale(1000, 1000);
-            // // Process the image
-            // //$image->resize(800, 800);
-            // $encoded = $image->toWebp();
-            // // $path = 'attachments/' . $user->id . '/' . Str::uuid()->toString() . '.webp';
-            // // $encoded->save(storage_path('app/private/'. $path));
-
-            // $path = 'attachments/' . $user->id . '/' . Str::uuid()->toString() . '.webp';
-            // $fullPath = storage_path('app/private/' . $path);
-
-            // // Ensure the directory exists
-            // $directory = dirname($fullPath);
-            // if (!File::exists($directory)) {
-            //     File::makeDirectory($directory, 0755, true);
-            // }
-
-            // // Now save the image
-            // $encoded->save($fullPath);
-            
-            //dd($encoded);
-        // ->resize(800, 800, function ($constraint) {
-        //     $constraint->aspectRatio();
-        //     $constraint->upsize(); // Prevent upsizing smaller images
-        // })
-        // ->encode('webp', 75); // Convert to WebP with 75% quality
-            //dd('ender');
             $attachment = Attachment::create([
                 'user_id' => $user->id,
                 'path' => $path,
@@ -123,12 +109,8 @@ class AttachmentController extends Controller
     {
         $user = $request->user();
         
-        // Reset all profile pictures
-        // Attachment::where('user_id', $user->id)->update(['is_profile_picture' => false]);
-        
         // Set new profile picture
         $attachment = Attachment::where('user_id', $user->id)->findOrFail($id);
-        // $attachment->update(['is_profile_picture' => true]);
         $user->update(['profile_picture_id' => $attachment->id]);
 
         return response()->json(['message' => 'Profile picture updated successfully']);

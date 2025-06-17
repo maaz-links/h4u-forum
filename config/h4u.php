@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'attachments'=> [
+        'limit' => 10,
+    ],
 
     'email' => [
         'support_address' => 'support@hostessforyou.com'

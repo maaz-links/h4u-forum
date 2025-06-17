@@ -88,13 +88,6 @@ class AttachmentController extends Controller
             ];
         }
 
-        // Update profile picture if specified
-        if ($request->profile_pic_id) {
-            Attachment::where('user_id', $user->id)->update(['is_profile_picture' => false]);
-            Attachment::where('id', $request->profile_pic_id)
-                ->where('user_id', $user->id)
-                ->update(['is_profile_picture' => true]);
-        }
 
         return response()->json($uploadedImages);
     }

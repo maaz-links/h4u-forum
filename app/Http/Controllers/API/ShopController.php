@@ -89,9 +89,10 @@ class ShopController extends Controller
             $paymentDetails = $paypal->captureOrder($validated['paymentIntentId']);
             //return $paymentDetails;
             // Check if payment was successful and amount matches
+            // dd($paymentDetails);
             if ($paymentDetails['status'] !== 'COMPLETED' 
             // || 
-            //     $paymentDetails['purchase_units'][0]['amount']['value'] != $shop->price
+            //     $paymentDetails['purchase_units'][0]['payments']['captures'][0]['amount']['value'] != $shop->price
                 ) {
                 return response()->json([
                     'status' => false,

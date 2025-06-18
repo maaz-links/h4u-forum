@@ -76,15 +76,6 @@
                                                 <i class="fas fa-trash"></i> Delete
                                             </button>
                                             </form>
-                                            {{-- @if ($chat['is_archived'])
-                                                <button class="btn btn-sm btn-success unarchive-btn" data-chat-id="{{ $chat['id'] }}">
-                                                    <i class="fas fa-inbox"></i> Unarchive
-                                                </button>
-                                            @else
-                                                <button class="btn btn-sm btn-warning archive-btn" data-chat-id="{{ $chat['id'] }}">
-                                                    <i class="fas fa-archive"></i> Archive
-                                                </button>
-                                            @endif --}}
                                         </td>
                                     </tr>
                                 @empty

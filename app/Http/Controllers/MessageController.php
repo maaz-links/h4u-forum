@@ -180,7 +180,9 @@ class MessageController extends Controller
 
     public function unreadCount(Request $request){
         $user = $request->user();
-        $count = Chat::myChats($user->id)->whereHas('messages', function ($query) use ($user) {
+        $count = Chat::myChats($user->id)
+        ->nonBannedChats()
+        ->whereHas('messages', function ($query) use ($user) {
             // $query->select(DB::raw(1))
             //       ->whereColumn('messages.chat_id', 'chats.id')
             //       ->orderByDesc('messages.created_at')

@@ -107,10 +107,8 @@ class ChatController extends Controller
             })
             ->
                 //Exclude chats with banned users
-            // whereDoesntHave('participants', function($query) use ($user, $type) {
-            //     $query->IsBanned()->IsShadowBanned();
-            // })
-            // ->
+                nonBannedChats()
+            ->
             with([
               
                 'participants' => function($query) use($user) {

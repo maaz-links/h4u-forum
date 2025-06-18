@@ -15,4 +15,14 @@ class ChatQueryBuilder extends Builder
               ->orWhere('user2_id', $userId);
           });
      }
+
+     public function nonBannedChats(){
+          return $this->whereDoesntHave('participants', function($query) {
+                    $query->where(function($q) {
+                        $q->IsBanned()->orWhere(function($q) {
+                            $q->IsShadowBanned();
+                        });
+                    });
+                });
+     }
 }

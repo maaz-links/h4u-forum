@@ -88,9 +88,6 @@
                             <span class="badge {{ $chat->unlocked ? 'bg-success' : 'bg-warning' }}">
                                 {{ $chat->unlocked ? 'Unlocked' : 'Locked' }}
                             </span>
-                            <span class="badge {{ $chat->is_archived ? 'bg-secondary' : 'bg-primary' }} ml-2">
-                                {{ $chat->is_archived ? 'Archived' : 'Active' }}
-                            </span>
                         </p>
                     </div> --}}
                 </div>
@@ -151,21 +148,6 @@
                             {{-- <button class="btn btn-default" data-toggle="modal" data-target="#messageDetails">
                                 <i class="fas fa-info-circle"></i> Details
                             </button> --}}
-                            {{-- @if($chat->is_archived)
-                            <form action="" method="POST" class="d-inline">
-                                @csrf
-                                <button type="submit" class="btn btn-success"s>
-                                    <i class="fas fa-inbox"></i> Unarchive
-                                </button>
-                            </form>
-                            @else
-                            <form action="" method="POST" class="d-inline">
-                                @csrf
-                                <button type="submit" class="btn btn-warning">
-                                    <i class="fas fa-archive"></i> Archive
-                                </button>
-                            </form>
-                            @endif --}}
                         </div>
                     </div>
                 </div>

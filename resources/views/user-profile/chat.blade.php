@@ -46,10 +46,6 @@
                                             @else
                                                 <span class="badge bg-warning">Locked</span>
                                             @endif
-
-                                            {{-- @if ($chat['is_archived'])
-                                                <span class="badge bg-secondary ml-1">Archived</span>
-                                            @endif --}}
                                         </td>
                                         <td>
                                             <a class="btn btn-sm btn-primary" href={{route('open.conversation',$chat['id'])}}><i class="fas fa-comments"></i> Open</a>
@@ -63,15 +59,6 @@
                                                     <i class="fas fa-comments"></i> Open
                                                 </button>
                                             </form> --}}
-                                            {{-- @if ($chat['is_archived'])
-                                                <button class="btn btn-sm btn-success unarchive-btn" data-chat-id="{{ $chat['id'] }}">
-                                                    <i class="fas fa-inbox"></i> Unarchive
-                                                </button>
-                                            @else
-                                                <button class="btn btn-sm btn-warning archive-btn" data-chat-id="{{ $chat['id'] }}">
-                                                    <i class="fas fa-archive"></i> Archive
-                                                </button>
-                                            @endif --}}
                                         </td>
                                     </tr>
                                 @empty

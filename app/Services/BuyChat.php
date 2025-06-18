@@ -99,6 +99,7 @@ class BuyChat
             'user1_id' => $user1_id,
             'user2_id' => $user2_id,
             'unlocked' => $unlocked,
+            'send_feedback_reminder' => 1,
         ]);
 
         $newChat->participants()->attach([

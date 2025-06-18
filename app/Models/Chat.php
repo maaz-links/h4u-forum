@@ -11,7 +11,7 @@ class Chat extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user1_id', 'user2_id', 'user1_archived','user2_archived','unlocked','temp'];
+    protected $fillable = ['user1_id', 'user2_id', 'user1_archived','user2_archived','unlocked','temp','send_feedback_reminder'];
 
     public function messages()
     {

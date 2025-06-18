@@ -3,6 +3,7 @@
 // app/Http/Controllers/ReviewController.php
 namespace App\Http\Controllers;
 
+use App\Events\ReviewRecieved;
 use App\Models\Chat;
 use App\Models\Review;
 use App\Models\User;
@@ -43,7 +44,10 @@ class ReviewController extends Controller
             return response()->json(['formError' => $validator->errors()], 422);
         }
         
-        
+        if(Review::where('reviewer_id',$userID)
+        ->where('reviewed_user_id',$request->reviewed_user_id)->first()){
+            return response()->json(['formError' => ['Review Already Exists']], 422);
+        }
 
         if($user->role == User::ROLE_HOSTESS){
 
@@ -85,6 +89,8 @@ class ReviewController extends Controller
             'rating' => $request->rating,
             'comment' => $request->comment,
         ]);
+
+        event(new ReviewRecieved($review));
 
         return response()->json(['data' => $review,'message' => "Review successfully submitted"], 201);
     }
@@ -157,7 +163,7 @@ class ReviewController extends Controller
                         //->addSelect('chats.created_at')
                         ->myChats($user->id)
                         ->where('unlocked', 1)
-                        ->where('created_at', '<=', $this->dayIntervalOutput)
+                        ->where('updated_at', '<=', $this->dayIntervalOutput)
                         ->get();
                         $otherUserIds = collect($chats)->pluck('other_user')->toArray();
             //return $chats;

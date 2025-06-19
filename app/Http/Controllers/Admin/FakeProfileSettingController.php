@@ -69,7 +69,7 @@ class FakeProfileSettingController extends Controller
 
         $validatedData = $request->validate([
             //'name' => 'required|string',
-            'script_name' => 'required|string',
+            'script_name' => 'required|string|max:255',
             'profile_count' => 'required|integer|min:1|max:50',
             'min_age' => 'required|integer|min:18',
             'max_age' => 'required|integer|gt:min_age|max:100',

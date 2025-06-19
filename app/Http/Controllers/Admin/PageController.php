@@ -21,7 +21,7 @@ class PageController extends Controller
     {
         //dd($request);
         $request->validate([
-            'content' => 'required',
+            'content' => 'required|string',
         ]);
         //dd($request->content);
         $page = Page::where('slug', $slug)->firstOrFail();

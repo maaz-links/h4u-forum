@@ -32,7 +32,7 @@ class ProfileValidation
             'other_data.height' => 'required|numeric|between:0,400',
             'other_data.weight' => 'required|numeric|between:0,400',
             'other_data.eyeColor' => 'required|string|in:brown,blue,green,hazel,gray',
-            'other_data.telegram' => 'nullable|string|max:32',
+            'other_data.telegram' => 'nullable|string|max:50',
             'other_data.dressSize' => 'required|string|in:S,M,L',
 
             'nationality' => 'required|string|max:50',

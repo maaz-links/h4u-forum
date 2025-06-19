@@ -56,7 +56,7 @@ class UpdateProfileController extends Controller
     public function changePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'current_password' => 'required',
+            'current_password' => 'required|string',
             //'new_password' => 'required|min:8|confirmed',
         ]+UserValidation::rules(['password']),
         UserValidation::messages()

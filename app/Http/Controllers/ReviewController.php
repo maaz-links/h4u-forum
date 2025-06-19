@@ -124,26 +124,30 @@ class ReviewController extends Controller
         if($user->role == User::ROLE_HOSTESS){
 
             //Target must have reviewed user
-            $hasReviewed = 
-            Review::select('reviewer_id','created_at')->where('reviewed_user_id',$currentUserId)->get();
-            $otherUserIds = collect($hasReviewed)->pluck('reviewer_id')->toArray();
-            //dd($hasReviewed,$otherUserIds);
-            //$reviews = User::whereIn('id',$otherUserIds)
+            // $hasReviewed = 
+            // Review::select('reviewer_id','created_at')->where('reviewed_user_id',$currentUserId)->get();
+            // $otherUserIds = collect($hasReviewed)->pluck('reviewer_id')->toArray();
+            
+            
             $reviews = User::
+
+            //Valid Users
             hasProfilePicture()
             ->NotBanned()
             ->NotShadowBanned()
             ->forOppositeRole($user->role)
+
             ->whereHas('reviewsGiven', function($query) use ($currentUserId) {
                 // Users who have reviewed the current user
                 $query->where('reviewed_user_id', $currentUserId);
             })
             ->whereDoesntHave('reviewsReceived', function($query) use ($currentUserId) {
+                // User I haven't reviewed yet
                     $query->where('reviewer_id', $currentUserId);
                 })
             ->latest()
             ->get()
-            ->map(function($review) use ($hasReviewed) {
+            ->map(function($review)  {
                 $review->unlocked_at = $review->created_at;
                 return $review;
                 });
@@ -157,13 +161,12 @@ class ReviewController extends Controller
                                         WHEN user1_id = ? THEN user2_id 
                                         ELSE user1_id 
                                     END AS other_user,
-                                    DATE_ADD(created_at, INTERVAL {$this->dayInterval} DAY) AS unlocked_at"
+                                    DATE_ADD(unlocked_at, INTERVAL {$this->dayInterval} DAY) AS unlocked_at"
                                     ,[$user->id])
                                     
                         //->addSelect('chats.created_at')
                         ->myChats($user->id)
-                        ->where('unlocked', 1)
-                        ->where('updated_at', '<=', $this->dayIntervalOutput)
+                        ->unlockedForDays($this->dayIntervalOutput)
                         ->get();
                         $otherUserIds = collect($chats)->pluck('other_user')->toArray();
             //return $chats;

@@ -25,4 +25,11 @@ class ChatQueryBuilder extends Builder
                     });
                 });
      }
+
+     public function unlockedForDays($dayIntervalOutput)
+        {
+            return $this->where('unlocked', 1)
+                        ->whereNotNull('unlocked_at')
+                        ->where('unlocked_at', '<=', $dayIntervalOutput);
+        }
 }

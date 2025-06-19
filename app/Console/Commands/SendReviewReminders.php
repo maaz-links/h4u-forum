@@ -21,7 +21,7 @@ class SendReviewReminders extends Command
     {
         $count = 0;
 
-        Chat::where('updated_at', '<=', Carbon::now()->subDays(config('h4u.reviews.review_delay')))
+        Chat::unlockedForDays(Carbon::now()->subDays(config('h4u.reviews.review_delay')))
             ->where('send_feedback_reminder', 1)
             ->with(['user1', 'user2'])
             ->chunkById(100, function ($chats) use (&$count) {

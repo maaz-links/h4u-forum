@@ -40,7 +40,11 @@ class BuyChat
                 ->decrement('credits', $amount);
 
             if($existingChat){
-                $newChat = $existingChat->update(['unlocked' => 1]);
+                $newChat = $existingChat->update(
+                    [   'unlocked' => 1,
+                                    'unlocked_at' => now(),
+                                    'send_feedback_reminder' => 1]
+                );
             }
             else{
                 // $newChat = Chat::create([
@@ -99,7 +103,8 @@ class BuyChat
             'user1_id' => $user1_id,
             'user2_id' => $user2_id,
             'unlocked' => $unlocked,
-            'send_feedback_reminder' => 1,
+            'unlocked_at' => $unlocked ? now() : null,
+            'send_feedback_reminder' => $unlocked ? 1 : 0,
         ]);
 
         $newChat->participants()->attach([

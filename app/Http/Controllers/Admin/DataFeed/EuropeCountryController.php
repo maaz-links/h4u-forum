@@ -54,9 +54,15 @@ class EuropeCountryController extends Controller
 
     public function destroy(EuropeCountry $europe_country)
     {
+        $totalCountries = EuropeCountry::count();
+        if ($totalCountries <= 1) {
+            return redirect()->route('europe-countries.index')
+                ->with('error', 'Cannot delete the only remaining country.');
+        }
+        
         if($europe_country->isDefault()){
             return redirect()->route('europe-countries.index')
-            ->with('success', 'Cannot delete default country');
+            ->with('error', 'Cannot delete the default country');
         }
 
 

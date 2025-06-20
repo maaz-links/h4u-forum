@@ -27,7 +27,6 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             PagesTableSeeder::class,
             PermissionSeeder::class,
-            ExtraCities::class,
             ModerationRulesSeeder::class,
         ]);
     }

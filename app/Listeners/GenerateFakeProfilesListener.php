@@ -174,14 +174,22 @@ class GenerateFakeProfilesListener
                 ? User::ROLE_KING
                 : User::ROLE_HOSTESS;
 
+            $country_id = null;
+            $province_id = null;
             //Find Province
             $myProvince =
             //EuropeProvince::with('country')->where('id', $event->given_data['province'])->first();
             EuropeProvince::with('country')->where('name', $randomProfile['Città'])->first();
             if(!$myProvince){
-                $myProvince = EuropeProvince::with(['country' => function($query){
-                    $query->where('name', 'Italy')->first();
-                }])->inRandomOrder()->first();
+                // $myProvince = EuropeProvince::with(['country' => function($query){
+                //     $query->where('name', 'Italy')->first();
+                // }])->inRandomOrder()->first();
+                $defaultValues = \App\Http\Controllers\Admin\DataFeed\EuropeCountryController::getDefaultCountryValues();
+                $country_id = $defaultValues['country_id'];
+                $province_id = $defaultValues['province_id'];
+            }else{
+                $country_id = $myProvince->country->id;
+                $province_id = $myProvince->id;
             }
             //$firstCountryId = $firstProvinceId->country->id ?? null;
             $height = $randomProfile['Altezza'];
@@ -256,8 +264,10 @@ class GenerateFakeProfilesListener
                 'description' => $toValidate['description'],
                 'shoe_size' => $toValidate['other_data']['shoeSize'],
                 'height' => $toValidate['other_data']['height'],
-                'country_id' => $myProvince->country->id ?? null,
-                'province_id' => $myProvince->id,
+                // 'country_id' => $myProvince->country->id ?? null,
+                // 'province_id' => $myProvince->id,
+                'country_id' => $country_id,
+                'province_id' => $province_id,
                 'eye_color' => $toValidate['other_data']['eyeColor'],
                 'top_profile' => $top_profile,
                 'verified_profile' => $verified_profile,

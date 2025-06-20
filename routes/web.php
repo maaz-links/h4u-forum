@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\AdminLogController;
 use App\Http\Controllers\Admin\BanController;
 use App\Http\Controllers\Admin\ConfigController;
 use App\Http\Controllers\Admin\CreditController;
+use App\Http\Controllers\Admin\DataFeed\EuropeCountryController;
+use App\Http\Controllers\Admin\DataFeed\EuropeProvinceController;
 use App\Http\Controllers\Admin\DataFeed\HostessServiceController;
 use App\Http\Controllers\Admin\DataFeed\InterestController;
 use App\Http\Controllers\Admin\DataFeed\ShownServiceController;
@@ -211,7 +213,9 @@ Route::group(['middleware' => ['admin']], function () {
             Route::resource('/interests', InterestController::class);
             Route::resource('/hostess-services', HostessServiceController::class);
             Route::resource('/spoken-languages', SpokenLanguageController::class);
-            
+            Route::resource('/europe-provinces', EuropeProvinceController::class);
+            Route::resource('/europe-countries', EuropeCountryController::class);
+            Route::get('/europe-countries/{europe_country}/default',[EuropeCountryController::class,'setDefault'])->name('europe-countries.setdefault');
         });
     });
 

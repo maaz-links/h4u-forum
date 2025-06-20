@@ -159,6 +159,22 @@ class AdminNav
                         'text' => 'Spoken Languages',
                         'url' => '/webdata/spoken-languages',
                     ],
+                    [
+                        'text' => 'Countries',
+                        'url' => '/webdata/europe-countries',
+                    ],
+                    [
+                        'text' => 'Provinces',
+                        'url' => '/webdata/europe-provinces',
+                    ],
+                    [
+                        'text' => 'Nationalities',
+                        'url' => '/webdata/nationalities',
+                    ],
+                    [
+                        'text' => 'Eye Colors',
+                        'url' => '/webdata/eye-colors',
+                    ],
                    
                 ],
             ];

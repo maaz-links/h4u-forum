@@ -57,10 +57,12 @@ class ApiAuthenticationController extends Controller
         //return response()->json($user);
         $user->save();
 
-        $firstCountryId = EuropeCountry::orderBy('display_order')->value('id') ?? null;
-        $firstProvinceId = EuropeProvince::where('country_id', $firstCountryId)
-        ->orderBy('display_order')
-        ->value('id') ?? null;
+        // $firstCountryId = EuropeCountry::orderBy('display_order')->value('id') ?? null;
+        // $firstProvinceId = EuropeProvince::where('country_id', $firstCountryId)
+        // ->orderBy('display_order')
+        // ->value('id') ?? null;
+
+        $defaultValues = \App\Http\Controllers\Admin\DataFeed\EuropeCountryController::getDefaultCountryValues();
 
         $initialCredits = [];
         if($user->role == User::ROLE_HOSTESS){
@@ -71,8 +73,8 @@ class ApiAuthenticationController extends Controller
             'user_id' => $user->id,
             'nationality' => 'Italian',
             'description' => 'New User here',
-            'country_id' => $firstCountryId,
-            'province_id' => $firstProvinceId,
+            'country_id' => $defaultValues['country_id'],
+            'province_id' => $defaultValues['province_id'],
             'is_user_model' => $request->isModel ?? 0,
         ] + $initialCredits);
 

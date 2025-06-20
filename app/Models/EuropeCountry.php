@@ -23,7 +23,8 @@ class EuropeCountry extends Model
      */
     protected $fillable = [
         'name',
-        'display_order'
+        'display_order',
+        'is_default'
     ];
 
     /**
@@ -34,6 +35,11 @@ class EuropeCountry extends Model
         return $this->hasMany(EuropeProvince::class, 'country_id');
     }
 
+    public function isDefault(){
+        return $this->is_default ? true : false;
+    }
+    
+
     /**
      * Scope a query to order by display order.
      *
@@ -42,6 +48,6 @@ class EuropeCountry extends Model
      */
     public function scopeOrdered($query)
     {
-        return $query->orderBy('display_order');
+        return $query->orderBy('name');
     }
 }

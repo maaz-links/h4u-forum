@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Countries')
+@section('title', 'Nationalities')
 
 @section('content_header')
-    <h1>Countries</h1>
+    <h1>Nationalities</h1>
 @stop
 
 @section('content')
@@ -11,7 +11,7 @@
     <div class="card">
         <div class="card-header">
             <div class="float-right">
-                <a href="{{ route('europe-countries.create') }}" class="btn btn-primary">Add New Country</a>
+                <a href="{{ route('form-nationalities.create') }}" class="btn btn-primary">Add New Nationality</a>
             </div>
         </div>
         <div class="card-body">
@@ -36,29 +36,25 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th width="60%">Country Name</th>
+                                <th width="60%">Nationality Name</th>
                                 <th width="40%">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($europe_countries->take(ceil(count($europe_countries)/2)) as $country)
+                            @foreach($form_nationalities->take(ceil(count($form_nationalities)/2)) as $nationality)
                             <tr>
-                                <td>{{ $country->name }}
-                                    @if($country->isDefault())
+                                <td>{{ $nationality->name }}
+                                    @if($nationality->isDefault())
                                         <span class="ml-2 badge bg-success">Default</span>
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('europe-countries.edit', $country->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                    @if($country->isDefault())
-                                        <button class="btn btn-sm btn-danger" disabled>Delete</button>
-                                    @else
-                                    <form action="{{ route('europe-countries.destroy', $country->id) }}" method="POST" style="display: inline-block;">
+                                    <a href="{{ route('form-nationalities.edit', $nationality->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                    <form action="{{ route('form-nationalities.destroy', $nationality->id) }}" method="POST" style="display: inline-block;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
                                     </form>
-                                    @endif
                                 </td>
                             </tr>
                             @endforeach
@@ -69,24 +65,24 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th width="60%">Country Name</th>
+                                <th width="60%">Nationality Name</th>
                                 <th width="40%">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($europe_countries->slice(ceil(count($europe_countries)/2)) as $country)
+                            @foreach($form_nationalities->slice(ceil(count($form_nationalities)/2)) as $nationality)
                             <tr>
-                                <td>{{ $country->name }}
-                                    @if($country->isDefault())
+                                <td>{{ $nationality->name }}
+                                    @if($nationality->isDefault())
                                         <span class="ml-2 badge bg-success">Default</span>
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('europe-countries.edit', $country->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                    @if($country->isDefault())
-                                        <button class="btn btn-sm btn-danger" disabled>Delete</button>
+                                    <a href="{{ route('form-nationalities.edit', $nationality->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                    @if($nationality->isDefault())
+                                    <button class="btn btn-sm btn-danger" disabled>Delete</button>
                                     @else
-                                    <form action="{{ route('europe-countries.destroy', $country->id) }}" method="POST" style="display: inline-block;">
+                                    <form action="{{ route('form-nationalities.destroy', $nationality->id) }}" method="POST" style="display: inline-block;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>

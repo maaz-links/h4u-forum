@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
             PagesTableSeeder::class,
             PermissionSeeder::class,
             ModerationRulesSeeder::class,
+            FormNationalitiesTableSeeder::class,
+            FormEyeColorsTableSeeder::class,
         ]);
     }
 }

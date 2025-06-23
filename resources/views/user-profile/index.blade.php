@@ -109,8 +109,9 @@
                             <div class="col-md-6">
                                 {{-- <p><strong>Gender:</strong> {{ $user->profile->gender }}</p> --}}
                                 {{-- <p><strong>Description:</strong> {{ $user->profile->description }}</p> --}}
-
-                                <p><strong>Nationality:</strong> {{ $user->profile->nationality }}</p>
+                                <p><strong>Country:</strong> {{ $user->profile->country()->value('name') }}</p>
+                                <p><strong>Province:</strong> {{ $user->profile->province()->value('name') }}</p>
+                                <p><strong>Nationality:</strong> {{ ucwords($user->profile->nationality) }}</p>
                                 <p><strong>Height:</strong> {{ $user->profile->height }} cm</p>
                                 <p><strong>Top Profile:</strong> {{ $user->profile->top_profile ? 'Yes' : 'No' }}</p>
                                 <p><strong>Verified Profile:</strong> {{ $user->profile->verified_profile ? 'Yes' : 'No' }}</p>

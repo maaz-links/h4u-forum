@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\ContactRequest;
 use App\Models\EuropeCountry;
 use App\Models\Faq;
+use App\Models\FormEyeColor;
+use App\Models\FormNationality;
 use App\Models\HostessService;
 use App\Models\Interest;
 use App\Models\Page;
@@ -23,11 +25,15 @@ class MiscController extends Controller
             $query->ordered(); // Uses the ordered() scope from the Province model
         }])->ordered() // Orders the countries by display_order
            ->get();
+        $nationalities = FormNationality::select('name')->ordered()->pluck('name')->toArray();
+        $eye_colors = FormEyeColor::select('name')->ordered()->pluck('name')->toArray();
         return response()->json([
             'interests' => $interests,
             'available_for' => $services,
             'spoken_languages' => $languages,
             'countries' => $countries,
+            'nationalities' => $nationalities,
+            'eye_colors' => $eye_colors,
             'profile_costs' => [
              'standard' => config('h4u.chatcost.standard'),
              'top' => config('h4u.chatcost.topprofile'),

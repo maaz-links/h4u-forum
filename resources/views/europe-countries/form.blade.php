@@ -46,7 +46,7 @@
                     {{ isset($europe_country) ? 'Update' : 'Save' }}
                 </button>
                 @if(isset($europe_country))
-                @if(!$europe_country->is_default)
+                @if(!$europe_country->isDefault())
                     <a href="{{ route('europe-countries.setdefault',$europe_country->id) }}" class="btn btn-success">Make Default</a>
                 @endif
                 @endif
@@ -54,7 +54,7 @@
                 
             </form>
             @if(isset($europe_country))
-            @if(!$europe_country->is_default)
+            @if(!$europe_country->isDefault())
             <small class="mt-2 form-text text-muted">
                 When user registers a new profile, Default Country is used and one of its provinces are selected.
             </small>

@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\ConfigController;
 use App\Http\Controllers\Admin\CreditController;
 use App\Http\Controllers\Admin\DataFeed\EuropeCountryController;
 use App\Http\Controllers\Admin\DataFeed\EuropeProvinceController;
+use App\Http\Controllers\Admin\DataFeed\FormEyeColorController;
+use App\Http\Controllers\Admin\DataFeed\FormNationalityController;
 use App\Http\Controllers\Admin\DataFeed\HostessServiceController;
 use App\Http\Controllers\Admin\DataFeed\InterestController;
 use App\Http\Controllers\Admin\DataFeed\ShownServiceController;
@@ -216,6 +218,12 @@ Route::group(['middleware' => ['admin']], function () {
             Route::resource('/europe-provinces', EuropeProvinceController::class);
             Route::resource('/europe-countries', EuropeCountryController::class);
             Route::get('/europe-countries/{europe_country}/default',[EuropeCountryController::class,'setDefault'])->name('europe-countries.setdefault');
+
+            Route::resource('form-nationalities', FormNationalityController::class);
+            Route::resource('form-eye-colors', FormEyeColorController::class);
+            Route::get('/form-nationalities/{form_nationality}/default',[FormNationalityController::class,'setDefault'])->name('form-nationalities.setdefault');
+            Route::get('/form-eye-colors/{form_eye_color}/default',[FormEyeColorController::class,'setDefault'])->name('form-eye-colors.setdefault');
+            
         });
     });
 

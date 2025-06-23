@@ -34,10 +34,8 @@ class ReviewController extends Controller
             $request->all(),
             [
                 'reviewed_user_id' => 'required|exists:users,id',
-                'rating' => "required|integer|between:{$leastrating},5",
+                'rating' => "required|integer|between:1,5",
                 'comment' => 'nullable|string|max:500',
-            ],[
-                'rating.between' => "Rating must be at least {$leastrating} stars",
             ]
         );
         if ($validator->fails()) {
@@ -86,7 +84,7 @@ class ReviewController extends Controller
         $review = Review::create([
             'reviewer_id' => $request->user()->id,
             'reviewed_user_id' => $request->reviewed_user_id,
-            'rating' => $request->rating,
+            'rating' => ($request->rating < $leastrating) ? $leastrating : $request->rating,
             'comment' => $request->comment,
         ]);
 

@@ -18,6 +18,7 @@ class ShownServiceController extends Controller
 
     public function create()
     {
+        abort(404);
         return view('shown_services.form');
     }
 
@@ -26,7 +27,8 @@ class ShownServiceController extends Controller
         $request->validate([
             'name' => 'required|string|max:50',
             'image' => 'required|image|max:2048',
-            'display_order' => 'required|integer',
+            'description' => 'required|string|max:500',
+            // 'display_order' => 'required|integer',
         ]);
 
         $imagePath = $request->file('image')->store('shown-services', 'public');
@@ -34,7 +36,7 @@ class ShownServiceController extends Controller
         ShownService::create([
             'name' => $request->name,
             'image_path' => $imagePath,
-            'display_order' => $request->display_order,
+            // 'display_order' => $request->display_order,
         ]);
         AuditAdmin::audit("ShownServiceController@store");
         return redirect()->route('shown-services.index')
@@ -43,6 +45,7 @@ class ShownServiceController extends Controller
 
     public function show(ShownService $shownService)
     {
+        abort(404);
         return view('shown_services.show', compact('shownService'));
     }
 
@@ -55,13 +58,16 @@ class ShownServiceController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'display_order' => 'required|integer',
+            'image' => 'nullable|image|max:2048',
+            'description' => 'required|string|max:500',
+            // 'display_order' => 'required|integer',
         ]);
+
 
         $data = [
             'name' => $request->name,
-            'display_order' => $request->display_order,
+            'description' => $request->description,
+            // 'display_order' => $request->display_order,
         ];
 
         if ($request->hasFile('image')) {
@@ -80,6 +86,7 @@ class ShownServiceController extends Controller
 
     public function destroy(ShownService $shownService)
     {
+        abort(404);
         if ($shownService->image_path) {
             Storage::disk('public')->delete($shownService->image_path);
         }

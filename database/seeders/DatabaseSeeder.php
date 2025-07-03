@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             ModerationRulesSeeder::class,
             FormNationalitiesTableSeeder::class,
             FormEyeColorsTableSeeder::class,
+            ShownServiceSeeder::class,
         ]);
     }
 }

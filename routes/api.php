@@ -182,6 +182,8 @@ Route::get('/my-faqs', [MiscController::class, 'apiGetFaqs']);
 Route::get('my-shown-services',function () {
     $shownServices = ShownService::orderBy('display_order')->get();
     foreach ($shownServices as $s) {
+        $s->title = $s->name;
+        $s->image = asset('storage/'.$s->image_path);
         $s->image_path = asset('storage/'.$s->image_path);
     }
     return response()->json($shownServices);

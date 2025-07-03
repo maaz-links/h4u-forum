@@ -27,6 +27,17 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="description">Service Description</label>
+                    <textarea class="form-control @error('description') is-invalid @enderror" 
+                              id="description" name="description" 
+                              rows="3" 
+                              placeholder="Enter service description">{{ old('description', $shownService->description ?? '') }}</textarea>
+                    @error('description')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                {{-- <div class="form-group">
                     <label for="display_order">Display Order</label>
                     <input type="number" class="form-control @error('display_order') is-invalid @enderror" 
                            id="display_order" name="display_order" 
@@ -34,7 +45,7 @@
                     @error('display_order')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                </div>
+                </div> --}}
 
                 <div class="form-group">
                     <label for="image">Service Image</label>

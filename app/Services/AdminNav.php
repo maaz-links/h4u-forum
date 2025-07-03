@@ -169,11 +169,11 @@ class AdminNav
                     ],
                     [
                         'text' => 'Nationalities',
-                        'url' => '/webdata/nationalities',
+                        'url' => '/webdata/form-nationalities',
                     ],
                     [
                         'text' => 'Eye Colors',
-                        'url' => '/webdata/eye-colors',
+                        'url' => '/webdata/form-eye-colors',
                     ],
                    
                 ],

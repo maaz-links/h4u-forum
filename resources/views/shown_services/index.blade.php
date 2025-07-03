@@ -8,9 +8,9 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header">
+        {{-- <div class="card-header">
             <a href="{{ route('shown-services.create') }}" class="btn btn-primary">Add New Service</a>
-        </div>
+        </div> --}}
         <div class="card-body">
             @if (session('success'))
                 <div class="alert alert-success">
@@ -21,30 +21,33 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th width="5%">Order</th>
+                        {{-- <th width="5%">Order</th> --}}
                         <th width="20%">Image</th>
-                        <th width="35%">Name</th>
+                        <th width="15%">Name</th>
+                        <th width="25%">Description</th>
                         <th width="40%">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($services as $service)
                     <tr>
-                        <td>{{ $service->display_order }}</td>
+                        {{-- <td>{{ $service->display_order }}</td> --}}
                         <td>
                             @if($service->image_path)
                                 <img src="{{ asset('storage/'.$service->image_path) }}" alt="{{ $service->name }}" style="max-width: 100px;">
                             @endif
                         </td>
                         <td>{{ $service->name }}</td>
+
+                        <td>{{ $service->description ?? 'N/A' }}</td>
                         <td>
                             {{-- <a href="{{ route('shown-services.show', $service->id) }}" class="btn btn-sm btn-info">View</a> --}}
                             <a href="{{ route('shown-services.edit', $service->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                            <form action="{{ route('shown-services.destroy', $service->id) }}" method="POST" style="display: inline-block;">
+                            {{-- <form action="{{ route('shown-services.destroy', $service->id) }}" method="POST" style="display: inline-block;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                            </form>
+                            </form> --}}
                         </td>
                     </tr>
                     @endforeach

@@ -12,6 +12,7 @@ class ShownService extends Model
     protected $fillable = [
         'name',
         'image_path',
+        'description',
         'display_order'
     ];
 }

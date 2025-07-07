@@ -176,7 +176,7 @@ class ApiAuthenticationController extends Controller
     }
 
     public static function generateOTP(User $user){
-        $otp = rand(100000, 999999);
+        $otp = rand(10000, 99999);
         $expiresAt = now()->addMinutes(5); // OTP valid for 5 minutes
         
         event(new SendOTP($user, $otp));
@@ -199,7 +199,7 @@ class ApiAuthenticationController extends Controller
             $request->all(),
             [
                 'email' => 'required|email',
-                'otp' => 'required|integer|digits:6',
+                'otp' => 'required|integer|digits:5',
                 //'otp' => 'integer|digits:6',
             ]
         );

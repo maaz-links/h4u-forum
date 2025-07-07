@@ -67,6 +67,12 @@ class AttachmentController extends Controller
                 'is_profile_picture' => false
             ]);
 
+
+            //If user has no Profile Picture then update
+            if(!$user->hasActivatedProfile()){
+                $user->update(['profile_picture_id' => $attachment->id]);
+            }
+            
             $uploadedImages[] = [
                 'id' => $attachment->id,
                 'url' => route('attachments.show', $attachment->id),

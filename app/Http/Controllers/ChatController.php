@@ -151,6 +151,7 @@ class ChatController extends Controller
                 $chat->other_user->province_id = $chat->other_user->profile->province_id;
                 $chat->other_user->verified_profile = $chat->other_user->profile->verified_profile;
                 $chat->other_user->top_profile = $chat->other_user->profile->top_profile;
+                $chat->other_user->unlock_cost = $chat->other_user->profile->getUnlockCost();
 
                 $chat->last_message = $chat->messages->first();
 

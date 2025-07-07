@@ -43,6 +43,20 @@ class UserProfile extends Model
     ];
     // protected $appends = ['available_services','personal_interests','my_languages','country_name', 'province_name'];
 
+    public function getUnlockCost(){
+        $cost = config('h4u.chatcost.standard');
+        if($this->verified_profile){
+            $cost = config('h4u.chatcost.verified');
+        }
+        if($this->top_profile){
+            $cost = config('h4u.chatcost.topprofile');
+        }
+        if($this->top_profile && $this->verified_profile){
+            $cost = config('h4u.chatcost.verified_topprofile');
+        }
+        return $cost;
+    }
+    
     public function getAvailableServicesAttribute()
     {
         return $this->hostess_services()->pluck('hostess_services.id')->toArray();

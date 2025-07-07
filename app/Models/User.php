@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Builders\UserQueryBuilder;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -39,6 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'otp',
         'otp_expires_at',
         'dummy_id',
+        'last_seen',
         //user_profile'
     ];
     // protected $appends = ['pfp_url'];
@@ -46,6 +48,35 @@ class User extends Authenticatable implements MustVerifyEmail
     //     return $this->profilePictureId()->value('path');
     // }
     // protected $appends = ['rating'];
+    protected $appends = ['is_online'];
+
+
+    public function getIsOnlineAttribute()
+    {
+        // Guard against null values
+        if (is_null($this->last_seen)) {
+            return false;
+        }
+
+        
+        $windowMinutes = 1;
+        $lastSeen = Carbon::parse($this->last_seen);
+        $cutoff = Carbon::now()->subMinutes($windowMinutes);
+        //return $this->last_seen->gte(Carbon::now()->subMinutes($window));
+        return $lastSeen->greaterThanOrEqualTo($cutoff)
+        ? 'online'
+        : $this->last_seen;//->toIso8601String();   // or ->toDateTimeString()
+    }
+
+    public function GetAllAttachmentIds($excludePfp= true){
+        return $this->attachments()
+        ->when(
+            $excludePfp && $this->profile_picture_id,            // only if flag is true and we actually have a PFP
+            fn ($q) => $q->whereKeyNot($this->profile_picture_id) // `whereKeyNot` = `where id != …`
+        )
+        ->pluck('id')
+        ->all();   // plain PHP array
+    }
 
     public function getRatingAttribute(){
         return $this->reviewsReceived()->avg('rating') ?? 0.0;
@@ -169,6 +200,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            //'last_seen' => 'datetime',
         ];
     }
 

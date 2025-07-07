@@ -42,6 +42,7 @@ class UserProfileResource extends JsonResource
             'nationality' => $this->nationality,
             'country_id' => $this->country_id,
             'province_id' => $this->province_id,
+            'unlock_cost' => $this->getUnlockCost(),
             'available_services' => $this->getAvailableServicesAttribute(),
             'personal_interests' => $this->getPersonalInterestsAttribute(),
             'my_languages' => $this->getMyLanguagesAttribute(),

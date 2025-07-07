@@ -26,7 +26,9 @@ class UserResource extends JsonResource
             'updated_at' => $this->updated_at,
             'rating' => $this->getRatingAttribute(),
             'visible_rating' => $this->checkRatingVisibility(),
-            
+            'last_seen' => $this->last_seen,
+            'is_online' => $this->is_online,
+            'other_pics' => $this->GetAllAttachmentIds(),
             'profile' => new UserProfileResource($this->whenLoaded('profile')),
         ];
     }

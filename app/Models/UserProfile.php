@@ -114,4 +114,11 @@ class UserProfile extends Model
          'spoken_language_user_profile', 'profile_id', 'language_id')
          ->withTimestamps();
     }
+
+    public function profileTypes()
+    {
+        return $this->belongsToMany(ProfileType::class,
+        'profile_profile_type_pivot','user_profile_id','profile_type_id'
+        );
+    }
 }

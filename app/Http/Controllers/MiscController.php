@@ -10,6 +10,7 @@ use App\Models\FormNationality;
 use App\Models\HostessService;
 use App\Models\Interest;
 use App\Models\Page;
+use App\Models\ProfileType;
 use App\Models\SpokenLanguage;
 
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ use Validator;
 class MiscController extends Controller
 {
     public function miscdata(Request $request){
+        $profiletype = ProfileType::all();
         $interests = Interest::all();
         $services = HostessService::all();
         $languages = SpokenLanguage::all();
@@ -28,6 +30,7 @@ class MiscController extends Controller
         $nationalities = FormNationality::select('name')->ordered()->pluck('name')->toArray();
         $eye_colors = FormEyeColor::select('name')->ordered()->pluck('name')->toArray();
         return response()->json([
+            'profile_types' => $profiletype,
             'interests' => $interests,
             'available_for' => $services,
             'spoken_languages' => $languages,

@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             FormNationalitiesTableSeeder::class,
             FormEyeColorsTableSeeder::class,
             ShownServiceSeeder::class,
+            ProfileTypeSeeder::class,
         ]);
     }
 }

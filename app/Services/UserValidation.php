@@ -36,7 +36,9 @@ class UserValidation
                 'before_or_equal:' . now()->subYears(18)->format('Y-m-d'),
             ],
             'newsletter' => 'boolean',
-            'isModel' => 'boolean'
+            'isModel' => 'boolean',
+            'profileTypes' => 'nullable|array',
+            'profileTypes.*' => 'integer|exists:profile_types,id'
         ];
 
         // If no specific fields requested, return all rules

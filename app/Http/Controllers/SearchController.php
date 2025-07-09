@@ -77,7 +77,25 @@ class SearchController extends Controller
             });
         })
         
-        //->with('profile.spoken_languages')
+        ->with('profile.profileTypes')
+        
+        // Add the hostess filter condition
+            ->when($request->hostess, function($query) {
+                $query->whereHas('profile.profileTypes', function($q) {
+                    $q->where('name', 'Hostess');
+                });
+            })
+            ->when($request->wingwoman, function($query) {
+                $query->whereHas('profile.profileTypes', function($q) {
+                    $q->where('name', 'Wingwoman');
+                });
+            })
+            ->when($request->sugarbaby, function($query) {
+                $query->whereHas('profile.profileTypes', function($q) {
+                    $q->where('name', 'Sugarbaby');
+                });
+            })
+
         ->when($minage !== false || $maxage !== false, function($q) use ($minage, $maxage) {
             $q->where(function($query) use ($minage, $maxage) {
                 if ($minage !== false) {

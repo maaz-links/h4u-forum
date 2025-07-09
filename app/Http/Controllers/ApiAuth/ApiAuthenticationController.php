@@ -24,7 +24,7 @@ class ApiAuthenticationController extends Controller
     {
         $validator = Validator::make(
             $request->all(),
-            UserValidation::rules(['name', 'email', 'password', 'dob','role','phone','newsletter','isModel']),
+            UserValidation::rules(['name', 'email', 'password', 'dob','role','phone','newsletter','isModel','profileTypes','profileTypes.*']),
             UserValidation::messages()
         );
 
@@ -80,6 +80,10 @@ class ApiAuthenticationController extends Controller
 
         $profile->save();
 
+        if($user->role == User::ROLE_HOSTESS){
+            $profile->profileTypes()->sync($request->profileTypes);
+        }
+        
         event(new Registered($user));
         // $otp = $this->generateOTP($user);
         // return response()->json([

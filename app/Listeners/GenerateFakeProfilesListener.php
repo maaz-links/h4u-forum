@@ -7,6 +7,7 @@ use App\Models\Attachment;
 use App\Models\EuropeProvince;
 use App\Models\HostessService;
 use App\Models\Interest;
+use App\Models\ProfileType;
 use App\Models\SpokenLanguage;
 use App\Models\User;
 use App\Models\UserProfile;
@@ -85,6 +86,7 @@ class GenerateFakeProfilesListener
         $eyeColors = ProfileValidation::EYE_COLORS;
         //$profiles = [];
 
+        $profiletype = ProfileType::all();
         $availableFor = HostessService::all();
         $personalInterests = Interest::all();
         $availableLanguages = SpokenLanguage::all();
@@ -101,7 +103,7 @@ class GenerateFakeProfilesListener
         try {
             DB::transaction(
                 function () use($filteredProfiles,$rows,$MALE,$FEMALE,$event,$eyeColors,
-                $availableFor,$personalInterests,$availableLanguages,$languagesMapped,$i)
+                $availableFor,$personalInterests,$availableLanguages,$languagesMapped,$profiletype,$i)
             {
 
             //If filtered values are empty, pick randomly from any row outside of filter.
@@ -297,11 +299,23 @@ class GenerateFakeProfilesListener
             ->where('id', $user->id)
             ->update(['created_at' => $createdAt]);
 
+            //The numbers are hardcoded! beware!
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+
             if($gender !== $MALE){
                 $randomServices = $availableFor->random(rand(3, 5))->pluck('id')->toArray();
                 $profile->hostess_services()->sync($randomServices);
                 $randomHobbies = $personalInterests->random(rand(3, 6))->pluck('id')->toArray();
                 $profile->interests()->sync($randomHobbies);
+                $randomTypes = $profiletype->random(rand(1, 2))->pluck('id')->toArray();
+                $profile->profileTypes()->sync($randomTypes);
             }
 
             $myLanguage = $languagesMapped[$randomProfile['Lingue']];

@@ -154,6 +154,9 @@ class MessageController extends Controller
 
     public function markAsRead(Request $request, Chat $chat){
 
+        //Before: only mark last other_user message as read if last other_user message is not read.
+        //Now: mark all other_user messages as read if any other_user message is not read.
+
         $reader = $request->user();
         $lastMessage = Message::where('chat_id', $chat->id)
         ->where('sender_id', '!=', $reader->id)
@@ -164,11 +167,17 @@ class MessageController extends Controller
         // dd($lastMessage);
 
         if ($lastMessage) {
-            if ($lastMessage->is_read == 0) {
-                $lastMessage->update(['is_read' => 1]);
+            // if ($lastMessage->is_read == 0) {
+                // $lastMessage->update(['is_read' => 1]);
+
+                Message::where('chat_id', $chat->id)
+               ->where('sender_id', '!=', $reader->id)
+               ->where('is_read', 0)
+               ->update(['is_read' => 1]);
+
                 event(new MarkMessageRead($lastMessage->id, $reader->id, $chat->id));
                 return response()->json(['message'=>'readset']);
-            }
+            // }
         }
 
         return response()->json(['message'=>'ok']);

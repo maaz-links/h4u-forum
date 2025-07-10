@@ -126,6 +126,15 @@ class ChatController extends Controller
                 $query->latest()->limit(1);
             }
             ])
+            ->withCount(['messages as unread_count' => function($query) use($user) {
+                // Get the timestamp of the last message sent by the current user
+                // Count unread messages that:
+                // 1. Are not sent by current user
+                // 2. Are unread (is_read = 0)
+                $query->where('sender_id', '!=', $user->id)
+                      ->where('is_read', 0)
+                      ;
+            }])
     
             //Get created_at of last message for sorting.
             // If a chat has no messages then use created_at attribute of the chat itself for sorting

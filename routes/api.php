@@ -114,6 +114,7 @@ Route::middleware('auth:sanctum')->group(function () {
         });        
 
         Route::post('/update-profile', [UpdateProfileController::class, 'updateProfile']);
+        Route::post('/update-personal', [UpdateProfileController::class, 'updatePersonalInfo']);
         Route::post('/change-password', [UpdateProfileController::class, 'changePassword']);
         
         Route::get('/attachments', [AttachmentController::class, 'index']);

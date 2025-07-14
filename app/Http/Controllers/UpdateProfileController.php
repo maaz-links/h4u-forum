@@ -9,7 +9,7 @@ use App\Services\UserValidation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Validator;
-
+use Propaganistas\LaravelPhone\PhoneNumber;
 class UpdateProfileController extends Controller
 {
     public function updateProfile(Request $request){
@@ -111,5 +111,37 @@ class UpdateProfileController extends Controller
         event(new CancellationRequest($user));
         
         return response()->json(['message'=>'Cancellation Request Sent']);
+    }
+
+    public function updatePersonalInfo(Request $request){
+    
+        $user = $request->user();
+
+        $changeName = [];
+        //dd($user->name,$request->name);
+        if($user->name !== $request->name){
+            $changeName = ['name'];
+        }
+        $validator = Validator::make(
+            $request->all(),
+            UserValidation::rules(array_merge(['dob', 'phone'], $changeName)),
+            UserValidation::messages()
+        );
+
+        //dd($validator);
+        if ($validator->fails()) {
+            return response()->json(['formError' => $validator->errors()], 422);
+        }
+
+        $phoneNumber = new PhoneNumber($request->phone);
+        $phoneNumber = $phoneNumber->formatE164();
+
+        $user->update([
+            'name' => $request->name,
+            'dob' => $request->dob,
+            'phone'=> $phoneNumber,
+        ]);
+
+        return response()->json(['message' => 'Submitted successfully'], 200);
     }
 }

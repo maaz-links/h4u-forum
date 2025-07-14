@@ -145,7 +145,9 @@ class ChatController extends Controller
                     ->limit(1)
             ])
             ->orderByDesc(DB::raw('COALESCE(latest_message_created_at, chats.created_at)'))
-
+            ->when($request->for_contact, function($query) {
+                $query->take(5);
+            })
             ->get()
             // ;
             //Map these values properly if you want to work with frontend.

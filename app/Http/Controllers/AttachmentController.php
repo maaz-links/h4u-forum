@@ -36,10 +36,11 @@ class AttachmentController extends Controller
         $validator = Validator::make($request->all(), [
             'images' => 'required|array|size:1',
             'images.*' => 'image|max:10000',
+            'set_profile_picture' => 'nullable|boolean'
         ], [
             'images.size' => 'Only one image can be uploaded at a time.',
             'images.*.image' => 'The uploaded file must be an image.',
-            'images.*.max' => 'The image must not be larger than 5MB.',
+            'images.*.max' => 'The image must not be larger than 10MB.',
         ]);
     
         if ($validator->fails()) {
@@ -69,7 +70,7 @@ class AttachmentController extends Controller
 
 
             //If user has no Profile Picture then update
-            if(!$user->hasActivatedProfile()){
+            if(!$user->hasActivatedProfile() || $request->set_profile_picture){
                 $user->update(['profile_picture_id' => $attachment->id]);
             }
             

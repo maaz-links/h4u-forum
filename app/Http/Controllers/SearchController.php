@@ -31,8 +31,17 @@ class SearchController extends Controller
 
 
         $language = $request->language ?? false;
+
+        $rawCostQ ="CASE 
+                    WHEN top_profile = 1 AND verified_profile = 1 THEN {$chatcost['verified_topprofile']}
+                    WHEN top_profile = 1 THEN {$chatcost['topprofile']}
+                    WHEN verified_profile = 1 THEN {$chatcost['verified']}
+                    ELSE {$chatcost['standard']}
+                END";
+
         //$visibilityStatuses = !empty($check_visibility) ? $check_visibility : [0, 1];
-        $users = User::withWhereHas('profile', function ($query) use ($check_visibility, $request,$language,$chatcost) {
+        $users = User::withWhereHas('profile', function ($query)
+        use ($check_visibility, $request,$language,$rawCostQ) {
             $query->select(
                 'id',
                 'user_id',
@@ -60,13 +69,8 @@ class SearchController extends Controller
             ->when($request->province_id, function($q) use ($request) {
                 $q->where('province_id', $request->province_id);
             })
-            ->when($request->cost, function($q) use ($request, $chatcost) {
-                $q->whereRaw("CASE 
-                    WHEN top_profile = 1 AND verified_profile = 1 THEN {$chatcost['verified_topprofile']}
-                    WHEN top_profile = 1 THEN {$chatcost['topprofile']}
-                    WHEN verified_profile = 1 THEN {$chatcost['verified']}
-                    ELSE {$chatcost['standard']}
-                END <= ?", [$request->cost]);
+            ->when($request->cost, function($q) use ($request, $rawCostQ) {
+                $q->whereRaw($rawCostQ." <= ?", [$request->cost]);
             })
 
             //LANGUAGE FILTER BY ID
@@ -113,6 +117,36 @@ class SearchController extends Controller
         ->NotBanned()
         ->NotShadowBanned()
         ->forOppositeRole($role)
+        
+        //SORT BY COST
+        ->when(false, function($query) use ($chatcost) {
+            $query->orderByRaw(
+                "CASE 
+                    WHEN EXISTS (SELECT 1 FROM user_profiles WHERE user_profiles.user_id = users.id AND user_profiles.top_profile = 1 AND user_profiles.verified_profile = 1) THEN ?
+                    WHEN EXISTS (SELECT 1 FROM user_profiles WHERE user_profiles.user_id = users.id AND user_profiles.top_profile = 1) THEN ?
+                    WHEN EXISTS (SELECT 1 FROM user_profiles WHERE user_profiles.user_id = users.id AND user_profiles.verified_profile = 1) THEN ?
+                    ELSE ?
+                END " . 'DESC',
+                [
+                    $chatcost['verified_topprofile'],
+                    $chatcost['topprofile'],
+                    $chatcost['verified'],
+                    $chatcost['standard']
+                ]
+            );
+    
+        })
+        ->when(false, function($query) {
+            $query->withCount([
+                'chats as popularity_count' => function($q) {
+                    $q->where('unlocked', 1);
+                }
+            ])->orderBy('popularity_count', 'desc');
+        })
+        ->when(false, function($query) {
+            $query->withAvg(['reviewsReceived as average_rating'], 'rating')
+                  ->orderBy('average_rating', 'desc');
+        })
         // ->get();
         ->paginate($perPage);
 

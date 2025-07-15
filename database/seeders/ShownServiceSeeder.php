@@ -11,22 +11,32 @@ class ShownServiceSeeder extends Seeder
 {
     public function run(): void
     {
+         // ─── 0. Clean existing records and files ─────────────────────────────────
+        $existing = ShownService::all();
+
+        foreach ($existing as $record) {
+            if ($record->image_path && Storage::disk('public')->exists($record->image_path)) {
+                Storage::disk('public')->delete($record->image_path);
+            }
+        }
+        // Truncate table (reset auto-increment, optional)
+        ShownService::truncate();
         // ─── 1.  Describe your seed data ──────────────────────────────────────────
         $records = [
             [
                 'name'        => 'Hostess',
                 'description' => 'Attend events, dinners, or private gatherings with a polished, professional presence.',
-                'file'        => 'servic3.png',
+                'file'        => 's-hostess.png',
             ],
             [
                 'name'        => 'Wing Woman',
                 'description' => 'Navigate social environments with confidence and support; impress at business mixers or casual parties.',
-                'file'        => 'servic2.png',
+                'file'        => 's-wingwoman.png',
             ],
             [
                 'name'        => 'Sugar Baby',
                 'description' => 'Engage in mutually beneficial relationships with clarity, honesty, and discretion.',
-                'file'        => 'servic1.png',
+                'file'        => 's-sugarbaby.png',
             ],
         ];
 

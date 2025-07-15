@@ -236,6 +236,7 @@ class GenerateFakeProfilesListener
 
             $toValidate = [
                 'description' => $description,
+                'travel_available' => 0,
                 'other_data'=> [
                     'shoeSize' => $shoeSize,
                     'height' => $height,
@@ -251,7 +252,7 @@ class GenerateFakeProfilesListener
                 $toValidate,
                 ProfileValidation::rules([
                     'description','other_data','other_data.shoeSize','other_data.height',
-                    'other_data.weight','other_data.eyeColor','other_data.telegram','other_data.dressSize','nationality'
+                    'other_data.weight','other_data.eyeColor','other_data.telegram','other_data.dressSize','nationality','travel_available'
                 ]),
                 ProfileValidation::messages()
             );
@@ -279,6 +280,7 @@ class GenerateFakeProfilesListener
                 ?   []:
                 [
                     'credits' => 5,
+                    'travel_available' => $toValidate['travel_available'],
                     'dress_size' => $toValidate['other_data']['dressSize'],
                     'weight' => $toValidate['other_data']['weight'],
                     'telegram' => $toValidate['other_data']['telegram'],

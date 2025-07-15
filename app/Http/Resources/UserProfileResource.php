@@ -46,6 +46,9 @@ class UserProfileResource extends JsonResource
             'available_services' => $this->getAvailableServicesAttribute(),
             'personal_interests' => $this->getPersonalInterestsAttribute(),
             'my_languages' => $this->getMyLanguagesAttribute(),
+            'my_profile_types' => $this->getMyProfileTypesAttribute(),
+            'profile_completion' => $this->getProfileCompletionAttribute(),
+
         ];
     }
 }

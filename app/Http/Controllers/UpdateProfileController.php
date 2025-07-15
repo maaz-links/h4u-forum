@@ -25,13 +25,13 @@ class UpdateProfileController extends Controller
             return response()->json(['formError' => $validator->errors()], 422);
         }
 
-        if(\App\Models\FormNationality::where('name',$request->nationality)->first() == false){
-            return response()->json(['formError' => ['Nationality is invalid']], 422);
-        }
+        // if(\App\Models\FormNationality::where('name',$request->nationality)->first() == false){
+        //     return response()->json(['formError' => ['Nationality is invalid']], 422);
+        // }
 
-        if(\App\Models\FormEyeColor::where('name',$request->other_data['eyeColor'])->first() == false){
-            return response()->json(['formError' => ['Eye Color is invalid']], 422);
-        }
+        // if(\App\Models\FormEyeColor::where('name',$request->other_data['eyeColor'])->first() == false){
+        //     return response()->json(['formError' => ['Eye Color is invalid']], 422);
+        // }
         
         //return response()->json(['message' => $request->other_data['dressSize']], 200);
         $profile->shoe_size = $request->other_data['shoeSize'];

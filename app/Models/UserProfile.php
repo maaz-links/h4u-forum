@@ -62,6 +62,11 @@ class UserProfile extends Model
         return $this->hostess_services()->pluck('hostess_services.id')->toArray();
     }
 
+    public function getMyProfileTypesAttribute()
+    {
+        return $this->profileTypes()->pluck('profile_types.id')->toArray();
+    }
+
     public function getPersonalInterestsAttribute()
     {
         return $this->interests()->pluck('interests.id')->toArray();
@@ -120,5 +125,80 @@ class UserProfile extends Model
         return $this->belongsToMany(ProfileType::class,
         'profile_profile_type_pivot','user_profile_id','profile_type_id'
         );
+    }
+
+    protected $requiredFieldsFemale = [
+        'user_id',
+        'description',
+        'height',
+        'shoe_size',
+        'eye_color',
+        'dress_size',
+        'weight',
+        'nationality',
+        //'telegram',
+        //'country_id',
+        'province_id',
+        'travel_available',
+    ];
+
+    protected $requiredFieldsMale = [
+        'user_id',
+        'description',
+        'height',
+        'shoe_size',
+        'eye_color',
+        'nationality',
+        //'country_id',
+        'province_id',
+    ];
+    
+    protected $requiredRelationsFemale = [
+        'hostess_services',  // At least one service required
+        'interests',         // At least one interest required
+        'spoken_languages',  // At least one language required
+        //'profileTypes',      // At least one profile type required
+    ];
+    protected $requiredRelationsMale = [
+        'spoken_languages',  // At least one language required
+        //'profileTypes',      // At least one profile type required
+    ];
+
+    public function getProfileCompletionAttribute(): float
+    {
+        $role = $this->user()->value('role');
+    
+        if ($role === User::ROLE_HOSTESS) {
+            $requiredFields = $this->requiredFieldsFemale;
+            $requiredRelations = $this->requiredRelationsFemale;
+        } elseif ($role === User::ROLE_KING) {
+            $requiredFields = $this->requiredFieldsMale;
+            $requiredRelations = $this->requiredRelationsMale;
+        } else {
+            // Fallback: no specific fields required
+            return 100;
+        }
+    
+        $totalFields = count($requiredFields);
+        $totalRelations = count($requiredRelations);
+        $totalItems = $totalFields + $totalRelations;
+    
+        $completed = 0;
+    
+        // Check regular fields
+        foreach ($requiredFields as $field) {
+            if ($this->$field !== NULL) {
+                $completed++;
+            }
+        }
+    
+        // Check relationships
+        foreach ($requiredRelations as $relation) {
+            if ($this->$relation()->count() > 0) {
+                $completed++;
+            }
+        }
+    
+        return $totalItems > 0 ? round(($completed / $totalItems) * 100, 0) : 100;
     }
 }

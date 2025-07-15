@@ -15,8 +15,8 @@ class ProfileValidation
     public static function rules(array $include = []): array
     {
         $allRules = [
-            'description' => 'required|string|min:1|max:1000', // Added min/max length
-            'travel_available' => 'required|integer|in:0,1', // Restrict to specific values
+            'description' => 'nullable|string|min:1|max:1000', // Added min/max length
+            'travel_available' => 'nullable|integer|in:0,1', // Restrict to specific values
             'notification_pref' => 'required|integer|in:0,1', // Assuming 2 notification types
             'visibility_status' => 'required|integer|in:0,1,2', // Assuming 3 visibility states
         
@@ -28,17 +28,17 @@ class ProfileValidation
             'option_language_ids.*' => 'integer|exists:spoken_languages,id|distinct',
 
             'other_data' => 'array|required',
-            'other_data.shoeSize' => 'required|numeric|between:0,100',
-            'other_data.height' => 'required|numeric|between:0,400',
-            'other_data.weight' => 'required|numeric|between:0,400',
-            'other_data.eyeColor' => 'required|string|max:50',
+            'other_data.shoeSize' => 'nullable|numeric|between:0,100',
+            'other_data.height' => 'nullable|numeric|between:0,400',
+            'other_data.weight' => 'nullable|numeric|between:0,400',
+            'other_data.eyeColor' => 'nullable|string|max:50',
             'other_data.telegram' => 'nullable|string|max:50',
-            'other_data.dressSize' => 'required|string|in:S,M,L',
+            'other_data.dressSize' => 'nullable|string|in:S,M,L',
 
-            'nationality' => 'required|string|max:50',
+            'nationality' => 'nullable|string|max:50',
           
-            'selectedCountry' => 'integer|required|exists:europe_countries,id',
-            'selectedProvince' => 'integer|required|exists:europe_provinces,id'
+            'selectedCountry' => 'nullable|integer|exists:europe_countries,id',
+            'selectedProvince' => 'nullable|integer|exists:europe_provinces,id'
         ];
 
         // If no specific fields requested, return all rules

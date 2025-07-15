@@ -62,7 +62,7 @@ class ApiAuthenticationController extends Controller
         // ->orderBy('display_order')
         // ->value('id') ?? null;
 
-        $defaultValues = \App\Http\Controllers\Admin\DataFeed\EuropeCountryController::getDefaultCountryValues();
+        // $defaultValues = \App\Http\Controllers\Admin\DataFeed\EuropeCountryController::getDefaultCountryValues();
 
         $initialCredits = [];
         if($user->role == User::ROLE_HOSTESS){
@@ -71,10 +71,10 @@ class ApiAuthenticationController extends Controller
 
         $profile = new UserProfile([
             'user_id' => $user->id,
-            'nationality' => 'Italian',
-            'description' => 'New User here',
-            'country_id' => $defaultValues['country_id'],
-            'province_id' => $defaultValues['province_id'],
+            //'nationality' => 'Italian',
+            //'description' => 'New User here',
+            //'country_id' => $defaultValues['country_id'],
+            //'province_id' => $defaultValues['province_id'],
             'is_user_model' => $request->isModel ?? 0,
         ] + $initialCredits);
 

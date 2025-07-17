@@ -15,8 +15,9 @@ class UserProfile extends Model
         'user_id',
         // 'available_services',
         // 'personal_interests',
-        'gender',
+        //'gender',
         'description',
+        'whatsapp',
         'facebook',
         'instagram',
         'telegram',
@@ -42,6 +43,27 @@ class UserProfile extends Model
         'warnings',
     ];
     // protected $appends = ['available_services','personal_interests','my_languages','country_name', 'province_name'];
+
+    public function setSocialLinks(array $links = [])
+    {
+        $allowed = [
+            'whatsapp',
+            'facebook',
+            'instagram',
+            'telegram',
+            'tiktok',
+            'onlyfans',
+            'personal_website'
+        ];
+    
+        foreach ($allowed as $key) {
+            if (array_key_exists($key, $links)
+                 //&& $links[$key] !== null
+                ) {
+                $this->{$key} = $links[$key];
+            }
+        }
+    }
 
     public function getUnlockCost(){
         $cost = config('h4u.chatcost.standard');

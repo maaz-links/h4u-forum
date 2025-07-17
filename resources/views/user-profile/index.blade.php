@@ -95,6 +95,8 @@
                     </div>
                 </div>
 
+                
+
                 @if($user->profile)
                 <div class="card mt-4">
                     <div class="card-header bg-success">
@@ -128,7 +130,7 @@
                             </div>
                             
                             <div class="col-md-6">
-                                @if ($user->role == \App\Models\User::ROLE_HOSTESS)
+                                {{-- @if ($user->role == \App\Models\User::ROLE_HOSTESS) --}}
                                 <p><strong>Weight:</strong> {{ $user->profile->weight ?: 'N/A' }} kg</p>
                                 <p><strong>Dress Size:</strong> {{ $user->profile->dress_size ?: 'N/A' }}</p>
                                 <p><strong>Is Model:</strong> {{ $user->profile->is_user_model ? 'Yes' : 'No' }}</p>
@@ -142,8 +144,26 @@
                                 N/A
                                 @endif
                                 </p>
-                                <p><strong>Telegram:</strong> {{ $user->profile->telegram ?: 'N/A' }}</p>
-                                @endif
+                                {{-- @php
+                                    $socialLinks = [
+                                        'whatsapp',
+                                        'facebook',
+                                        'instagram',
+                                        'telegram',
+                                        'tiktok',
+                                        'onlyfans',
+                                        'personal_website',
+                                    ];
+                                @endphp
+                                @foreach ($socialLinks as $field)
+                                    @php
+                                        $label = ucwords(str_replace('_', ' ', $field));
+                                        $value = $user->profile->$field ?? null;
+                                    @endphp
+
+                                    <p><strong>{{ $label }}:</strong> {{ $value ?: 'N/A' }}</p>
+                                @endforeach --}}
+                                {{-- @endif --}}
                             </div>
                            
                             @if (\Auth::user()->hasPermission('declare_badges'))
@@ -166,6 +186,26 @@
                         </div>
                     </div>
                 </div>
+                <div class="card mt-4">
+                    <div class="card-header bg-info">
+                        <h3 class="card-title">Contact</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Whatsapp:</strong> {{ $user->profile->facebook ?: 'N/A' }}</p>
+                                <p><strong>Facebook:</strong> {{ $user->profile->facebook ?: 'N/A' }}</p>
+                                <p><strong>Instagram:</strong> {{ $user->profile->instagram ?: 'N/A' }}</p>
+                                <p><strong>Telegram:</strong> {{ $user->profile->telegram ?: 'N/A' }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>TikTok:</strong> {{ $user->profile->tiktok ?: 'N/A' }}</p>
+                                <p><strong>OnlyFans:</strong> {{ $user->profile->onlyfans ?: 'N/A' }}</p>
+                                <p><strong>Personal Website:</strong> {{ $user->profile->personal_website ?: 'N/A' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 @else
                 <div class="card mt-4">
@@ -174,6 +214,24 @@
                     </div>
                 </div>
                 @endif
+                <div class="card  mt-4 w-50">
+                    <div class="card-header bg-danger">
+                        <h3 class="card-title">Delete Account</h3>
+                       
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ route('admin.users.delete-permanently', $user->id) }}">
+                            @csrf
+                            {{-- <div class="form-group">
+                                <label for="permanent_reason">Permanent Ban Reason</label>
+                                <textarea class="form-control" id="permanent_reason" name="reason" rows="2" required></textarea>
+                            </div> --}}
+                            <button type="submit" onclick="return confirm('Confirm this action? This action cannot be undone?')" class="btn btn-danger btn-block mt-2">
+                                <i class="fas fa-ban "></i> Delete Account of this user Permanently
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

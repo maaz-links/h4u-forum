@@ -18,8 +18,10 @@ class UserProfileResource extends JsonResource
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
-            'gender' => $this->gender,
+            // 'gender' => $this->gender,
+
             'description' => $this->description,
+            'whatsapp' => $this->whatsapp,
             'facebook' => $this->facebook,
             'instagram' => $this->instagram,
             'telegram' => $this->telegram,

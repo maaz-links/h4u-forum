@@ -33,6 +33,7 @@ class UserProfileController extends Controller
             'user'=>new UserResource($result),
             'unlockChat'=>false,
             'canReport'=>false,
+            'showSocial'=>false,
         ]);
     }
 
@@ -48,6 +49,7 @@ class UserProfileController extends Controller
                     'user'=>new UserResource($user),
                     'unlockChat'=>false,
                     'canReport'=>false,
+                    'showSocial'=>true,
                 ]
             );
         }
@@ -56,20 +58,27 @@ class UserProfileController extends Controller
             return response()->json('Terrible code',500);
         }
         if (!$result) {
-            return response()->json(['user'=>$result,'unlockChat'=>false,'canReport'=>false,]);
+            return response()->json(['user'=>$result,'unlockChat'=>false,'canReport'=>false,'showSocial'=>false,]);
         }
-        if(!$user->profile_picture_id){
+
+        //If current user (not target user's profile) is not activated
+        if(!$user->hasActivatedProfile()){
             $unlockChat = false;
             $canReport = false;
+            $showSocial = false;
         }else{
             $existingChat = Chat::findBetweenUsers($user->id, $result->id);
             $unlockChat = $existingChat ? false : true;
+
+            //Only show Social Links if chat is unlocked with other user.
+            $showSocial = $existingChat?->unlocked ? true : false;
             $canReport = true;
         }
         $this->recordProfileView($user->id, $result->id);
         // ProfileViewed::dispatch($user->id, $result->id);
 
-        return response()->json(['user'=>new UserResource($result),'unlockChat'=>$unlockChat,'canReport'=>$canReport]);
+        return response()->json(
+            ['user'=>new UserResource($result),'unlockChat'=>$unlockChat,'canReport'=>$canReport,'showSocial'=>$showSocial]);
     }
 
     public function getFullProfile($username,$check_visibility,$role = User::ROLE_KING){

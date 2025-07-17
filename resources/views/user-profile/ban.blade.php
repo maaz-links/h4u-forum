@@ -61,24 +61,6 @@
                     </form>
                 </div>
             </div>
-            <div class="card  mt-5">
-                <div class="card-header bg-danger">
-                    <h3 class="card-title">Delete Account</h3>
-                   
-                </div>
-                <div class="card-body">
-                    <form method="POST" action="{{ route('admin.users.delete-permanently', $user->id) }}">
-                        @csrf
-                        {{-- <div class="form-group">
-                            <label for="permanent_reason">Permanent Ban Reason</label>
-                            <textarea class="form-control" id="permanent_reason" name="reason" rows="2" required></textarea>
-                        </div> --}}
-                        <button type="submit" onclick="return confirm('Confirm this action? This action cannot be undone?')" class="btn btn-danger btn-block mt-2">
-                            <i class="fas fa-ban "></i> Delete Account of this user Permanently
-                        </button>
-                    </form>
-                </div>
-            </div>
         </div>
 
         <div class="col-md-6">

@@ -29,15 +29,22 @@ class ProfileValidation
             'option_language_ids' => 'nullable|array',
             'option_language_ids.*' => 'integer|exists:spoken_languages,id|distinct',
 
-            'other_data' => 'array|required',
-            'other_data.shoeSize' => 'nullable|numeric|between:0,100',
-            'other_data.height' => 'nullable|numeric|between:0,400',
-            'other_data.weight' => 'nullable|numeric|between:0,400',
-            'other_data.eyeColor' => 'nullable|string|max:50',
-            'other_data.telegram' => 'nullable|string|max:50',
-            //'other_data.dressSize' => 'nullable|string|in:S,M,L',
+            // 'other_data' => 'array|required',
+            'shoeSize' => 'nullable|numeric|between:0,100',
+            'height' => 'nullable|numeric|between:0,400',
+            'weight' => 'nullable|numeric|between:0,400',
+            'eyeColor' => 'nullable|string|max:50',
+            
+            'telegram' => 'nullable|string|max:50',
+            'whatsapp' => 'nullable|string|max:50',
+            'facebook' => 'nullable|string|max:50',
+            'instagram' => 'nullable|string|max:50',
+            'onlyfans' => 'nullable|string|max:50',
+            'tiktok' => 'nullable|string|max:50',
+            'personal_website' => 'nullable|string|max:100',
+            //'dressSize' => 'nullable|string|in:S,M,L',
             //numveric validation but dress_size is stored as string in DB
-            'other_data.dressSize' => 'nullable|numeric|between:0,50',
+            'dressSize' => 'nullable|numeric|between:0,50',
 
             'nationality' => 'nullable|string|max:50',
           

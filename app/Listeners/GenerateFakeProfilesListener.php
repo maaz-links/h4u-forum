@@ -237,22 +237,22 @@ class GenerateFakeProfilesListener
             $toValidate = [
                 'description' => $description,
                 'travel_available' => 0,
-                'other_data'=> [
+                
                     //'shoeSize' => $shoeSize,
                     'height' => $height,
                     'weight' => $weight,
                     //'eyeColor' => $eyeColors[array_rand($eyeColors)],
                     'telegram' => $telegram,
                     //'dressSize' => $dressSize,
-                ],
+                
                 //'nationality' => "Italian",
             ];
 
             $validator = Validator::make(
                 $toValidate,
                 ProfileValidation::rules([
-                    'description','other_data','other_data.shoeSize','other_data.height',
-                    'other_data.weight','other_data.eyeColor','other_data.telegram','other_data.dressSize','nationality','travel_available'
+                    'description','shoeSize','height',
+                    'weight','eyeColor','telegram','dressSize','nationality','travel_available'
                 ]),
                 ProfileValidation::messages()
             );
@@ -265,13 +265,13 @@ class GenerateFakeProfilesListener
                 'user_id' => $user->id,
                 //'nationality' => $toValidate['nationality'],
                 'description' => $toValidate['description'],
-                //'shoe_size' => $toValidate['other_data']['shoeSize'],
-                'height' => $toValidate['other_data']['height'],
+                //'shoe_size' => $toValidate['shoeSize'],
+                'height' => $toValidate['height'],
                 // 'country_id' => $myProvince->country->id ?? null,
                 // 'province_id' => $myProvince->id,
                 'country_id' => $country_id,
                 'province_id' => $province_id,
-                //'eye_color' => $toValidate['other_data']['eyeColor'],
+                //'eye_color' => $toValidate['eyeColor'],
                 'top_profile' => $top_profile,
                 'verified_profile' => $verified_profile,
             ];
@@ -281,9 +281,9 @@ class GenerateFakeProfilesListener
                 [
                     'credits' => 5,
                     'travel_available' => $toValidate['travel_available'],
-                    //'dress_size' => $toValidate['other_data']['dressSize'],
-                    'weight' => $toValidate['other_data']['weight'],
-                    'telegram' => $toValidate['other_data']['telegram'],
+                    //'dress_size' => $toValidate['dressSize'],
+                    'weight' => $toValidate['weight'],
+                    'telegram' => $toValidate['telegram'],
                 ];
             
             $profile = new UserProfile($mainAttrib + $femaleAttrib);

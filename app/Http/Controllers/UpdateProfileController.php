@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\CancellationRequest;
+use App\Models\User;
 use App\Models\UserProfile;
 use App\Services\ProfileValidation;
 use App\Services\UserValidation;
@@ -13,7 +14,8 @@ use Propaganistas\LaravelPhone\PhoneNumber;
 class UpdateProfileController extends Controller
 {
     public function updateProfile(Request $request){
-        $profile = UserProfile::where('user_id','=',$request->user()->id)->first();
+        $user = $request->user();
+        $profile = UserProfile::where('user_id','=',$user->id)->first();
       //option_available_for_ids
         $validator = Validator::make(
             $request->all(),
@@ -34,16 +36,29 @@ class UpdateProfileController extends Controller
         // }
         
         //return response()->json(['message' => $request->other_data['dressSize']], 200);
-        $profile->shoe_size = $request->other_data['shoeSize'];
-        $profile->height = $request->other_data['height'];
-        $profile->eye_color = $request->other_data['eyeColor'];
-        $profile->weight = $request->other_data['weight'];
-        $profile->dress_size = $request->other_data['dressSize'];
-        $profile->telegram = $request->other_data['telegram'];
-        
+        $profile->shoe_size = $request['shoeSize'];
+        $profile->height = $request['height'];
+
+        if($user->role == User::ROLE_HOSTESS){
+            $profile->eye_color = $request['eyeColor'];
+            $profile->weight = $request['weight'];
+            $profile->dress_size = $request['dressSize'];
+
+            $profile->setSocialLinks([
+                'whatsapp'         => $request->input('whatsapp'),
+                'facebook'         => $request->input('facebook'),
+                'instagram'        => $request->input('instagram'),
+                'telegram'         => $request->input('telegram'),
+                'tiktok'           => $request->input('tiktok'),
+                'onlyfans'         => $request->input('onlyfans'),
+                'personal_website' => $request->input('personal_website'),
+            ]);
+            $profile->travel_available= $request->travel_available;
+
+        }
         $profile->description= $request->description;
 
-        $profile->travel_available= $request->travel_available;
+        
         $profile->notification_pref= $request->notification_pref;
         $profile->visibility_status= $request->visibility_status;
 
@@ -54,11 +69,14 @@ class UpdateProfileController extends Controller
         $profile->province_id = $request->selectedProvince;
 
         $profile->save();
-        $profile->interests()->sync($request->option_ids);
-        $profile->hostess_services()->sync($request->option_available_for_ids);
         $profile->spoken_languages()->sync($request->option_language_ids);
-        $profile->profileTypes()->sync($request->option_profile_types);
 
+        if($user->role == User::ROLE_HOSTESS){
+            $profile->interests()->sync($request->option_ids);
+            $profile->hostess_services()->sync($request->option_available_for_ids);
+            $profile->profileTypes()->sync($request->option_profile_types);
+        }
+        
         return response()->json(['message' => 'Submitted successfully'], 200);
 
     }

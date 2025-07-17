@@ -160,7 +160,7 @@ class MessageController extends Controller
         $reader = $request->user();
         $lastMessage = Message::where('chat_id', $chat->id)
         ->where('sender_id', '!=', $reader->id)
-        // ->whereNull('read_at')
+        ->where('is_read',0)
         ->latest()
         ->first();
 

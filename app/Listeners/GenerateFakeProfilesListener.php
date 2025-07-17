@@ -211,8 +211,8 @@ class GenerateFakeProfilesListener
             
             // Generate European sizes based on gender
             $dressSize = $gender === $MALE
-                ? 'M'   // Male dress size (European)
-                : 'S';  // Female dress size (European)
+                ? 32   // Male dress size (European)
+                : 32;  // Female dress size (European)
             
             $shoeSize = $gender === $MALE
                 ? random_int(39, 46)   // Male shoe size (European)
@@ -238,14 +238,14 @@ class GenerateFakeProfilesListener
                 'description' => $description,
                 'travel_available' => 0,
                 'other_data'=> [
-                    'shoeSize' => $shoeSize,
+                    //'shoeSize' => $shoeSize,
                     'height' => $height,
                     'weight' => $weight,
-                    'eyeColor' => $eyeColors[array_rand($eyeColors)],
+                    //'eyeColor' => $eyeColors[array_rand($eyeColors)],
                     'telegram' => $telegram,
-                    'dressSize' => $dressSize,
+                    //'dressSize' => $dressSize,
                 ],
-                'nationality' => "Italian",
+                //'nationality' => "Italian",
             ];
 
             $validator = Validator::make(
@@ -263,15 +263,15 @@ class GenerateFakeProfilesListener
             }
             $mainAttrib = [
                 'user_id' => $user->id,
-                'nationality' => $toValidate['nationality'],
+                //'nationality' => $toValidate['nationality'],
                 'description' => $toValidate['description'],
-                'shoe_size' => $toValidate['other_data']['shoeSize'],
+                //'shoe_size' => $toValidate['other_data']['shoeSize'],
                 'height' => $toValidate['other_data']['height'],
                 // 'country_id' => $myProvince->country->id ?? null,
                 // 'province_id' => $myProvince->id,
                 'country_id' => $country_id,
                 'province_id' => $province_id,
-                'eye_color' => $toValidate['other_data']['eyeColor'],
+                //'eye_color' => $toValidate['other_data']['eyeColor'],
                 'top_profile' => $top_profile,
                 'verified_profile' => $verified_profile,
             ];
@@ -281,7 +281,7 @@ class GenerateFakeProfilesListener
                 [
                     'credits' => 5,
                     'travel_available' => $toValidate['travel_available'],
-                    'dress_size' => $toValidate['other_data']['dressSize'],
+                    //'dress_size' => $toValidate['other_data']['dressSize'],
                     'weight' => $toValidate['other_data']['weight'],
                     'telegram' => $toValidate['other_data']['telegram'],
                 ];
@@ -301,15 +301,6 @@ class GenerateFakeProfilesListener
             ->where('id', $user->id)
             ->update(['created_at' => $createdAt]);
 
-            //The numbers are hardcoded! beware!
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
 
             if($gender !== $MALE){
                 $count = min($availableFor->count(), rand(3, 5));

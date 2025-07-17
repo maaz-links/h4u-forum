@@ -35,7 +35,9 @@ class ProfileValidation
             'other_data.weight' => 'nullable|numeric|between:0,400',
             'other_data.eyeColor' => 'nullable|string|max:50',
             'other_data.telegram' => 'nullable|string|max:50',
-            'other_data.dressSize' => 'nullable|string|in:S,M,L',
+            //'other_data.dressSize' => 'nullable|string|in:S,M,L',
+            //numveric validation but dress_size is stored as string in DB
+            'other_data.dressSize' => 'nullable|numeric|between:0,50',
 
             'nationality' => 'nullable|string|max:50',
           

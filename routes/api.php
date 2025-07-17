@@ -107,7 +107,7 @@ Route::middleware('auth:sanctum')->group(function () {
         // });     
         Route::get('/user', function (Request $request) {
             $user = User::with('profile')->where('id', '=', $request->user()->id)->first();
-            $user->rating = $user->getRatingAttribute();
+            //$user->rating = $user->getRatingAttribute();
             return new UserResource($user);
             // dd($user->profile());
             // return response()->json($user);
@@ -126,7 +126,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::post('/search', [SearchController::class, 'searchByUser']);
         Route::get('/user-profile/{username}',[UserProfileController::class, 'profileByUser']);
-        Route::get('/last-views',[UserProfileController::class, 'getLastViews']);
+        //Route::get('/last-views',[UserProfileController::class, 'getLastViews']);
 
         Route::middleware('check.activated')->group(function () {
             Route::post('/chats/credits', [ChatController::class, 'create']);

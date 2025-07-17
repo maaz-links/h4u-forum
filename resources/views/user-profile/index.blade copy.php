@@ -109,15 +109,14 @@
                             <div class="col-md-6">
                                 {{-- <p><strong>Gender:</strong> {{ $user->profile->gender }}</p> --}}
                                 {{-- <p><strong>Description:</strong> {{ $user->profile->description }}</p> --}}
-                                <p><strong>Country:</strong> {{ $user->profile->country()->value('name') ?: 'N/A' }}</p>
-                                <p><strong>Province:</strong> {{ $user->profile->province()->value('name') ?: 'N/A' }}</p>
-                                <p><strong>Nationality:</strong> {{ ucwords($user->profile->nationality ?: 'N/A') }}</p>
-                                <p><strong>Height:</strong> {{ $user->profile->height ?: 'N/A' }} cm</p>
-                                
-                                <p><strong>Eye Color:</strong> {{ ucwords($user->profile->eye_color ?: 'N/A') }}</p>
-                                <p><strong>Shoe Size:</strong> {{ $user->profile->shoe_size ?: 'N/A' }}</p>
+                                <p><strong>Country:</strong> {{ $user->profile->country()->value('name') }}</p>
+                                <p><strong>Province:</strong> {{ $user->profile->province()->value('name') }}</p>
+                                <p><strong>Nationality:</strong> {{ ucwords($user->profile->nationality) }}</p>
+                                <p><strong>Height:</strong> {{ $user->profile->height }} cm</p>
                                 <p><strong>Top Profile:</strong> {{ $user->profile->top_profile ? 'Yes' : 'No' }}</p>
                                 <p><strong>Verified Profile:</strong> {{ $user->profile->verified_profile ? 'Yes' : 'No' }}</p>
+                                <p><strong>Eye Color:</strong> {{ ucwords($user->profile->eye_color) }}</p>
+                                <p><strong>Shoe Size:</strong> {{ $user->profile->shoe_size }}</p>
                                 <p><strong>
                                     @if ($user->role == \App\Models\User::ROLE_HOSTESS)
                                     Free Message limit today:
@@ -129,19 +128,13 @@
                             
                             <div class="col-md-6">
                                 @if ($user->role == \App\Models\User::ROLE_HOSTESS)
-                                <p><strong>Weight:</strong> {{ $user->profile->weight ?: 'N/A' }} kg</p>
-                                <p><strong>Dress Size:</strong> {{ $user->profile->dress_size ?: 'N/A' }}</p>
+                                <p><strong>Weight:</strong> {{ $user->profile->weight }} kg</p>
+                                <p><strong>Dress Size:</strong> {{ $user->profile->dress_size }}</p>
                                 <p><strong>Is Model:</strong> {{ $user->profile->is_user_model ? 'Yes' : 'No' }}</p>
                                 
                                 {{-- <p><strong>Verified Female:</strong> {{ $user->profile->verified_female ? 'Yes' : 'No' }}</p> --}}
                                 
-                                <p><strong>Travel Available:</strong>
-                                @if ($user->profile->travel_available !== null)
-                                {{ $user->profile->travel_available ? 'Yes' : 'No' }}
-                                @else
-                                N/A
-                                @endif
-                                </p>
+                                <p><strong>Travel Available:</strong> {{ $user->profile->travel_available ? 'Yes' : 'No' }}</p>
                                 <p><strong>Telegram:</strong> {{ $user->profile->telegram ?: 'N/A' }}</p>
                                 @endif
                             </div>
@@ -167,6 +160,54 @@
                     </div>
                 </div>
 
+                {{-- <div class="card mt-4">
+                    <div class="card-header bg-info">
+                        <h3 class="card-title">Social Media</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Facebook:</strong> {{ $user->profile->facebook ?: 'N/A' }}</p>
+                                <p><strong>Instagram:</strong> {{ $user->profile->instagram ?: 'N/A' }}</p>
+                                <p><strong>Telegram:</strong> {{ $user->profile->telegram ?: 'N/A' }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>TikTok:</strong> {{ $user->profile->tiktok ?: 'N/A' }}</p>
+                                <p><strong>OnlyFans:</strong> {{ $user->profile->onlyfans ?: 'N/A' }}</p>
+                                <p><strong>Personal Website:</strong> {{ $user->profile->personal_website ?: 'N/A' }}</p>
+                            </div>
+                        </div> --}}
+                        {{-- <hr> --}}
+                        {{-- <div class="row mt-3">
+                            <div class="col-md-6">
+                                <p><strong>Available Services:</strong></p>
+                                <ul>
+                                    @foreach($user->profile->available_services as $service)
+                                        <li>{{ $service }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Personal Interests:</strong></p>
+                                <ul>
+                                    @foreach($user->profile->personal_interests as $interest)
+                                        <li>{{ $interest }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <p><strong>Languages:</strong></p>
+                                <ul>
+                                    @foreach($user->profile->my_languages as $language)
+                                        <li>{{ $language }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div> --}}
+                    {{-- </div>
+                </div> --}}
                 @else
                 <div class="card mt-4">
                     <div class="card-body">

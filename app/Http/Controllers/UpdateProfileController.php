@@ -57,6 +57,7 @@ class UpdateProfileController extends Controller
         $profile->interests()->sync($request->option_ids);
         $profile->hostess_services()->sync($request->option_available_for_ids);
         $profile->spoken_languages()->sync($request->option_language_ids);
+        $profile->profileTypes()->sync($request->option_profile_types);
 
         return response()->json(['message' => 'Submitted successfully'], 200);
 

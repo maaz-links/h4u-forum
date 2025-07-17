@@ -244,7 +244,8 @@ class ApiAuthenticationController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
-            'user' => $user,
+            //'user' => $user,
+            'welcome_new_user'=> !$user->hasActivatedProfile(),
             'email_verified' => $user->hasVerifiedEmail(),
         ]);
     }

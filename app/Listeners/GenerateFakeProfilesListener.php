@@ -312,11 +312,16 @@ class GenerateFakeProfilesListener
             //
 
             if($gender !== $MALE){
-                $randomServices = $availableFor->random(rand(3, 5))->pluck('id')->toArray();
+                $count = min($availableFor->count(), rand(3, 5));
+                $randomServices = $availableFor->random($count)->pluck('id')->toArray();
                 $profile->hostess_services()->sync($randomServices);
-                $randomHobbies = $personalInterests->random(rand(3, 6))->pluck('id')->toArray();
+
+                $count = min($personalInterests->count(), rand(3, 6));
+                $randomHobbies = $personalInterests->random($count)->pluck('id')->toArray();
                 $profile->interests()->sync($randomHobbies);
-                $randomTypes = $profiletype->random(rand(1, 2))->pluck('id')->toArray();
+
+                $count = min($profiletype->count(), rand(1,2));
+                $randomTypes = $profiletype->random($count)->pluck('id')->toArray();
                 $profile->profileTypes()->sync($randomTypes);
             }
 
@@ -325,10 +330,14 @@ class GenerateFakeProfilesListener
                 $myLanguage = "English";
             }
             $finalLanguage = $availableLanguages->firstWhere('name', $myLanguage)?->id;
-            // $randomLanguages = $availableLanguages->random(rand(2, 3))->pluck('id')->toArray();
-            // $profile->spoken_languages()->sync($randomLanguages);
-
-            $profile->spoken_languages()->sync([$finalLanguage]);
+            if(!$finalLanguage){
+                $count = min($availableLanguages->count(), rand(2,2));
+                $randomLanguages = $availableLanguages->random($count)->pluck('id')->toArray();
+                $profile->spoken_languages()->sync($randomLanguages);
+            }
+            else{
+                $profile->spoken_languages()->sync([$finalLanguage]);
+            }
             
         });
 

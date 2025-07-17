@@ -20,6 +20,8 @@ class ProfileValidation
             'notification_pref' => 'required|integer|in:0,1', // Assuming 2 notification types
             'visibility_status' => 'required|integer|in:0,1,2', // Assuming 3 visibility states
         
+            'option_profile_types' => 'nullable|array',
+            'option_profile_types.*' => 'integer|exists:profile_types,id|distinct',
             'option_ids' => 'nullable|array',
             'option_ids.*' => 'integer|exists:interests,id|distinct',
             'option_available_for_ids' => 'nullable|array',

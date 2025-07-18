@@ -23,66 +23,107 @@ class AttachmentController extends Controller
     {
         $user = Auth::user();
         $maxAttachments = config('h4u.attachments.limit');
-
-        // Check if the user has already reached the attachment limit
+        $maxBatchSize = 5; // Maximum images per upload
+    
+        // Check total attachment limit
         $existingAttachmentsCount = Attachment::where('user_id', $user->id)->count();
+        $remainingQuota = $maxAttachments - $existingAttachmentsCount;
         
-        if ($existingAttachmentsCount >= $maxAttachments) {
+        if ($remainingQuota <= 0) {
             return response()->json([
                 'message' => 'You have reached the maximum limit of ' . $maxAttachments . ' images.'
             ], 422);
         }
-        
+    
+        // Phase 1: Basic validation
         $validator = Validator::make($request->all(), [
-            'images' => 'required|array|size:1',
-            'images.*' => 'image|max:10000',
+            'images' => 'required|array|max:'.min($maxBatchSize, $remainingQuota),
             'set_profile_picture' => 'nullable|boolean'
         ], [
-            'images.size' => 'Only one image can be uploaded at a time.',
-            'images.*.image' => 'The uploaded file must be an image.',
-            'images.*.max' => 'The image must not be larger than 10MB.',
+            'images.max' => 'You can upload maximum :max images at this time.',
         ]);
     
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors()
-            ], 422); // Unprocessable Entity
+            ], 422);
         }
-        //dd('ok');
-        $user = Auth::user();
-        $uploadedImages = [];
-        $imageService = new ImageService();
-        foreach ($request->file('images') as $file) {
-            //$path = $file->store('attachments/' . $user->id, 'local');
-            
-            
-            $path = $imageService->processAndSaveImage(
-                $file,
-                'attachments/' . $user->id,
-                true,
-            );
     
-            $attachment = Attachment::create([
-                'user_id' => $user->id,
-                'path' => $path,
-                'is_profile_picture' => false
-            ]);
-
-
-            //If user has no Profile Picture then update
-            if(!$user->hasActivatedProfile() || $request->set_profile_picture){
-                $user->update(['profile_picture_id' => $attachment->id]);
+        $successfulUploads = [];
+        $failedUploads = [];
+        $imageService = new ImageService();
+    
+        // Phase 2: Process each image individually
+        foreach ($request->file('images') as $file) {
+            try {
+                // Validate individual image
+                $imageValidator = Validator::make(
+                    ['image' => $file],
+                    [
+                        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:10000',
+                    ],
+                    [
+                        'image.image' => 'The file must be an image.',
+                        'image.mimes' => 'Only jpeg, png, jpg, and gif images are allowed.',
+                        'image.max' => 'The image must not be larger than 10MB.',
+                    ]
+                );
+    
+                if ($imageValidator->fails()) {
+                    $failedUploads[] = [
+                        'name' => $file->getClientOriginalName(),
+                        'errors' => $imageValidator->errors()->all()
+                    ];
+                    continue;
+                }
+    
+                // Process valid image
+                $path = $imageService->processAndSaveImage(
+                    $file,
+                    'attachments/' . $user->id,
+                    true
+                );
+    
+                $attachment = Attachment::create([
+                    'user_id' => $user->id,
+                    'path' => $path,
+                ]);
+    
+                $successfulUploads[] = $attachment;
+    
+            } catch (\Exception $e) {
+                $failedUploads[] = [
+                    'name' => $file->getClientOriginalName(),
+                    'errors' => [$e->getMessage()]
+                ];
             }
-            
-            $uploadedImages[] = [
-                'id' => $attachment->id,
-                'url' => route('attachments.show', $attachment->id),
-                'is_profile_picture' => false
-            ];
         }
-
-
-        return response()->json($uploadedImages);
+    
+        $PFP = false;
+        // Handle profile picture setting if requested
+        if ($request->set_profile_picture && count($successfulUploads)) {
+            $user->update(['profile_picture_id' => $successfulUploads[0]->id]);
+            $PFP = true;
+        }
+    
+        // Prepare response
+        $response = [
+            'message' => count($successfulUploads) ? 'Upload completed' : 'No images were uploaded',
+            'uploaded_images' => array_map(function($attachment) {
+                return [
+                    'id' => $attachment->id,
+                    'url' => route('attachments.show', $attachment->id),
+                ];
+            }, $successfulUploads),
+            'failed_uploads' => $failedUploads,
+            'remaining_quota' => $maxAttachments - ($existingAttachmentsCount + count($successfulUploads)),
+            'set_profile_picture' => $PFP,
+        ];
+    
+        return response()->json(
+            $response,
+            count($successfulUploads) ? 200 : 422
+        );
     }
 
     public function destroy($id)

@@ -18,13 +18,13 @@ Schedule::command('credits:reset-daily')
         logger('Completed daily credit reset');
     });
 
-    Schedule::command('reminders:send-feedback')
-    // ->dailyAt('00:00')
-    // ->timezone('America/New_York') // Set your timezone
-    ->hourly()
-    ->before(function () {
-        logger('Sending Feedback Reminders');
-    })
-    ->after(function () {
-        logger('Sent Feedback Reminders');
-    });
+    // Schedule::command('reminders:send-feedback')
+    // // ->dailyAt('00:00')
+    // // ->timezone('America/New_York') // Set your timezone
+    // ->hourly()
+    // ->before(function () {
+    //     logger('Sending Feedback Reminders');
+    // })
+    // ->after(function () {
+    //     logger('Sent Feedback Reminders');
+    // });

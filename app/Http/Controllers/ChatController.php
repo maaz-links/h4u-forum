@@ -102,8 +102,11 @@ class ChatController extends Controller
             whereHas('participants', function($query) use ($user, $type) {
 
                 //Chat belongs to current user if chat->participant->user_id == currentUserId
-                $query->where('user_id', $user->id)
-                      ->where('is_archived', $type === 'archived');
+                $query->where('user_id', $user->id);
+                    //   ->where('is_archived', $type === 'archived');
+                    if ($type === 'archived') {
+                        $query->where('is_archived', true);
+                    }
             })
             ->
                 //Exclude chats with banned users
@@ -172,6 +175,29 @@ class ChatController extends Controller
             });
             
         return response()->json($chats);
+    }
+
+    public function getActivity(Request $request){
+        
+        $user = Auth::user();
+        $chats = Chat::select('id', 'user1_id', 'user2_id')
+        ->myChats($user->id)
+        ->with([
+            'user1:id,name,last_seen',
+            'user2:id,name,last_seen',
+        ])
+        ->get();
+
+        $chatsWithOtherUser = $chats->map(function ($chat) use ($user) {
+            $otherUser = $chat->otherUser($user->id);
+        
+            return [
+                'chat_id' => $chat->id,
+                'other_user' => $otherUser,
+            ];
+        });
+
+        return $chatsWithOtherUser;
     }
 
 

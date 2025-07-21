@@ -32,7 +32,7 @@ return [
         'otp' =>  'Your OTP for login',
         'unlockchat' =>  'Someone just unlocked chat with you!',
         'freemessage'=> 'You have received a new message!',
-        'review_remainder'=> 'Reminder to Leave a Review',
+        // 'review_remainder'=> 'Reminder to Leave a Review',
         'review_recieved'=> 'Someone left a Review',
     ],
 
@@ -49,7 +49,7 @@ return [
 
     'unlockchat' => "Dear {username}, Great news! {other_username} is interested in chatting and has just unlocked the chat with you. Open the app now to see who it is and start the conversation.",
     'freemessage' => "Dear {username}, {other_username} has sent you greeting message and wants to talk to you. Unlock Chat with her to continue conversation.",
-    'review_remainder'=> 'Dear {username}, You have chatted with {other_username} for {delay} days. You can now leave your review for {other_username}.',
+    // 'review_remainder'=> 'Dear {username}, You have chatted with {other_username} for {delay} days. You can now leave your review for {other_username}.',
     'review_recieved'=> 'Dear {username}, {other_username} has left {rating} star rating for you. Leave your review for {other_username}.',
     ],
 ];

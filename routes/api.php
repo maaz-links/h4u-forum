@@ -134,10 +134,10 @@ Route::middleware('auth:sanctum')->group(function () {
             // Route::post('/chats/freemsg', [ChatController::class, 'freeChat']);
             // Chat routes
             Route::get('/chats', [ChatController::class, 'index']);
-            Route::get('/chats/{chat}', [ChatController::class, 'show']);
+            //Route::get('/chats/{chat}', [ChatController::class, 'show']);
             Route::post('/chats/{chat}/archive', [ChatController::class, 'archive']);
             Route::post('/chats/{chat}/unarchive', [ChatController::class, 'unarchive']);
-            
+            Route::get('/chats-activity', [ChatController::class, 'getActivity']);
             // Message routes
             Route::get('/chats/{chat}/messages', [MessageController::class, 'index']);
             Route::post('/chats/{chat}/messages', [MessageController::class, 'store']);

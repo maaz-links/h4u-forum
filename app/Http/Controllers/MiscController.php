@@ -37,12 +37,9 @@ class MiscController extends Controller
             'countries' => $countries,
             'nationalities' => $nationalities,
             'eye_colors' => $eye_colors,
-            'profile_costs' => [
-             'standard' => config('h4u.chatcost.standard'),
-             'top' => config('h4u.chatcost.topprofile'),
-             'verified' => config('h4u.chatcost.verified'),
-             'verified_top' => config('h4u.chatcost.verified_topprofile'),
-            ]
+            'backend_configs' => [
+                'image_limit_per_user' => config('h4u.attachments.limit'),
+            ],
           ]);
     }
 

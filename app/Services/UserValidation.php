@@ -20,12 +20,18 @@ class UserValidation
             'email' => 'required|string|email|max:255|unique:users',
             'password' => [
                 'required',
-                'confirmed',
+                
                 Password::min(8)
                     ->letters()
                     ->mixedCase()
                     ->numbers()
                     ->symbols(),
+                    function ($attribute, $value, $fail) {
+                        if ($value !== trim($value)) {
+                            $fail('Password cannot start or end with spaces.');
+                        }
+                    },
+                'confirmed',
             ],
             'role' => ['string','nullable','max:255',Rule::in([User::ROLE_HOSTESS, User::ROLE_KING])],
             'phone' => 'required|string|phone:AUTO',

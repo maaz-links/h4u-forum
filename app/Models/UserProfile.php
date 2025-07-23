@@ -158,7 +158,6 @@ class UserProfile extends Model
         'dress_size',
         'weight',
         'nationality',
-        //'telegram',
         //'country_id',
         'province_id',
         'travel_available',
@@ -167,9 +166,6 @@ class UserProfile extends Model
     protected $requiredFieldsMale = [
         'user_id',
         'description',
-        'height',
-        'shoe_size',
-        'eye_color',
         'nationality',
         //'country_id',
         'province_id',

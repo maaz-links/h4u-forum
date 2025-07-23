@@ -266,7 +266,6 @@ class GenerateFakeProfilesListener
                 //'nationality' => $toValidate['nationality'],
                 'description' => $toValidate['description'],
                 //'shoe_size' => $toValidate['shoeSize'],
-                'height' => $toValidate['height'],
                 // 'country_id' => $myProvince->country->id ?? null,
                 // 'province_id' => $myProvince->id,
                 'country_id' => $country_id,
@@ -282,6 +281,7 @@ class GenerateFakeProfilesListener
                     'credits' => 5,
                     'travel_available' => $toValidate['travel_available'],
                     //'dress_size' => $toValidate['dressSize'],
+                    'height' => $toValidate['height'],
                     'weight' => $toValidate['weight'],
                     'telegram' => $toValidate['telegram'],
                 ];

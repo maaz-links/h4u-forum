@@ -60,11 +60,11 @@ class AttachmentController extends Controller
                 $imageValidator = Validator::make(
                     ['image' => $file],
                     [
-                        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:10000',
+                        'image' => 'required|image|mimes:jpeg,png,jpg|max:10000',
                     ],
                     [
                         'image.image' => 'The file must be an image.',
-                        'image.mimes' => 'Only jpeg, png, jpg, and gif images are allowed.',
+                        'image.mimes' => 'Only jpeg, png and jpg images are allowed.',
                         'image.max' => 'The image must not be larger than 10MB.',
                     ]
                 );

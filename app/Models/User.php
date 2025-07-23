@@ -59,7 +59,7 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         
-        $windowMinutes = 1;
+        $windowMinutes = 2;
         $lastSeen = Carbon::parse($this->last_seen);
         $cutoff = Carbon::now()->subMinutes($windowMinutes);
         //return $this->last_seen->gte(Carbon::now()->subMinutes($window));

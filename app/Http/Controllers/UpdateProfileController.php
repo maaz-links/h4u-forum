@@ -36,10 +36,9 @@ class UpdateProfileController extends Controller
         // }
         
         //return response()->json(['message' => $request->other_data['dressSize']], 200);
-        $profile->shoe_size = $request['shoeSize'];
-        $profile->height = $request['height'];
-
         if($user->role == User::ROLE_HOSTESS){
+            $profile->shoe_size = $request['shoeSize'];
+            $profile->height = $request['height'];
             $profile->eye_color = $request['eyeColor'];
             $profile->weight = $request['weight'];
             $profile->dress_size = $request['dressSize'];

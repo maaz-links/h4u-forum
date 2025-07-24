@@ -81,7 +81,20 @@ class SearchController extends Controller
             });
         })
         
-        ->with('profile.profileTypes')
+        ->with([
+            'profile' => function($query) {
+                $query->select(
+                    'id',
+                    'user_id',
+                    'country_id',
+                    'province_id',
+                    'top_profile',
+                    'verified_profile',
+                    'visibility_status'
+                );
+            },
+            'profile.profileTypes' // or specify columns for profileTypes if needed
+        ])
         
         // Add the hostess filter condition
             ->when($request->hostess, function($query) {
@@ -136,16 +149,41 @@ class SearchController extends Controller
             );
     
         })
-        ->when(false, function($query) {
+        // ->when($request->sort === "popular", function($query) {
+        //     $query->leftJoin('chats', function($join) {
+        //         $join->on(function($query) {
+        //             $query->on('users.id', '=', 'chats.user1_id')
+        //                   ->orOn('users.id', '=', 'chats.user2_id');
+        //         })
+        //         ->where('chats.unlocked', '=', 1);
+        //     })
+        //     ->select([
+        //         'users.id',
+        //         'users.name',
+        //         'users.email',
+        //         'users.dob',
+        //         'users.role',
+        //         'users.last_seen',
+        //         'users.profile_picture_id',
+        //         \DB::raw('COUNT(DISTINCT chats.id) as unlocked_chats_count')
+        //     ])
+        //     ->groupBy('users.id')
+        //     ->orderBy('unlocked_chats_count', 'desc');
+        // })
+        ->when($request->sort === "popular", function($query) {
             $query->withCount([
                 'chats as popularity_count' => function($q) {
                     $q->where('unlocked', 1);
                 }
             ])->orderBy('popularity_count', 'desc');
         })
-        ->when(false, function($query) {
+        
+        ->when($request->sort === "rating", function($query) {
             $query->withAvg(['reviewsReceived as average_rating'], 'rating')
                   ->orderBy('average_rating', 'desc');
+        })
+        ->when($request->sort === "newest" , function($query) {
+            $query->orderBy('created_at', 'desc');
         })
         // ->get();
         ->paginate($perPage);

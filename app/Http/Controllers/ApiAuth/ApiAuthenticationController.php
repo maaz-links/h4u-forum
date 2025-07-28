@@ -93,7 +93,8 @@ class ApiAuthenticationController extends Controller
         // $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'message' => 'User registered successfully. Please check your email for verification.',
+            
+            'message' => 'Registrazione completata con successo. Controlla la tua email per la verifica.', // 'User registered successfully. Please check your email for verification.',
         //    'access_token' => $token,
         //     'token_type' => 'Bearer',
         ], 201);
@@ -119,7 +120,8 @@ class ApiAuthenticationController extends Controller
 
         if (!Auth::attempt($credentials)) {
             return response()->json([
-                'formError' => ['email' => ['Invalid login credentials']],
+                'formError' => ['email' => ['Credenziali di accesso non valide']], //'Invalid login credentials'
+
                 'noreload' => true
             ], 422);
         }
@@ -127,7 +129,7 @@ class ApiAuthenticationController extends Controller
         $user = User::where('email', $request->email)->forRoleAny()->first();
         if(!$user){
             return response()->json([
-                'formError' => ['email' => ['Invalid login credentials']],
+                'formError' => ['email' => ['Credenziali di accesso non valide']], //'Invalid login credentials'
                 'noreload' => true
             ], 422);
         }
@@ -138,7 +140,7 @@ class ApiAuthenticationController extends Controller
         if (!$user->hasVerifiedEmail()) {
             $user->sendEmailVerificationNotification();
             return response()->json([
-                'message' => 'User registered successfully. Please check your email for verification.',
+                'message' => 'Registrazione completata con successo. Controlla la tua email per la verifica.', // 'User registered successfully. Please check your email for verification.',
                 'mustverify' => true,
             ], 200);
         }
@@ -152,7 +154,7 @@ class ApiAuthenticationController extends Controller
         }
         $otp = $this->generateOTP($user);
         return response()->json([
-                'message' => $otp,
+                'message' => (env('APP_ENV') == 'local') ? $otp : '',
                 'phone' => $user->phone,
             ]);
         // Create new token
@@ -175,7 +177,7 @@ class ApiAuthenticationController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'message' => 'Successfully logged out'
+            'message' => 'Disconnessione avvenuta con successo'  // 'Successfully logged out'
         ]);
     }
 
@@ -205,6 +207,11 @@ class ApiAuthenticationController extends Controller
                 'email' => 'required|email',
                 'otp' => 'required|integer|digits:5',
                 //'otp' => 'integer|digits:6',
+            ],
+            [
+                'otp.required' => 'Il codice è obbligatorio',             // 'The code is required'
+                'otp.integer'  => 'Il codice deve essere un numero',      // 'The code must be a number'
+                'otp.digits'   => 'Il codice deve essere di :digits cifre', // 'The code must be :digits digits'
             ]
         );
         // dd('ok');
@@ -228,7 +235,7 @@ class ApiAuthenticationController extends Controller
         if (!$user) {
             return response()->json([
                 //'message' => 'Invalid login credentials',
-                'formError' => ['otp' => ['OTP Invalid or Expired']],
+                'formError' => ['otp' => ['Codice non valido o scaduto']], //Code Invalid or Expired
                 'noreload' => true
             ], 422);
         }
@@ -273,7 +280,7 @@ class ApiAuthenticationController extends Controller
             if (!$user) {
                 return response()->json([
                     //'message' => 'Invalid login credentials',
-                    'formError' => ['otp' => ['Codice non valido o scaduto']],
+                    'formError' => ['otp' => ['Codice non valido o scaduto']], //Code Invalid or Expired
                     'noreload' => true
                 ], 422);
             }

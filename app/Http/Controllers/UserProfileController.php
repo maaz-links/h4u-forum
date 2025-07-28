@@ -166,26 +166,26 @@ class UserProfileController extends Controller
         );
 
         if ($validator->fails()) {
-            return response()->json(['message' => 'Invalid Data'], 422);
+            return response()->json(['message' => 'Dati non validi'], 422); // 'Invalid Data'
         }
 
         if(auth()->id() == $request->reported_user_id){
-            return response()->json(['message' => 'Cannot Report self'], 422);
+            return response()->json(['message' => 'Non puoi segnalare te stesso'], 422); // 'Cannot Report self'
         }
 
         if(Report::where('reporter_id',auth()->id())->where('reported_user_id',$request->reported_user_id)->first()){
-            return response()->json(['message' => 'Already Reported'], 422);
+            return response()->json(['message' => 'Utente già segnalato'], 422); // 'Already Reported'
         } 
+
         $report = Report::create([
             'reporter_id' => auth()->id(),
             'reported_user_id' => $request->reported_user_id,
             'reason' => $request->reason,
             //'additional_info' => $request->additional_info ?? null,
-            
         ]);
-    
+
         return response()->json([
-            'message' => 'Report submitted successfully',
+            'message' => 'Segnalazione inviata con successo', // 'Report submitted successfully'
             'data' => $report
         ], 201);
     }
@@ -201,22 +201,22 @@ class UserProfileController extends Controller
         );
 
         if ($validator->fails()) {
-            return response()->json(['message' => 'Invalid Data'], 422);
+            return response()->json(['message' => 'Dati non validi'], 422); // 'Invalid Data'
         }
 
         if(ReportChat::where('reporter_id',auth()->id())->where('reported_chat_id',$request->reported_chat_id)->first()){
-            return response()->json(['message' => 'Already Reported'], 422);
+            return response()->json(['message' => 'Chat già segnalata'], 422); // 'Already Reported'
         } 
+
         $report = ReportChat::create([
             'reporter_id' => auth()->id(),
             'reported_chat_id' => $request->reported_chat_id,
             'reason' => $request->reason,
             //'additional_info' => $request->additional_info ?? null,
-            
         ]);
-    
+
         return response()->json([
-            'message' => 'Report submitted successfully',
+            'message' => 'Segnalazione inviata con successo', // 'Report submitted successfully'
             'data' => $report
         ], 201);
     }

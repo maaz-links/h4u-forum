@@ -31,8 +31,8 @@ class AttachmentController extends Controller
         
         if ($remainingQuota <= 0) {
             return response()->json([
-                'message' => 'You have reached the maximum limit of ' . $maxAttachments . ' images.'
-            ], 422);
+                'message' => 'Hai raggiunto il limite massimo di ' . $maxAttachments . ' immagini.'
+            ], 422); // 'You have reached the maximum limit of {n} images.'
         }
     
         // Phase 1: Basic validation
@@ -40,7 +40,7 @@ class AttachmentController extends Controller
             'images' => 'required|array|max:'.min($maxBatchSize, $remainingQuota),
             'set_profile_picture' => 'nullable|boolean'
         ], [
-            'images.max' => 'You can upload maximum :max images at this time.',
+            'images.max' => 'Puoi caricare un massimo di :max immagini in questo momento.', // 'You can upload maximum :max images at this time.'
         ]);
     
         if ($validator->fails()) {
@@ -63,10 +63,10 @@ class AttachmentController extends Controller
                         'image' => 'required|image|mimes:jpeg,png,jpg|max:10000',
                     ],
                     [
-                        'image.image' => 'The file must be an image.',
-                        'image.mimes' => 'Only jpeg, png and jpg images are allowed.',
-                        'image.max' => 'The image must not be larger than 10MB.',
-                    ]
+                        'image.image' => 'Il file deve essere un\'immagine.', // 'The file must be an image.'
+                        'image.mimes' => 'Sono consentite solo immagini jpeg, png e jpg.', // 'Only jpeg, png and jpg images are allowed.'
+                        'image.max' => 'L\'immagine non deve superare i 10MB.', // 'The image must not be larger than 10MB.'
+                    ]                    
                 );
     
                 if ($imageValidator->fails()) {
@@ -108,7 +108,7 @@ class AttachmentController extends Controller
     
         // Prepare response
         $response = [
-            'message' => count($successfulUploads) ? 'Upload completed' : 'No images were uploaded',
+            'message' => count($successfulUploads) ? 'Caricamento completato' : 'Nessuna immagine è stata caricata', // 'Upload completed' / 'No images were uploaded'
             'uploaded_images' => array_map(function($attachment) {
                 return [
                     'id' => $attachment->id,
@@ -134,7 +134,7 @@ class AttachmentController extends Controller
         Storage::disk('local')->delete($attachment->path);
         $attachment->delete();
 
-        return response()->json(['message' => 'Image deleted successfully']);
+        return response()->json(['message' => 'Immagine eliminata con successo']); // 'Image deleted successfully'
     }
 
     public function show($id)
@@ -161,6 +161,6 @@ class AttachmentController extends Controller
         $attachment = Attachment::where('user_id', $user->id)->findOrFail($id);
         $user->update(['profile_picture_id' => $attachment->id]);
 
-        return response()->json(['message' => 'Profile picture updated successfully']);
+        return response()->json(['message' => 'Immagine del profilo aggiornata con successo']); // 'Profile picture updated successfully'
     }
 }

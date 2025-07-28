@@ -82,12 +82,17 @@ class UpdateProfileController extends Controller
 
     public function changePassword(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'current_password' => 'required|string',
-            //'new_password' => 'required|min:8|confirmed',
-        ]+UserValidation::rules(['password']),
-        UserValidation::messages()
-    );
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'current_password' => 'required|string',
+                //'new_password' => 'required|min:8|confirmed',
+            ] + UserValidation::rules(['password']),
+            UserValidation::messages() + [
+                'current_password.required' => 'La password attuale è obbligatoria', // 'The current password is required'
+                'current_password.string' => 'La password attuale deve essere una stringa', // 'The current password must be a string'
+            ]
+        );
     //dd('wat');
 
         if ($validator->fails()) {
@@ -99,7 +104,8 @@ class UpdateProfileController extends Controller
         if (!Hash::check($request->current_password, $user->password)) {
             return response()->json([
                 'formError' => [
-                    'current_password' => ['The current password is incorrect.']
+                    'current_password' => ['La password attuale non è corretta.'], // 'The current password is incorrect.'
+
                 ]
             ], 422);
         }
@@ -109,7 +115,7 @@ class UpdateProfileController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Password changed successfully.'
+            'message' => 'Password cambiata con successo.', // 'Password changed successfully.'
         ]);
     }
 
@@ -121,14 +127,14 @@ class UpdateProfileController extends Controller
 
         $user->delete();
         
-        return response()->json(['message'=>'User account successfully deleted']);
+        return response()->json(['message' => 'Account utente eliminato con successo']); // 'User account successfully deleted'
     }
     public function sendCancellationRequest(Request $request){
         $user = $request->user();
 
         event(new CancellationRequest($user));
         
-        return response()->json(['message'=>'Cancellation Request Sent']);
+        return response()->json(['message' => 'Richiesta di cancellazione inviata']); // 'Cancellation Request Sent'
     }
 
     public function updatePersonalInfo(Request $request){

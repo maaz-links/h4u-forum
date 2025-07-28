@@ -44,7 +44,7 @@ class ReviewController extends Controller
         
         if(Review::where('reviewer_id',$userID)
         ->where('reviewed_user_id',$request->reviewed_user_id)->first()){
-            return response()->json(['formError' => ['Review Already Exists']], 422);
+            return response()->json(['formError' => ['Recensione già esistente']], 422); // 'Review Already Exists'
         }
 
         if($user->role == User::ROLE_HOSTESS){
@@ -54,7 +54,7 @@ class ReviewController extends Controller
             Review::where('reviewer_id',$request->reviewed_user_id)
             ->where('reviewed_user_id',$userID)->first();
             if(!$hasReviewed){
-                return response()->json(['formError' => ['target hasnt reviewed yet']], 422);
+                return response()->json(['formError' => ['Il destinatario non ha ancora lasciato una recensione']], 422); // 'target hasnt reviewed yet'
             }
         }
         elseif($user->role == User::ROLE_KING){
@@ -64,7 +64,7 @@ class ReviewController extends Controller
             Chat::findBetweenUsers($userID, $request->reviewed_user_id,true,$this->dayIntervalOutput);
             //return $existingChat;
             if(!$existingChat){
-                return response()->json(['formError' => ['Chat not exist']], 422);
+                return response()->json(['formError' => ['La chat non esiste']], 422); // 'Chat not exist'
             }
             // if(!$existingChat->unlocked){
             //     return response()->json(['formError' => 'locked chat'], 422);
@@ -90,7 +90,7 @@ class ReviewController extends Controller
 
         event(new ReviewRecieved($review));
 
-        return response()->json(['data' => $review,'message' => "Review successfully submitted"], 201);
+        return response()->json(['data' => $review, 'message' => 'Recensione inviata con successo'], 201); // 'Review successfully submitted'
     }
 
     public function index(Request $request)

@@ -21,49 +21,43 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/send-message', function () {
-    $message = 'Hello from Laravel at ' . now();
-    event(new App\Events\Chat\MessageSent($message));
-    return response()->json(['status' => 'Message sent!']);
-});
+// Route::get('/send-message', function () {
+//     $message = 'Hello from Laravel at ' . now();
+//     event(new App\Events\Chat\MessageSent($message));
+//     return response()->json(['status' => 'Message sent!']);
+// });
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
-
-Route::post('register', [ApiAuthenticationController::class, 'register']);
-Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])
-    ->name('verification.verify')
-    ->middleware('signed');
-//Route::get('email/verify/{id}',[ApiAuthentication::class,'verify'])->name('verification.verify');
-// Route::post('/email/resend', [VerificationController::class, 'resend'])
-//     ->middleware('auth:sanctum');
-
-Route::post('/login', [ApiAuthenticationController::class, 'login'])->name('login');
-Route::post('/verify-otp', [ApiAuthenticationController::class, 'verifyOtp']);
-Route::post('/resend-otp', [ApiAuthenticationController::class, 'resendOtp']);
-Route::post('/logout', [ApiAuthenticationController::class, 'logout'])->middleware('auth:sanctum');
-
-Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail'])
-    ->middleware('guest:sanctum')
-    ->name('password.email')->middleware('throttle:2,1');
-
-Route::post('/reset-password', [PasswordResetController::class, 'reset'])
-    ->middleware('guest:sanctum')
-    ->name('password.update');
-
 Route::get('/verify-impersonation/{id}/{hash}', [ApiAuthenticationController::class, 'verifyImpersonation'])
      ->name('admin.impersonation')
      ->middleware('signed');
 
+Route::middleware('language')->group(function () {
+    Route::post('register', [ApiAuthenticationController::class, 'register']);
+    Route::get('/email/verify/{id}', [VerificationController::class, 'verify'])
+        ->name('verification.verify')
+        ->middleware('signed');
+    //Route::get('email/verify/{id}',[ApiAuthentication::class,'verify'])->name('verification.verify');
+    // Route::post('/email/resend', [VerificationController::class, 'resend'])
+    //     ->middleware('auth:sanctum');
 
+    Route::post('/login', [ApiAuthenticationController::class, 'login'])->name('login');
+    Route::post('/verify-otp', [ApiAuthenticationController::class, 'verifyOtp']);
+    Route::post('/resend-otp', [ApiAuthenticationController::class, 'resendOtp']);
+    Route::post('/logout', [ApiAuthenticationController::class, 'logout'])->middleware('auth:sanctum');
+
+    Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail'])
+        ->middleware('guest:sanctum')
+        ->name('password.email')->middleware('throttle:2,1');
+
+    Route::post('/reset-password', [PasswordResetController::class, 'reset'])
+        ->middleware('guest:sanctum')
+        ->name('password.update');
+    
+    Route::post('/contact-form', [MiscController::class, 'apiContactForm'])->middleware('throttle:1,60');
+});
 Route::get('/miscdata', [MiscController::class, 'miscdata']);
-
-
-
 Route::get('/attachments/{id}', [AttachmentController::class, 'show'])->name('attachments.show');
-
-// Route::get('/countries', function() {
-//     return EuropeCountry::ordered()->get(['id', 'name']);
-// });
 Route::get('/countries', function() {
     return EuropeCountry::with(
         ['provinces' => function($query) {
@@ -84,11 +78,10 @@ Route::get('/countries/{countryId}/provinces', function($countryId) {
 
 Route::post('/search-guest', [SearchController::class, 'searchByGuest']);
 Route::get('/user-profile-guest/{username}',[UserProfileController::class, 'profileByGuest']);
-
 Route::get('/ban-report/{username}',[UserProfileController::class, 'banReport']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::middleware('check.banned')->group(function () {
+    Route::middleware(['check.banned','language'])->group(function () {
 
         Route::post('/heartbeat', function (Request $request) {
             $user = $request->user();
@@ -97,20 +90,9 @@ Route::middleware('auth:sanctum')->group(function () {
         });        
     // Route::middleware('reset.msglimit')->group(function () {
 
-        // Route::get('/user', function (Request $request) {
-        //     $user = User::with('profile')->where('id', '=', $request->user()->id)->first();
-        //     $user->rating = $user->getRatingAttribute();
-        
-        //     // dd($user->profile());
-        //     return response()->json($user);
-        
-        // });     
         Route::get('/user', function (Request $request) {
             $user = User::with('profile')->where('id', '=', $request->user()->id)->first();
-            //$user->rating = $user->getRatingAttribute();
             return new UserResource($user);
-            // dd($user->profile());
-            // return response()->json($user);
         });        
 
         Route::post('/update-profile', [UpdateProfileController::class, 'updateProfile']);
@@ -184,7 +166,6 @@ Route::get('/my-terms', [MiscController::class, 'ApiGetTerms']);
 Route::get('/my-privacy', [MiscController::class, 'ApiGetPrivacy']);
 Route::get('/my-cookies', [MiscController::class, 'ApiGetCookiesInfo']);
 Route::get('/my-credits', [MiscController::class, 'apiGetPaymentsCredits']);
-Route::post('/contact-form', [MiscController::class, 'apiContactForm'])->middleware('throttle:1,60');
 Route::get('/my-faqs', [MiscController::class, 'apiGetFaqs']);
 Route::get('my-shown-services',function () {
     $shownServices = ShownService::orderBy('display_order')->get();
@@ -196,8 +177,8 @@ Route::get('my-shown-services',function () {
     return response()->json($shownServices);
 });
 
-Route::get('/twilio-test', function (Request $request) {
-    $type = $request->query('phone', 'all');
-    $twilio = new \App\Services\TwilioService();
-    return $twilio->sendSms("+$type", "Its working");
-});
+// Route::get('/twilio-test', function (Request $request) {
+//     $type = $request->query('phone', 'all');
+//     $twilio = new \App\Services\TwilioService();
+//     return $twilio->sendSms("+$type", "Its working");
+// });

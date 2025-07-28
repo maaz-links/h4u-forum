@@ -51,7 +51,7 @@ class VerificationController extends Controller
         $user = User::find($id);
         
         if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
+            return response()->json(['message' => 'Utente non trovato'], 404); // 'User not found'
         }
 
         // Verify the signed URL and hash
@@ -60,7 +60,7 @@ class VerificationController extends Controller
         }
 
         if ($user->hasVerifiedEmail()) {
-            return response()->json(['message' => 'Email already verified'], 422);
+            return response()->json(['message' => 'Email già verificata'], 422); // 'Email already verified'
         }
 
         
@@ -71,7 +71,7 @@ class VerificationController extends Controller
         $otp = ApiAuthenticationController::generateOTP($user);
         return response()->json([
             'email' => $user->email,
-            'message' => $otp,
+            'message' => (env('APP_ENV') == 'local') ? $otp : '',
             'phone' => $user->phone,
         ]);
     //     $token = $user->createToken('auth-token')->plainTextToken;
@@ -92,11 +92,11 @@ class VerificationController extends Controller
     public function resend(Request $request)
     {
         if ($request->user()->hasVerifiedEmail()) {
-            return response()->json(['message' => 'Email already verified'], 422);
+            return response()->json(['message' => 'Email già verificata'], 422); // 'Email already verified'
         }
 
         $request->user()->sendEmailVerificationNotification();
 
-        return response()->json(['message' => 'Verification link resent']);
+        return response()->json(['message' => 'Link di verifica reinviato']); // 'Verification link resent'
     }
 }

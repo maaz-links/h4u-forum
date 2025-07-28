@@ -22,14 +22,14 @@ class BuyChat
         
         if($existingChat){
             if($existingChat->unlocked){
-                return response()->json(['message' => 'Chat already exists'],200);
+                return response()->json(['message' => 'La chat esiste già'], 200); // 'Chat already exists'
             }
         }
 
         $profile = DB::table('user_profiles')->where('user_id', $user->id)->first();
 
         if (!$profile || $profile->credits < $amount) {
-            return response()->json(['message' => 'Insufficient credits','shop_redirect' => true], 400);
+            return response()->json(['message' => 'Crediti insufficienti','shop_redirect' => true], 400); // 'Insufficient credits'
         }
 
         return DB::transaction(function () use ($user, $other_user_id,$amount,$existingChat) {
@@ -47,17 +47,12 @@ class BuyChat
                 );
             }
             else{
-                // $newChat = Chat::create([
-                //     'user1_id' => $user->id,
-                //     'user2_id' => $other_user_id,
-                //     'unlocked' => 1,
-                // ]);
                 $newChat = $this->fullChatInstance($user->id,$other_user_id,1);
             }           
 
 
             event(new ChatUnlocked($user->id,$other_user_id));
-            return response()->json(['message' => 'Chat Created','chat' => $newChat]);
+            return response()->json(['message' => 'Chat creata','chat' => $newChat]); // 'Chat Created'
         });
     }
 
@@ -69,13 +64,13 @@ class BuyChat
         $existingChat = Chat::findBetweenUsers($user->id, $other_user_id);
         
         if($existingChat){
-            return response()->json(['message' => 'Chat already exists'],200);
+            return response()->json(['message' => 'La chat esiste già'], 200); // 'Chat already exists'
         }
 
         $profile = DB::table('user_profiles')->where('user_id', $user->id)->first();
 
         if (!$profile || $profile->credits < 1) {
-            return response()->json(['message' => 'You have reached the limit of free messages today'], 400);
+            return response()->json(['message' => 'Hai raggiunto il limite di messaggi gratuiti per oggi'], 400); // 'You have reached the limit of free messages today'
         }
         $king_id = $other_user_id;
         return DB::transaction(function () use ($user, $king_id) {
@@ -89,12 +84,13 @@ class BuyChat
                 $newChat->messages()->create([
                     'sender_id' => $user->id,
                     'message' => "Hi! Nice to meet you, wanna chat?",
+                    //'message' => "Ciao! Piacere di conoscerti, vuoi chattare?", // 'Hi! Nice to meet you, wanna chat?'
                 ]);
 
                 event(new FreeMessageSent($user->id, $king_id));
                 event(new NewMessageSent($newChat->messages[0],$newChat));
         
-                return response()->json(['message' => 'Message Given','chat' => $newChat]);
+                return response()->json(['message' => 'Messaggio inviato','chat' => $newChat]); // 'Message Given'
         });
     }
 

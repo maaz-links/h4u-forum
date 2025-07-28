@@ -67,28 +67,7 @@ class ProfileValidation
     public static function messages(): array
     {
         return [
-            'description.required' => 'Description is required',
-            'travel_available.required' => 'Travel availability is required',
-            'notification_pref.required' => 'Notification preference is required',
-            'visibility_status.required' => 'Visibility status is required',
             
-            'option_ids.*.exists' => 'Selected interest is invalid',
-            'option_available_for_ids.*.exists' => 'Selected service is invalid',
-            'option_language_ids.*.exists' => 'Selected language is invalid',
-            
-            'other_data.required' => 'Additional information is required',
-            'other_data.shoeSize.required' => 'Shoe size is required',
-            'other_data.height.required' => 'Height is required',
-            'other_data.weight.required' => 'Weight is required',
-            'other_data.eyeColor.required' => 'Eye color is required',
-            'other_data.dressSize.required' => 'Dress size is required',
-            
-            'nationality.required' => 'Nationality is required',
-            
-            'selectedCountry.required' => 'Country is required',
-            'selectedCountry.exists' => 'Selected country is invalid',
-            'selectedProvince.required' => 'Province is required',
-            'selectedProvince.exists' => 'Selected province is invalid',
         ];
     }
 }

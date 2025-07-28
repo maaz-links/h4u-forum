@@ -83,7 +83,7 @@ class MessageController extends Controller
 
             
             return response()->json([
-                'message' => 'Your message is under review due to a potential policy violation and will be delivered upon approval.'
+                'message' => 'Il tuo messaggio è in fase di revisione a causa di una potenziale violazione delle politiche e verrà consegnato dopo l\'approvazione.', // 'Your message is under review due to a potential policy violation and will be delivered upon approval.'
             ], 202);
         }
 

@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'check.activated' => \App\Http\Middleware\CheckActivatedProfile::class,
             'check.males-only' => \App\Http\Middleware\CheckMalesOnly::class,
             'admin.perm' => \App\Http\Middleware\CheckAdminPermission::class,
+            'language' => \App\Http\Middleware\LangMiddleware::class,
         ]);
         // $middleware->alias([
             

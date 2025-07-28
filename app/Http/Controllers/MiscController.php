@@ -54,7 +54,7 @@ class MiscController extends Controller
     }
 
     public function apiGetCookiesInfo(Request $request){
-        $page = Page::where('slug', 'cookies-info')->firstOrFail();
+        $page = Page::where('slug', 'cookie-policy')->firstOrFail();
         return response()->json(['page' => $page], 200);
     }
     public function apiGetPaymentsCredits(Request $request){

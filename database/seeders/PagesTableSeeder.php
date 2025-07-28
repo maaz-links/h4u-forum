@@ -29,8 +29,8 @@ class PagesTableSeeder extends Seeder
         ]);
 
         Page::create([
-            'slug' => 'cookies-info',
-            'content' => '<h1>Initial Cookies info</h1><p>Edit this content using the Quill editor.</p>',
+            'slug' => 'cookie-policy',
+            'content' => '<h1>Initial Cookie policy</h1><p>Edit this content using the Quill editor.</p>',
         ]);
 
     }

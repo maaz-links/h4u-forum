@@ -388,14 +388,14 @@ return [
                         'url' => '/pages/privacy-policy',
                         // 'icon' => 'far fa-fw fa-file',
                     ],
+                    // [
+                    //     'text' => 'Credits and Payment',
+                    //     'url' => '/pages/credits-and-payment',
+                    //     // 'icon' => 'far fa-fw fa-file',
+                    // ],
                     [
-                        'text' => 'Credits and Payment',
-                        'url' => '/pages/credits-and-payment',
-                        // 'icon' => 'far fa-fw fa-file',
-                    ],
-                    [
-                        'text' => 'Cookies info',
-                        'url' => '/pages/cookies-info',
+                        'text' => 'Cookie Policy',
+                        'url' => '/pages/cookie-policy',
                         // 'icon' => 'far fa-fw fa-file',
                     ],
                 ],

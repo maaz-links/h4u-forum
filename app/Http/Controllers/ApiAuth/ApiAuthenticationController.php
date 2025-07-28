@@ -273,13 +273,13 @@ class ApiAuthenticationController extends Controller
             if (!$user) {
                 return response()->json([
                     //'message' => 'Invalid login credentials',
-                    'formError' => ['otp' => ['OTP Invalid or Expired']],
+                    'formError' => ['otp' => ['Codice non valido o scaduto']],
                     'noreload' => true
                 ], 422);
             }
             event(new SendOTP($user, $user->otp));
 
-            return response()->json(['message' => "OTP is resent"], 200);
+            return response()->json(['message' => "OK"], 200);
     }
 
     public function verifyImpersonation(Request $request, $id, $hash)

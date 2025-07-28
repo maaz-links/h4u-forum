@@ -221,19 +221,29 @@ class UserProfileController extends Controller
         ], 201);
     }
 
-    public function banReport($username){
+    public function banReport($username)
+    {
+
         $ban = Ban::whereHas('user', function ($query) use ($username) {
             $query->where('name', $username);
         })->first();
-        if(!$ban){
-            return response()->json(['message'=> 'no'], 404);
+
+        if (!$ban) {
+            return response()->json(['message' => 'nessun ban trovato'], 404);
         }
-        if($ban->isPermanent()){
-            return response()->json(['message'=> 'You have been permanently banned'],200);
+
+        if ($ban->isPermanent()) {
+            return response()->json(['message' => 'Sei stato bannato permanentemente'], 200);
         }
-        if($ban->isTemporary()){
+
+        if ($ban->isTemporary()) {
             $date = Carbon::parse($ban->expired_at);
-            return response()->json(['message'=> 'You have been temporarily banned until '.$date->format('F j, Y \a\t g:i A')],200);
+            return response()->json([
+                // 'message' => 'You have been temporarily banned until ' . $date->format('F j, Y \a\t g:i A')
+                'message' => 'Sei stato bannato temporaneamente fino al ' . $date->format('j F Y \a\l\l\e g:i A')
+            ], 200);
         }
+
+        return response()->json(['message' => 'Nessun ban attivo trovato'], 200);
     }
 }

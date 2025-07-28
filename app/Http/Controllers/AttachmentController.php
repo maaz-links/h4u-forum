@@ -23,7 +23,7 @@ class AttachmentController extends Controller
     {
         $user = Auth::user();
         $maxAttachments = config('h4u.attachments.limit');
-        $maxBatchSize = 5; // Maximum images per upload
+        $maxBatchSize = 100; // Maximum images per upload
     
         // Check total attachment limit
         $existingAttachmentsCount = Attachment::where('user_id', $user->id)->count();

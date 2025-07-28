@@ -85,7 +85,6 @@ class MiscController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Contact request submitted successfully',
             'data' => $contact
         ], 201);
     }

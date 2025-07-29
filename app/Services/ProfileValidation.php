@@ -18,7 +18,7 @@ class ProfileValidation
             'description' => 'nullable|string|min:1|max:1000', // Added min/max length
             'travel_available' => 'nullable|integer|in:0,1', // Restrict to specific values
             'notification_pref' => 'required|integer|in:0,1', // Assuming 2 notification types
-            'visibility_status' => 'required|integer|in:0,1,2', // Assuming 3 visibility states
+            //'visibility_status' => 'required|integer|in:0,1,2', // Assuming 3 visibility states
         
             'option_profile_types' => 'nullable|array',
             'option_profile_types.*' => 'integer|exists:profile_types,id|distinct',

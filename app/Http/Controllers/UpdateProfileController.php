@@ -59,7 +59,7 @@ class UpdateProfileController extends Controller
 
         
         $profile->notification_pref= $request->notification_pref;
-        $profile->visibility_status= $request->visibility_status;
+        //$profile->visibility_status= $request->visibility_status; //Unused Feature
 
         $profile->nationality= $request->nationality;
         // $profile->province= $request->province;

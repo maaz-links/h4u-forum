@@ -21,7 +21,7 @@ class SearchController extends Controller
 
     protected function search(Request $request,$check_visibility,$role = User::ROLE_KING)
     {
-        $perPage = $request->per_page ?? 50;
+        $perPage = 50;
 
         $minage = $request->minage ?? false;
         $maxage = $request->maxage ?? false;
@@ -49,7 +49,7 @@ class SearchController extends Controller
                 'province_id',
                 'top_profile',
                 'verified_profile',
-                'visibility_status',
+                //'visibility_status',
 
                 // // Add computed cost column
                 //     \DB::raw("CASE 
@@ -59,7 +59,7 @@ class SearchController extends Controller
                 //     ELSE {$chatcost['standard']}
                 // END as cost")
             )
-            ->whereIn('visibility_status', $check_visibility)
+            // ->whereIn('visibility_status', $check_visibility) // Unused Feature about visibility
             ->when($request->top_profile, function($q) use ($request) {
                 $q->where('top_profile', $request->top_profile);
             })
@@ -90,7 +90,7 @@ class SearchController extends Controller
                     'province_id',
                     'top_profile',
                     'verified_profile',
-                    'visibility_status'
+                    //'visibility_status'
                 );
             },
             'profile.profileTypes' // or specify columns for profileTypes if needed
@@ -185,6 +185,7 @@ class SearchController extends Controller
         ->when($request->sort === "newest" , function($query) {
             $query->orderBy('created_at', 'desc');
         })
+        ->orderBy('id','asc')
         // ->get();
         ->paginate($perPage);
 

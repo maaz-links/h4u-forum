@@ -83,11 +83,13 @@ class UserProfileController extends Controller
 
     public function getFullProfile($username,$check_visibility,$role = User::ROLE_KING){
         
-        $user = User::withWhereHas(
-            'profile', function ($query) use ($check_visibility) {
-                $query->whereIn('visibility_status', $check_visibility);
-            }
-        )
+        $user = User::
+        // withWhereHas(
+        //     'profile', function ($query) use ($check_visibility) {
+        //         $query->whereIn('visibility_status', $check_visibility);
+        //     }
+        // )
+        withWhereHas('profile')
         ->hasProfilePicture()
         ->forUsername($username)
         ->forOppositeRole($role)

@@ -35,7 +35,7 @@ class PermissionSeeder extends Seeder
             'script_admin',
             'shop_admin',
             'badge_admin',
-            'email_admin',
+            'backend_admin',
             'password_admin',
         ];
 
@@ -66,7 +66,7 @@ class PermissionSeeder extends Seeder
 
             ['name' => 'Can Declare Verified/Top Profile Status', 'slug' => 'declare_badges'],
 
-            ['name' => 'Change Email Settings', 'slug' => 'change_email_settings'],
+            ['name' => 'Change Mailer and Payment Settings', 'slug' => 'change_backend_settings'],
 
            
 
@@ -119,8 +119,8 @@ class PermissionSeeder extends Seeder
             $permissionModels['declare_badges']->id,
         ]);
 
-        $roleModels['email_admin']->permissions()->attach([
-            $permissionModels['change_email_settings']->id,
+        $roleModels['backend_admin']->permissions()->attach([
+            $permissionModels['change_backend_settings']->id,
         ]);
 
         $roleModels['password_admin']->permissions()->attach([

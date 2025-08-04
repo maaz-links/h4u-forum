@@ -189,10 +189,15 @@ class AdminNav
             ];
         }
 
-        if (in_array('change_email_settings',$permissionSlugs)) {
+        if (in_array('change_backend_settings',$permissionSlugs)) {
             $menu[] = [
-                'text' => 'Change Email Settings',
+                'text' => 'Change Mailer Settings',
                 'url' => '/mail-config',
+                'icon' => '',
+            ];
+            $menu[] = [
+                'text' => 'Change Payment Settings',
+                'url' => '/payment-config',
                 'icon' => '',
             ];
         }

@@ -47,7 +47,7 @@ return [
     'paypal' => [
         'client_id' => env('PAYPAL_CLIENT_ID'),
         'secret' => env('PAYPAL_SECRET'),
-        'sandbox' => env('PAYPAL_SANDBOX', true),
+        'sandbox' => filter_var(env('PAYPAL_SANDBOX', true), FILTER_VALIDATE_BOOLEAN),
     ],
 
 

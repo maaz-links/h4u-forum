@@ -37,9 +37,15 @@ class PaymentController extends Controller
     {
         $shop = Shop::findOrFail($request->shopId);
         $paypal = new PayPalService();
-
-        $order = $paypal->createOrder($shop->price, $shop->id);
-
+        try {
+            $order = $paypal->createOrder($shop->price, $shop->id);
+        } 
+        catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'devNote' => 'An error occured when creating order, most likely due to invalid keys'
+            ], 500);
+        }
         $approvalUrl = collect($order['links'])->firstWhere('rel', 'approve')['href'];
 
         return response()->json([

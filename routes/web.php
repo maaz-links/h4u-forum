@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\MailConfigController;
 use App\Http\Controllers\Admin\MessageAlertController;
 use App\Http\Controllers\Admin\ModerationReportController;
 use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\PaymentConfigController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ReviewConfigController;
 use App\Http\Controllers\Admin\ShopController;
@@ -264,12 +265,16 @@ Route::group(['middleware' => ['admin']], function () {
         });
     });
 
-    Route::middleware(['admin.perm:change_email_settings'])->group(function () {
-    Route::get('/mail-config', [MailConfigController::class, 'edit'])
-        ->name('mail-config.edit');
-    Route::put('/mail-config', [MailConfigController::class, 'update'])
-        ->name('mail-config.update');
-});
+    Route::middleware(['admin.perm:change_backend_settings'])->group(function () {
+        Route::get('/mail-config', [MailConfigController::class, 'edit'])
+            ->name('mail-config.edit');
+        Route::put('/mail-config', [MailConfigController::class, 'update'])
+            ->name('mail-config.update');
+        Route::get('/payment-config', [PaymentConfigController::class, 'edit'])
+            ->name('payment-config.edit');
+        Route::put('/payment-config', [PaymentConfigController::class, 'update'])
+            ->name('payment-config.update');
+    });
 });
 
 });

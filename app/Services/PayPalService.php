@@ -13,7 +13,7 @@ class PayPalService
     {
         $this->clientId = config('services.paypal.client_id');
         $this->secret = config('services.paypal.secret');
-        $this->baseUrl = config('services.paypal.sandbox')
+        $this->baseUrl = filter_var(config('services.paypal.sandbox'), FILTER_VALIDATE_BOOLEAN)
             ? 'https://api-m.sandbox.paypal.com'
             : 'https://api-m.paypal.com';
     }

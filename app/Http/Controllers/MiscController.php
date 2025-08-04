@@ -39,6 +39,7 @@ class MiscController extends Controller
             'eye_colors' => $eye_colors,
             'backend_configs' => [
                 'image_limit_per_user' => config('h4u.attachments.limit'),
+                'stripe_pk' => config('services.stripe.key'),
             ],
           ]);
     }

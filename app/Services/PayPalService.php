@@ -37,7 +37,7 @@ class PayPalService
             'intent' => 'CAPTURE',
             'purchase_units' => [[
                 'amount' => [
-                    'currency_code' => 'USD',
+                    'currency_code' => 'EUR',
                     'value' => $amount,
                 ],
                 'custom_id' => $shopId,

@@ -19,7 +19,7 @@ class PaymentController extends Controller
         try {
             $paymentIntent = PaymentIntent::create([
                 'amount' => $request->amount * 100, 
-                'currency' => 'usd',
+                'currency' => 'eur',
                 'payment_method_types' => ['card'],
             ]);
 
